@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/serial_comms.dart';
+import 'package:flutter_libserialport/flutter_libserialport.dart';
 
 void main() {
+  SerialComms serialComms = SerialComms(SerialPort("/dev/tty.usbserial-10")); // mac/linux use ls /dev/tty.* to find the port
   runApp(const MyApp());
 }
 

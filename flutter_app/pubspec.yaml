@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_libserialport: ^0.3.0
+  dart_mavlink:
+    path: ./dart_mavlink
 
 
   # The following adds the Cupertino Icons font to your application.
