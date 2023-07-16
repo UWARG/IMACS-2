@@ -25,14 +25,10 @@ class SerialComms {
   void listen() {
     onData.listen((Uint8List data) {
       print('Received data: ${data}');
-      Uint8List sendData = Uint8List.fromList('Hello'.codeUnits);
-      write(sendData);
     });
   }
   
   void write(Uint8List data) {
-    print("writing data");
-    print(data);
     _port.write(data);
   }
   
