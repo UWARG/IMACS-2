@@ -8,28 +8,21 @@ import 'package:flutter_app/serial_comms.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 
   void main() {
-  // final SerialComms serialComms = SerialComms(SerialPort("/dev/cu.usbserial-10")); // mac/linux use ls /dev/tty.* to find the port
-  // final SerialComms serialComms = SerialComms(SerialPort("test")); // mac/linux use ls /dev/tty.* to find the port
-
-  // serialComms.listen();
   SerialPort port = SerialPort("/dev/tty.usbserial-10");
-  port.openRead();
-  SerialPortReader reader = SerialPortReader(port);
-  reader.stream.listen((Uint8List data) {
-    print("data:" + data.toString());
-  });
+  final SerialComms serialComms = SerialComms(port); // mac/linux use ls /dev/tty.* to find the port
 
-  // runApp(MyApp(serialComms: serialComms));
-  runApp(MyApp());
+  serialComms.listen();
+  Uint8List data = Uint8List.fromList('Hello'.codeUnits);
+  serialComms.write(data);
+  runApp(MyApp(serialComms: serialComms));
 }
 
 class MyApp extends StatelessWidget {
   
-  // final SerialComms serialComms;
+  final SerialComms serialComms;
 
-  // const MyApp({Key? key, required this.serialComms}) : super(key: key);
-  const MyApp({Key? key});
-
+  const MyApp({Key? key, required this.serialComms}) : super(key: key);
+  
 
   // This widget is the root of your application.
   @override

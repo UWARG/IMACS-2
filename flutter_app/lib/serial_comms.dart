@@ -5,26 +5,35 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 
 class SerialComms {
   final SerialPortReader _reader;
+  final SerialPort _port;
   StreamController<Uint8List> _dataStreamController = StreamController<Uint8List>();
   Stream<Uint8List> get onData => _dataStreamController.stream;
 
-  SerialComms(SerialPort port, {int? timeout}) : _reader = SerialPortReader(port, timeout: timeout) {
+  SerialComms(SerialPort port, {int? timeout}) 
+      : _port = port,
+        _reader = SerialPortReader(port, timeout: timeout) {
+    port.openReadWrite();
     _reader.stream.listen((Uint8List data) {
-      print("data:" + data.toString());
       _dataStreamController.add(data);
     }, onError: (error) {
-      // Handle errors if needed
+      // TODO
     }, onDone: () {
       _dataStreamController.close();
     });
   }
 
   void listen() {
-    // Start listening for data (if not already started by the constructor)
-    print("listening");
     onData.listen((Uint8List data) {
       print('Received data: ${data}');
+      Uint8List sendData = Uint8List.fromList('Hello'.codeUnits);
+      write(sendData);
     });
+  }
+  
+  void write(Uint8List data) {
+    print("writing data");
+    print(data);
+    _port.write(data);
   }
   
   void close() {
