@@ -1,18 +1,40 @@
+
+
+
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app/serial_comms.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 
-void main() {
-  SerialComms serialComms = SerialComms(SerialPort("/dev/tty.usbserial-10")); // mac/linux use ls /dev/tty.* to find the port
-  runApp(const MyApp());
+  void main() {
+  // final SerialComms serialComms = SerialComms(SerialPort("/dev/cu.usbserial-10")); // mac/linux use ls /dev/tty.* to find the port
+  // final SerialComms serialComms = SerialComms(SerialPort("test")); // mac/linux use ls /dev/tty.* to find the port
+
+  // serialComms.listen();
+  SerialPort port = SerialPort("/dev/tty.usbserial-10");
+  port.openRead();
+  SerialPortReader reader = SerialPortReader(port);
+  reader.stream.listen((Uint8List data) {
+    print("data:" + data.toString());
+  });
+
+  // runApp(MyApp(serialComms: serialComms));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  
+  // final SerialComms serialComms;
+
+  // const MyApp({Key? key, required this.serialComms}) : super(key: key);
+  const MyApp({Key? key});
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

@@ -2,9 +2,6 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
-import 'package:dart_mavlink/mavlink.dart';
-import 'package:dart_mavlink/dialects/common.dart';
-
 
 class SerialComms {
   final SerialPortReader _reader;
@@ -13,6 +10,7 @@ class SerialComms {
 
   SerialComms(SerialPort port, {int? timeout}) : _reader = SerialPortReader(port, timeout: timeout) {
     _reader.stream.listen((Uint8List data) {
+      print("data:" + data.toString());
       _dataStreamController.add(data);
     }, onError: (error) {
       // Handle errors if needed
@@ -23,6 +21,10 @@ class SerialComms {
 
   void listen() {
     // Start listening for data (if not already started by the constructor)
+    print("listening");
+    onData.listen((Uint8List data) {
+      print('Received data: ${data}');
+    });
   }
   
   void close() {
