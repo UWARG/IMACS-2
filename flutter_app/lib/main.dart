@@ -12,8 +12,6 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
   final SerialComms serialComms = SerialComms(port); // mac/linux use ls /dev/tty.* to find the port
 
   serialComms.listen();
-  Uint8List data = Uint8List.fromList('Hello'.codeUnits);
-  serialComms.write(data);
   runApp(MyApp(serialComms: serialComms));
 }
 
