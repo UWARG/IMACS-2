@@ -1,0 +1,2 @@
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_libserialport.framework
+${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libserialport.framework
