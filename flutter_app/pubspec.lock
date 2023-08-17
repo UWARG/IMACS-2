@@ -52,9 +52,11 @@ packages:
   dart_mavlink:
     dependency: "direct main"
     description:
-      path: dart_mavlink
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: c59140017a038476ec87788a73a0cfa6dd2ef274
+      url: "https://github.com/nus/dart_mavlink"
+    source: git
     version: "0.1.0"
   dylib:
     dependency: transitive
