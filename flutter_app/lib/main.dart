@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'command_constructor.dart';
 
 void main() {
   runApp(const MyApp());
-  testConstruction();
 }
 
 class MyApp extends StatelessWidget {
