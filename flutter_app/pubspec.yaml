@@ -36,6 +36,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+
+  flutter_libserialport: ^0.3.0
+
+  # if library is install locally
+  # dart_mavlink:
+  #   path: ./dart_mavlink
+
+  dart_mavlink:
+    git:
+      url: https://github.com/nus/dart_mavlink
+      ref: main
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
