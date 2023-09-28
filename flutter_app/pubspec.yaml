@@ -31,10 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_libserialport: ^0.3.0
+
   dart_mavlink:
     git:
       url: https://github.com/nus/dart_mavlink
       ref: main
+    
 
 
 
