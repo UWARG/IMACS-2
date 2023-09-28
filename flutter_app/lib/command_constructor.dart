@@ -3,77 +3,71 @@ import 'package:dart_mavlink/dialects/common.dart';
 
 // ignore_for_file: avoid_print
 
-/// Constructs a MAVLink command to request a single instance of a message using MAV_CMD_REQUEST_MESSAGE (512).
-///
-/// @sequence The sequence number for the MAVLink frame.
-/// Each component counts up its send sequence.
-/// Allows to detect packet loss.
-/// @systemId The MAVLink system ID of the vehicle (normally "1").
-/// @componentId The MAVLink component ID (normally "0").
-/// @messageId The MAVLink message ID of the requested message.
-/// @param2 Depends on the message requested; see that message's definition for details. Otherwise 0.
-/// @param3-6 The use of this parameter, must be defined in the requested message. Otherwise 0.
-/// @responseTarget: Target address of message stream (if message has target address fields).
-/// 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.
-///
-/// @return A MAVLink frame representing the request command.
+// Construct command to request a single instance of a message using MAV_CMD_REQUEST_MESSAGE (512)
 MavlinkFrame requestMessage(
-  int sequence,
-  int systemID,
-  int componentID,
-  int messageID, {
-  int param2 = 0,
-  int param3 = 0,
-  int param4 = 0,
-  int param5 = 0,
-  int param6 = 0,
-  int responseTarget = 0,
-}) {
+    int sequence, int systemId, int componentId, int messageId, int param2) {
   var commandLong = CommandLong(
       targetSystem: 1,
       targetComponent: 0,
       command: 512,
       confirmation: 0,
-      param1: messageID.toDouble(),
-      param2: param2.toDouble(),
-      param3: param3.toDouble(),
-      param4: param4.toDouble(),
-      param5: param5.toDouble(),
-      param6: param6.toDouble(),
-      param7: responseTarget.toDouble());
-  var frm = MavlinkFrame.v2(sequence, systemID, componentID, commandLong);
+      param1: messageId.toDouble(),
+      param2: param2
+          .toDouble(), // parameter required for some messages, described in common message set
+      param3: 0,
+      param4: 0,
+      param5: 0,
+      param6: 0,
+      param7: 0);
+  var frm = MavlinkFrame.v2(sequence, systemId, componentId, commandLong);
   return frm;
 }
 
 // Construct command to request messages at a specified rate using MAV_CMD_SET_MESSAGE_INTERVAL (511)
-///
-/// @sequence: The sequence number for the MAVLink frame.
-/// Each component counts up its send sequence.
-/// Allows to detect packet loss.
-/// @systemId: The MAVLink system ID of the vehicle (normally "1").
-/// @componentId: The MAVLink component ID (normally "0").
-/// @messageId: The MAVLink message ID of the requested message.
-/// @interval: Time interval between messages in microseconds.
-/// -1: disable, 0: request default rate.
-/// @responseTarget: Target address of message stream (if message has target address fields).
-/// 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.
-///
-/// @return A MAVLink frame representing the request command.
 MavlinkFrame setMessageInterval(
-    int sequence, int systemID, int componentID, int messageID, int interval,
-    {int responseTarget = 0}) {
+    int sequence, int systemId, int componentId, int messageId, int interval) {
   var commandLong = CommandLong(
       targetSystem: 1,
       targetComponent: 0,
       command: 511,
       confirmation: 0,
-      param1: messageID.toDouble(),
+      param1: messageId.toDouble(),
       param2: interval.toDouble(), // interval in μs
       param3: 0,
       param4: 0,
       param5: 0,
       param6: 0,
-      param7: responseTarget.toDouble());
-  var frm = MavlinkFrame.v2(sequence, systemID, componentID, commandLong);
+      param7: 0);
+  var frm = MavlinkFrame.v2(sequence, systemId, componentId, commandLong);
   return frm;
+}
+
+void testConstruction() {
+  var sequence = 0;
+  var systemId = 255;
+  var componentId = 1;
+  var messageId = 33; // GLOBAL_POSITION_INT
+  var interval = 1000000;
+
+  var dialect = MavlinkDialectCommon();
+  var parser = MavlinkParser(dialect);
+  parser.stream.listen((MavlinkFrame frm) {
+    if (frm.message is CommandLong) {
+      var cl = frm.message as CommandLong;
+      if (cl.command == 512) {
+        print("Received Request Message");
+        print("Message id: ${cl.param1}");
+      } else if (cl.command == 511) {
+        print("Received Set Message Interval");
+        print("Interval: ${cl.param2} μs");
+        print("Message id: ${cl.param1}");
+      }
+    }
+  });
+
+  parser.parse(requestMessage(sequence, systemId, componentId, messageId, 0)
+      .serialize());
+  parser.parse(
+      setMessageInterval(sequence, systemId, componentId, messageId, interval)
+          .serialize());
 }
