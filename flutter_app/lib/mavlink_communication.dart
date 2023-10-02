@@ -16,19 +16,23 @@ class MavlinkCommunication {
   final StreamController<double> _pitchSpeedController = StreamController<double>();
   final StreamController<double> _yawSpeedController = StreamController<double>();
   final StreamController<int> _timeBootMsPitchController = StreamController<int>();
+
+  final StreamController<int> _latStreamController = StreamController<int>();
+  final StreamController<int> _lonStreamController = StreamController<int>();
+  final StreamController<int> _altStreamController = StreamController<int>();
+
   final bool _shouldReadFromTCP;
 
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
 
-  late int _tcpPort;
   late Socket _tcpSocket;
 
-  MavlinkCommunication(bool shouldReadFromTCP, String connectionAddress)
+  MavlinkCommunication(bool shouldReadFromTCP, String connectionAddress, int tcpPort)
       : _parser = MavlinkParser(MavlinkDialectCommon()),
         _shouldReadFromTCP = shouldReadFromTCP {
     if (shouldReadFromTCP) {
-      startupTcpPort(connectionAddress);
+      startupTcpPort(connectionAddress, tcpPort);
     } else {
       startupSerialPort(connectionAddress);
     }
@@ -36,9 +40,9 @@ class MavlinkCommunication {
     parseMavlinkMessage();
   }
 
-  startupTcpPort(String connectionAddress) async {
+  startupTcpPort(String connectionAddress, tcpPort) async {
     // Connect to the socket
-    _tcpSocket = await Socket.connect(connectionAddress, _tcpPort);
+    _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
     _tcpSocket.listen(
       (Uint8List data) {
       _parser.parse(data);
@@ -81,6 +85,11 @@ class MavlinkCommunication {
         _pitchSpeedController.add(attitude.pitchspeed);
         _yawSpeedController.add(attitude.yawspeed);
         _timeBootMsPitchController.add(attitude.timeBootMs);
+      } else if (frame.message is GlobalPositionInt) {
+        var globalPositionInt = frame.message as GlobalPositionInt;
+        _latStreamController.add(globalPositionInt.lat);
+        _lonStreamController.add(globalPositionInt.lon);
+        _altStreamController.add(globalPositionInt.relativeAlt);
       }
     });
   }
@@ -111,6 +120,18 @@ class MavlinkCommunication {
 
   Stream<int> getTimeBootMsPitchStream() {
     return _timeBootMsPitchController.stream;
+  }
+
+  Stream<int> getLatStream() {
+    return _latStreamController.stream;
+  }
+
+  Stream<int> getLonStream() {
+    return _lonStreamController.stream;
+  }
+
+  Stream<int> getAltStream() {
+    return _altStreamController.stream;
   }
 
   // Send MAVLink messages
