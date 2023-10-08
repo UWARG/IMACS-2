@@ -6,7 +6,7 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 
-enum CommsType{
+enum MavlinkCommunicationConnection{
   tcp,
   serial
 }
@@ -22,9 +22,8 @@ class MavlinkCommunication {
   final StreamController<double> _pitchSpeedController = StreamController<double>();
   final StreamController<double> _yawSpeedController = StreamController<double>();
   final StreamController<int> _timeBootMsPitchController = StreamController<int>();
-  final CommsType _commsType;
+  final MavlinkCommunicationConnection _commsType;
 
-  
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
 
@@ -32,14 +31,14 @@ class MavlinkCommunication {
   late Socket _tcpSocket;
 
   // Class constructor
-  MavlinkCommunication(CommsType commsType, String connectionAddress, int port)
+  MavlinkCommunication(MavlinkCommunicationConnection commsType, String connectionAddress, int port)
       : _parser = MavlinkParser(MavlinkDialectCommon()),
         _commsType = commsType {
-    if (_commsType == CommsType.tcp) {
+    if (_commsType == MavlinkCommunicationConnection.tcp) {
       _tcpPort = port;
       startupTcpPort(connectionAddress);
     }
-    else if(_commsType == CommsType.serial){
+    else if(_commsType == MavlinkCommunicationConnection.serial){
       startupSerialPort(connectionAddress);
     }
     parseMavlinkMessage();
@@ -127,10 +126,10 @@ class MavlinkCommunication {
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
   void write(MavlinkFrame frame) {
-    if (_commsType == CommsType.tcp) {
+    if (_commsType == MavlinkCommunicationConnection.tcp) {
       writeToTcpPort(frame);
     } 
-    else if(_commsType == CommsType.serial){
+    else if(_commsType == MavlinkCommunicationConnection.serial){
       writeToSerialPort(frame);
     }
   }
