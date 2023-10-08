@@ -4,18 +4,18 @@ import 'package:flutter_app/command_constructor.dart';
 import 'package:test/test.dart';
 
 void main() {
+  /// dialect: Selected MAVLink dialect
   /// sequence: The sequence number for the MAVLink frame.
   /// Each component counts up its send sequence.
   /// Allows to detect packet loss.
   /// systemId: The MAVLink system ID of the vehicle (normally "1").
   /// componentId: The MAVLink component ID (normally "0").
   /// messageId: The MAVLink message ID of the requested message.
-  /// dialect: Selected MAVLink dialect
+  var dialect = MavlinkDialectCommon();
   const sequence = 0;
   const systemID = 1;
   const componentID = 0;
   const messageID = 33; // GLOBAL_POSITION_INT
-  var dialect = MavlinkDialectCommon();
 
   group('Command Constructor Tests', () {
     test('Request Message', () {
