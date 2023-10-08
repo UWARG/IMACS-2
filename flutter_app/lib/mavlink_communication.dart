@@ -6,6 +6,12 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 
+enum CommsType{
+  tcp,
+  serial
+}
+
+/// Base class for sending and receiving Mavlink messages
 class MavlinkCommunication {
   final MavlinkParser _parser;
 
@@ -16,23 +22,26 @@ class MavlinkCommunication {
   final StreamController<double> _pitchSpeedController = StreamController<double>();
   final StreamController<double> _yawSpeedController = StreamController<double>();
   final StreamController<int> _timeBootMsPitchController = StreamController<int>();
-  final bool _shouldReadFromTCP;
+  final CommsType _commsType;
 
+  
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
 
   late int _tcpPort;
   late Socket _tcpSocket;
 
-  MavlinkCommunication(bool shouldReadFromTCP, String connectionAddress)
+  // Class constructor
+  MavlinkCommunication(CommsType commsType, String connectionAddress, int port)
       : _parser = MavlinkParser(MavlinkDialectCommon()),
-        _shouldReadFromTCP = shouldReadFromTCP {
-    if (shouldReadFromTCP) {
+        _commsType = commsType {
+    if (_commsType == CommsType.tcp) {
+      _tcpPort = port;
       startupTcpPort(connectionAddress);
-    } else {
+    }
+    else if(_commsType == CommsType.serial){
       startupSerialPort(connectionAddress);
     }
-
     parseMavlinkMessage();
   }
 
@@ -85,6 +94,7 @@ class MavlinkCommunication {
     });
   }
 
+  // Getters for various streams
   Stream<double> getYawStream() {
     return _yawStreamController.stream;
   }
@@ -117,9 +127,10 @@ class MavlinkCommunication {
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
   void write(MavlinkFrame frame) {
-    if (_shouldReadFromTCP) {
+    if (_commsType == CommsType.tcp) {
       writeToTcpPort(frame);
-    } else {
+    } 
+    else if(_commsType == CommsType.serial){
       writeToSerialPort(frame);
     }
   }
