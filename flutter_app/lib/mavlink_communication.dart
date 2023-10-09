@@ -22,7 +22,7 @@ class MavlinkCommunication {
   final StreamController<double> _pitchSpeedController = StreamController<double>();
   final StreamController<double> _yawSpeedController = StreamController<double>();
   final StreamController<int> _timeBootMsPitchController = StreamController<int>();
-  final MavlinkCommunicationConnection _commsType;
+  final MavlinkCommunicationConnection _connectionType;
 
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
@@ -31,19 +31,23 @@ class MavlinkCommunication {
   late Socket _tcpSocket;
 
   // Class constructor
-  MavlinkCommunication(MavlinkCommunicationConnection commsType, String connectionAddress, int port)
+  MavlinkCommunication(MavlinkCommunicationConnection connectionType, String connectionAddress, int port)
       : _parser = MavlinkParser(MavlinkDialectCommon()),
-        _commsType = commsType {
-    if (_commsType == MavlinkCommunicationConnection.tcp) {
-      _tcpPort = port;
-      startupTcpPort(connectionAddress);
-    }
-    else if(_commsType == MavlinkCommunicationConnection.serial){
-      startupSerialPort(connectionAddress);
+        _connectionType = connectionType {
+    switch(_connectionType){
+      case MavlinkCommunicationConnection.tcp:{
+        _tcpPort = port;
+        startupTcpPort(connectionAddress);
+        break;
+      }
+      case MavlinkCommunicationConnection.serial:{
+        startupSerialPort(connectionAddress);
+        break;
+      }
     }
     parseMavlinkMessage();
   }
-
+  
   startupTcpPort(String connectionAddress) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, _tcpPort);
@@ -126,10 +130,10 @@ class MavlinkCommunication {
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
   void write(MavlinkFrame frame) {
-    if (_commsType == MavlinkCommunicationConnection.tcp) {
+    if (_connectionType == MavlinkCommunicationConnection.tcp) {
       writeToTcpPort(frame);
     } 
-    else if(_commsType == MavlinkCommunicationConnection.serial){
+    else if(_connectionType == MavlinkCommunicationConnection.serial){
       writeToSerialPort(frame);
     }
   }
