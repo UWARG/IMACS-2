@@ -37,18 +37,18 @@ class MavlinkCommunication {
     switch(_connectionType){
       case MavlinkCommunicationConnection.tcp:{
         _tcpPort = port;
-        startupTcpPort(connectionAddress);
+        _startupTcpPort(connectionAddress);
         break;
       }
       case MavlinkCommunicationConnection.serial:{
-        startupSerialPort(connectionAddress);
+        _startupSerialPort(connectionAddress);
         break;
       }
     }
-    parseMavlinkMessage();
+    _parseMavlinkMessage();
   }
   
-  startupTcpPort(String connectionAddress) async {
+  _startupTcpPort(String connectionAddress) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, _tcpPort);
     _tcpSocket.listen(
@@ -63,7 +63,7 @@ class MavlinkCommunication {
     );
   }
 
-  startupSerialPort(String connectionAddress) {
+  _startupSerialPort(String connectionAddress) {
     _serialPort = SerialPort(connectionAddress);
     _serialPort.openReadWrite();
     SerialPortReader serialPortReader = SerialPortReader(_serialPort);
@@ -73,15 +73,15 @@ class MavlinkCommunication {
     });
   }
 
-  writeToTcpPort(MavlinkFrame frame) {
+  _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
   }
 
-  writeToSerialPort(MavlinkFrame frame) {
+  _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
   }
 
-  parseMavlinkMessage() {
+  _parseMavlinkMessage() {
     _parser.stream.listen((MavlinkFrame frame) {
       if (frame.message is Attitude) {
         // Append data to appropriate stream
@@ -130,11 +130,15 @@ class MavlinkCommunication {
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
   void write(MavlinkFrame frame) {
-    if (_connectionType == MavlinkCommunicationConnection.tcp) {
-      writeToTcpPort(frame);
-    } 
-    else if(_connectionType == MavlinkCommunicationConnection.serial){
-      writeToSerialPort(frame);
+    switch(_connectionType){
+      case MavlinkCommunicationConnection.tcp:{
+        _writeToTcpPort(frame);
+        break;
+      }
+      case MavlinkCommunicationConnection.serial:{
+        _writeToSerialPort(frame);
+        break;
+      }
     }
   }
 }
