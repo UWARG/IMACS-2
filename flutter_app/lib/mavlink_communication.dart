@@ -6,22 +6,26 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 
-enum MavlinkCommunicationConnection{
-  tcp,
-  serial
-}
+enum MavlinkCommunicationConnection { tcp, serial }
 
 /// Base class for sending and receiving Mavlink messages
 class MavlinkCommunication {
   final MavlinkParser _parser;
 
-  final StreamController<double> _yawStreamController = StreamController<double>();
-  final StreamController<double> _pitchStreamController = StreamController<double>();
-  final StreamController<double> _rollStreamController = StreamController<double>();
-  final StreamController<double> _rollSpeedController = StreamController<double>();
-  final StreamController<double> _pitchSpeedController = StreamController<double>();
-  final StreamController<double> _yawSpeedController = StreamController<double>();
-  final StreamController<int> _timeBootMsPitchController = StreamController<int>();
+  final StreamController<double> _yawStreamController =
+      StreamController<double>();
+  final StreamController<double> _pitchStreamController =
+      StreamController<double>();
+  final StreamController<double> _rollStreamController =
+      StreamController<double>();
+  final StreamController<double> _rollSpeedController =
+      StreamController<double>();
+  final StreamController<double> _pitchSpeedController =
+      StreamController<double>();
+  final StreamController<double> _yawSpeedController =
+      StreamController<double>();
+  final StreamController<int> _timeBootMsPitchController =
+      StreamController<int>();
   final MavlinkCommunicationConnection _connectionType;
 
   late Stream<Uint8List> _stream;
@@ -31,36 +35,36 @@ class MavlinkCommunication {
   late Socket _tcpSocket;
 
   // Class constructor
-  MavlinkCommunication(MavlinkCommunicationConnection connectionType, String connectionAddress, int port)
+  MavlinkCommunication(MavlinkCommunicationConnection connectionType,
+      String connectionAddress, int port)
       : _parser = MavlinkParser(MavlinkDialectCommon()),
         _connectionType = connectionType {
-    switch(_connectionType){
-      case MavlinkCommunicationConnection.tcp:{
-        _tcpPort = port;
-        _startupTcpPort(connectionAddress);
-        break;
-      }
-      case MavlinkCommunicationConnection.serial:{
-        _startupSerialPort(connectionAddress);
-        break;
-      }
+    switch (_connectionType) {
+      case MavlinkCommunicationConnection.tcp:
+        {
+          _tcpPort = port;
+          _startupTcpPort(connectionAddress);
+          break;
+        }
+      case MavlinkCommunicationConnection.serial:
+        {
+          _startupSerialPort(connectionAddress);
+          break;
+        }
     }
     _parseMavlinkMessage();
   }
-  
+
   _startupTcpPort(String connectionAddress) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, _tcpPort);
-    _tcpSocket.listen(
-      (Uint8List data) {
+    _tcpSocket.listen((Uint8List data) {
       _parser.parse(data);
-      },
-      onError: (error){
-        // print if log does not work, I can't really test it, just avoid the warning
-        log(error);
-        _tcpSocket.destroy();
-      }
-    );
+    }, onError: (error) {
+      // print if log does not work, I can't really test it, just avoid the warning
+      log(error);
+      _tcpSocket.destroy();
+    });
   }
 
   _startupSerialPort(String connectionAddress) {
@@ -130,15 +134,17 @@ class MavlinkCommunication {
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
   void write(MavlinkFrame frame) {
-    switch(_connectionType){
-      case MavlinkCommunicationConnection.tcp:{
-        _writeToTcpPort(frame);
-        break;
-      }
-      case MavlinkCommunicationConnection.serial:{
-        _writeToSerialPort(frame);
-        break;
-      }
+    switch (_connectionType) {
+      case MavlinkCommunicationConnection.tcp:
+        {
+          _writeToTcpPort(frame);
+          break;
+        }
+      case MavlinkCommunicationConnection.serial:
+        {
+          _writeToSerialPort(frame);
+          break;
+        }
     }
   }
 }
