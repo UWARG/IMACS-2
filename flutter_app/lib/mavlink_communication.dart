@@ -31,7 +31,6 @@ class MavlinkCommunication {
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
 
-  late int _tcpPort;
   late Socket _tcpSocket;
 
   // Class constructor
@@ -42,8 +41,7 @@ class MavlinkCommunication {
     switch (_connectionType) {
       case MavlinkCommunicationConnection.tcp:
         {
-          _tcpPort = port;
-          _startupTcpPort(connectionAddress);
+          _startupTcpPort(connectionAddress, port);
           break;
         }
       case MavlinkCommunicationConnection.serial:
@@ -55,9 +53,9 @@ class MavlinkCommunication {
     _parseMavlinkMessage();
   }
 
-  _startupTcpPort(String connectionAddress) async {
+  _startupTcpPort(String connectionAddress, int tcpPort) async {
     // Connect to the socket
-    _tcpSocket = await Socket.connect(connectionAddress, _tcpPort);
+    _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
     _tcpSocket.listen((Uint8List data) {
       _parser.parse(data);
     }, onError: (error) {
