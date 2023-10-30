@@ -130,7 +130,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-<<<<<<< HEAD
   file:
     dependency: transitive
     description:
@@ -139,8 +138,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-=======
->>>>>>> 3ef0ddf9685c9a5dd2fd4ed95efcccca518666d4
   flutter:
     dependency: "direct main"
     description: flutter
@@ -303,7 +300,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-<<<<<<< HEAD
   pool:
     dependency: transitive
     description:
@@ -352,8 +348,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-=======
->>>>>>> 3ef0ddf9685c9a5dd2fd4ed95efcccca518666d4
   sky_engine:
     dependency: transitive
     description: flutter

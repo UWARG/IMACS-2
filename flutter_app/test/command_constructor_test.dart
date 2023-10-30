@@ -1,6 +1,6 @@
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
-import 'package:flutter_app/command_constructor.dart';
+import 'package:imacs/command_constructor.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -31,7 +31,7 @@ void main() {
         }
       });
 
-      parser.parse(requestMessage(sequence, systemID, componentID, messageID)
+      parser.parse(requestMessage(sequence, systemID, componentID, messageID, 0)
           .serialize());
     });
 
