@@ -1,3 +1,0 @@
-[submodule "flutter_app/dart_mavlink"]
-	path = flutter_app/dart_mavlink
-	url = https://github.com/nus/dart_mavlink.git
