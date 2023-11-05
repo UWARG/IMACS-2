@@ -6,6 +6,11 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 
+enum MavlinkCommunicationType {
+  TCP,
+  SERIAL,
+}
+
 class MavlinkCommunication {
   final MavlinkParser _parser;
 
@@ -21,26 +26,29 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
-  final bool _shouldReadFromTCP;
+  final MavlinkCommunicationType _connectionType;
 
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
 
   late Socket _tcpSocket;
 
-  MavlinkCommunication(bool shouldReadFromTCP, String connectionAddress, int tcpPort)
+  MavlinkCommunication(MavlinkCommunicationType connectionType, String connectionAddress, int tcpPort)
       : _parser = MavlinkParser(MavlinkDialectCommon()),
-        _shouldReadFromTCP = shouldReadFromTCP {
-    if (shouldReadFromTCP) {
-      startupTcpPort(connectionAddress, tcpPort);
-    } else {
-      startupSerialPort(connectionAddress);
+        _connectionType = connectionType {
+    switch (_connectionType) {
+      case MavlinkCommunicationType.TCP:
+        _startupTcpPort(connectionAddress, tcpPort);
+        break;
+      case MavlinkCommunicationType.SERIAL:
+        _startupSerialPort(connectionAddress);
+        break;
     }
 
-    parseMavlinkMessage();
+    _parseMavlinkMessage();
   }
 
-  startupTcpPort(String connectionAddress, tcpPort) async {
+  _startupTcpPort(String connectionAddress, tcpPort) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
     _tcpSocket.listen(
@@ -55,7 +63,7 @@ class MavlinkCommunication {
     );
   }
 
-  startupSerialPort(String connectionAddress) {
+  _startupSerialPort(String connectionAddress) {
     _serialPort = SerialPort(connectionAddress);
     _serialPort.openReadWrite();
     SerialPortReader serialPortReader = SerialPortReader(_serialPort);
@@ -65,15 +73,15 @@ class MavlinkCommunication {
     });
   }
 
-  writeToTcpPort(MavlinkFrame frame) {
+  _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
   }
 
-  writeToSerialPort(MavlinkFrame frame) {
+  _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
   }
 
-  parseMavlinkMessage() {
+  _parseMavlinkMessage() {
     _parser.stream.listen((MavlinkFrame frame) {
       if (frame.message is Attitude) {
         // Append data to appropriate stream
@@ -138,10 +146,13 @@ class MavlinkCommunication {
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
   void write(MavlinkFrame frame) {
-    if (_shouldReadFromTCP) {
-      writeToTcpPort(frame);
-    } else {
-      writeToSerialPort(frame);
+    switch (_connectionType) {
+      case MavlinkCommunicationType.TCP:
+        _writeToTcpPort(frame);
+        break;
+      case MavlinkCommunicationType.SERIAL:
+        _writeToSerialPort(frame);
+        break;
     }
   }
 }

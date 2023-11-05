@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:imacs/mavlink_communication.dart';
 
-// ignore_for_file: avoid_print
-
 void main() async {
   runApp(const App());
 }
@@ -29,7 +27,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
-  final comm = MavlinkCommunication(true, '127.0.0.1', 14550);
+  final comm = MavlinkCommunication(MavlinkCommunicationType.TCP, '127.0.0.1', 14550);
 
   @override
   Widget build(BuildContext context) {
