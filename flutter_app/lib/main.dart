@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
-  final comm = MavlinkCommunication(MavlinkCommunicationType.TCP, '127.0.0.1', 14550);
+  final comm = MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
 
   @override
   Widget build(BuildContext context) {

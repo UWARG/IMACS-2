@@ -7,8 +7,8 @@ import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 
 enum MavlinkCommunicationType {
-  TCP,
-  SERIAL,
+  tcp,
+  serial,
 }
 
 class MavlinkCommunication {
@@ -37,10 +37,10 @@ class MavlinkCommunication {
       : _parser = MavlinkParser(MavlinkDialectCommon()),
         _connectionType = connectionType {
     switch (_connectionType) {
-      case MavlinkCommunicationType.TCP:
+      case MavlinkCommunicationType.tcp:
         _startupTcpPort(connectionAddress, tcpPort);
         break;
-      case MavlinkCommunicationType.SERIAL:
+      case MavlinkCommunicationType.serial:
         _startupSerialPort(connectionAddress);
         break;
     }
@@ -48,7 +48,7 @@ class MavlinkCommunication {
     _parseMavlinkMessage();
   }
 
-  _startupTcpPort(String connectionAddress, tcpPort) async {
+  _startupTcpPort(String connectionAddress, int tcpPort) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
     _tcpSocket.listen(
@@ -147,10 +147,10 @@ class MavlinkCommunication {
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
   void write(MavlinkFrame frame) {
     switch (_connectionType) {
-      case MavlinkCommunicationType.TCP:
+      case MavlinkCommunicationType.tcp:
         _writeToTcpPort(frame);
         break;
-      case MavlinkCommunicationType.SERIAL:
+      case MavlinkCommunicationType.serial:
         _writeToSerialPort(frame);
         break;
     }
