@@ -31,7 +31,7 @@ void main() {
         }
       });
 
-      parser.parse(requestMessage(sequence, systemID, componentID, messageID, 0)
+      parser.parse(requestMessage(sequence, systemID, componentID, messageID)
           .serialize());
     });
 
