@@ -88,4 +88,3 @@ class DataField<T> extends StatelessWidget {
     );
   }
 }
-
