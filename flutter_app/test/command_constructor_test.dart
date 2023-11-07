@@ -1,6 +1,6 @@
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
-import 'package:flutter_app/command_constructor.dart';
+import 'package:imacs/command_constructor.dart';
 import 'package:test/test.dart';
 
 void main() {
