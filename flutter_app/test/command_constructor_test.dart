@@ -54,5 +54,22 @@ void main() {
               sequence, systemID, componentID, messageID, interval)
           .serialize());
     });
+
+    test('Change Mode', () {
+      const changeModeCommandNumber = 176; // MAV_CMD Number for changing the mode
+      const baseMode = 1;
+
+      var parser = MavlinkParser(dialect);
+      parser.stream.listen((MavlinkFrame frm) {
+        if (frm.message is CommandLong) {
+          var cl = frm.message as CommandLong;
+          expect(cl.command, equals(changeModeCommandNumber));
+          expect(cl.param1, equals(baseMode));
+        }
+      });
+
+      parser.parse(setMode(sequence, systemID, componentID, baseMode)
+          .serialize());
+      });
   });
 }

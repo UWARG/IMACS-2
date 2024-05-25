@@ -90,15 +90,20 @@ MavlinkFrame setMessageInterval(
 /// @customSubMode The new autopilot-specific sub-mode. This is system-specific.
 ///
 /// @return A MAVLink frame representing the set mode command.
-MavlinkFrame setMode(int sequence, int systemID, int componentID, int customMode,
-    int baseMode, { int customSubMode = 0 }) {
+MavlinkFrame setMode(
+  int sequence, 
+  int systemID, 
+  int componentID, 
+  MavMode baseMode, 
+  {int customMode = 0, 
+  int customSubMode = 0 }) {
   var commandLong = CommandLong(
       targetSystem: 1,
       targetComponent: 0,
       command: 176,
       confirmation: 0,
-      param1: customMode.toDouble(),
-      param2: baseMode.toDouble(),
+      param1: baseMode.toDouble(),
+      param2: customMode.toDouble(),
       param3: customSubMode.toDouble(),
       param4: 0,
       param5: 0,
