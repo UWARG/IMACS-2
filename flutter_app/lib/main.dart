@@ -27,7 +27,8 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
-  final comm = MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
+  final comm =
+      MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
 
   @override
   Widget build(BuildContext context) {
@@ -36,29 +37,51 @@ class HomePage extends StatelessWidget {
         title: Text(title),
       ),
       body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              // attitude
-              DataField<double>(name: 'Yaw (deg)', value: comm.getYawStream(), formatter: (double value) => (value / pi * 180.0).round()),
-              DataField<double>(name: 'Pitch (deg)', value: comm.getPitchStream(), formatter: (double value) => (value / pi * 180.0).round()),
-              DataField<double>(name: 'Roll (deg)', value: comm.getRollStream(), formatter: (double value) => (value / pi * 180.0).round()),
+          child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            // attitude
+            DataField<double>(
+                name: 'Yaw (deg)',
+                value: comm.getYawStream(),
+                formatter: (double value) => (value / pi * 180.0).round()),
+            DataField<double>(
+                name: 'Pitch (deg)',
+                value: comm.getPitchStream(),
+                formatter: (double value) => (value / pi * 180.0).round()),
+            DataField<double>(
+                name: 'Roll (deg)',
+                value: comm.getRollStream(),
+                formatter: (double value) => (value / pi * 180.0).round()),
 
-              // global position
-              DataField<int>(name: 'Latitude', value: comm.getLatStream(), formatter: (int value) => (value / 1e7).round()),
-              DataField<int>(name: 'Longitude', value: comm.getLonStream(), formatter: (int value) => (value / 1e7).round()),
-              DataField<int>(name: 'Altitude (m)', value: comm.getAltStream(), formatter: (int value) => (value / 1e3).round()),
-            ],
-          ),
-        )
-      ),
+            // global position
+            DataField<int>(
+                name: 'Latitude',
+                value: comm.getLatStream(),
+                formatter: (int value) => (value / 1e7).round()),
+            DataField<int>(
+                name: 'Longitude',
+                value: comm.getLonStream(),
+                formatter: (int value) => (value / 1e7).round()),
+            DataField<int>(
+                name: 'Altitude (m)',
+                value: comm.getAltStream(),
+                formatter: (int value) => (value / 1e3).round()),
+          ],
+        ),
+      )),
     );
   }
 }
 
 class DataField<T> extends StatelessWidget {
-  const DataField({Key? key, required this.name, required this.value, required this.formatter}) : super(key: key);
+  const DataField(
+      {Key? key,
+      required this.name,
+      required this.value,
+      required this.formatter})
+      : super(key: key);
 
   final String name;
   final Stream<T> value;
@@ -66,15 +89,14 @@ class DataField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          "$name: ",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+    return Row(children: [
+      Text(
+        "$name: ",
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
         ),
-        StreamBuilder<T>(
+      ),
+      StreamBuilder<T>(
           stream: value,
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
@@ -82,9 +104,7 @@ class DataField<T> extends StatelessWidget {
             } else {
               return const Text('No data');
             }
-          }
-        )
-      ]
-    );
+          })
+    ]);
   }
 }

@@ -14,13 +14,20 @@ enum MavlinkCommunicationType {
 class MavlinkCommunication {
   final MavlinkParser _parser;
 
-  final StreamController<double> _yawStreamController = StreamController<double>();
-  final StreamController<double> _pitchStreamController = StreamController<double>();
-  final StreamController<double> _rollStreamController = StreamController<double>();
-  final StreamController<double> _rollSpeedController = StreamController<double>();
-  final StreamController<double> _pitchSpeedController = StreamController<double>();
-  final StreamController<double> _yawSpeedController = StreamController<double>();
-  final StreamController<int> _timeBootMsPitchController = StreamController<int>();
+  final StreamController<double> _yawStreamController =
+      StreamController<double>();
+  final StreamController<double> _pitchStreamController =
+      StreamController<double>();
+  final StreamController<double> _rollStreamController =
+      StreamController<double>();
+  final StreamController<double> _rollSpeedController =
+      StreamController<double>();
+  final StreamController<double> _pitchSpeedController =
+      StreamController<double>();
+  final StreamController<double> _yawSpeedController =
+      StreamController<double>();
+  final StreamController<int> _timeBootMsPitchController =
+      StreamController<int>();
 
   final StreamController<int> _latStreamController = StreamController<int>();
   final StreamController<int> _lonStreamController = StreamController<int>();
@@ -33,7 +40,8 @@ class MavlinkCommunication {
 
   late Socket _tcpSocket;
 
-  MavlinkCommunication(MavlinkCommunicationType connectionType, String connectionAddress, int tcpPort)
+  MavlinkCommunication(MavlinkCommunicationType connectionType,
+      String connectionAddress, int tcpPort)
       : _parser = MavlinkParser(MavlinkDialectCommon()),
         _connectionType = connectionType {
     switch (_connectionType) {
@@ -51,16 +59,13 @@ class MavlinkCommunication {
   _startupTcpPort(String connectionAddress, int tcpPort) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
-    _tcpSocket.listen(
-      (Uint8List data) {
+    _tcpSocket.listen((Uint8List data) {
       _parser.parse(data);
-      },
-      onError: (error){
-        // print if log does not work, I can't really test it, just avoid the warning
-        log(error);
-        _tcpSocket.destroy();
-      }
-    );
+    }, onError: (error) {
+      // print if log does not work, I can't really test it, just avoid the warning
+      log(error);
+      _tcpSocket.destroy();
+    });
   }
 
   _startupSerialPort(String connectionAddress) {
