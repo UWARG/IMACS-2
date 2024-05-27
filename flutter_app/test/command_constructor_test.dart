@@ -57,7 +57,7 @@ void main() {
 
     test('Change Mode', () {
       const changeModeCommandNumber = 176; // MAV_CMD Number for changing the mode
-      const baseMode = 1;
+      const baseMode = MAV_MODE_GUIDED_ARMED;
 
       var parser = MavlinkParser(dialect);
       parser.stream.listen((MavlinkFrame frm) {
