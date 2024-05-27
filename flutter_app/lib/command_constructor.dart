@@ -91,12 +91,8 @@ MavlinkFrame setMessageInterval(
 ///
 /// @return A MAVLink frame representing the set mode command.
 MavlinkFrame setMode(
-  int sequence, 
-  int systemID, 
-  int componentID, 
-  MavMode baseMode, 
-  {int customMode = 0, 
-  int customSubMode = 0 }) {
+    int sequence, int systemID, int componentID, MavMode baseMode,
+    {int customMode = 0, int customSubMode = 0}) {
   var commandLong = CommandLong(
       targetSystem: 1,
       targetComponent: 0,

@@ -56,7 +56,8 @@ void main() {
     });
 
     test('Change Mode', () {
-      const changeModeCommandNumber = 176; // MAV_CMD Number for changing the mode
+      const changeModeCommandNumber =
+          176; // MAV_CMD Number for changing the mode
       const baseMode = MAV_MODE_GUIDED_ARMED;
 
       var parser = MavlinkParser(dialect);
@@ -68,8 +69,8 @@ void main() {
         }
       });
 
-      parser.parse(setMode(sequence, systemID, componentID, baseMode)
-          .serialize());
-      });
+      parser.parse(
+          setMode(sequence, systemID, componentID, baseMode).serialize());
+    });
   });
 }

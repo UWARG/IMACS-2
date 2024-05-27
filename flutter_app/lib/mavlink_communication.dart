@@ -163,7 +163,8 @@ class MavlinkCommunication {
   }
 
   // Change drone mode using MAVLink messages
-  void changeMode(int sequence, int systemID, int componentID, MavMode baseMode) {
+  void changeMode(
+      int sequence, int systemID, int componentID, MavMode baseMode) {
     var frame = setMode(sequence, systemID, componentID, baseMode);
     write(frame);
   }
