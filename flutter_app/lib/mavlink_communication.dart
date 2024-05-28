@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
+import 'package:imacs/command_constructor.dart';
 
 enum MavlinkCommunicationType {
   tcp,
@@ -159,5 +160,12 @@ class MavlinkCommunication {
         _writeToSerialPort(frame);
         break;
     }
+  }
+
+  // Change drone mode using MAVLink messages
+  void changeMode(
+      int sequence, int systemID, int componentID, MavMode baseMode) {
+    var frame = setMode(sequence, systemID, componentID, baseMode);
+    write(frame);
   }
 }
