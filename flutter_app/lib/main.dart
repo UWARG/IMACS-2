@@ -36,47 +36,59 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Center(
-          child: Container(
+      body: Container(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // attitude
-            DataField<double>(
-              name: 'Yaw (deg)',
-              value: comm.getYawStream(),
-              formatter: (double value) => (value / pi * 180.0).round(),
-            ),
-            DataField<double>(
-              name: 'Pitch (deg)',
-              value: comm.getPitchStream(),
-              formatter: (double value) => (value / pi * 180.0).round(),
-            ),
-            DataField<double>(
-              name: 'Roll (deg)',
-              value: comm.getRollStream(),
-              formatter: (double value) => (value / pi * 180.0).round(),
-            ),
-
-            // global position
-            DataField<int>(
-              name: 'Latitude',
-              value: comm.getLatStream(),
-              formatter: (int value) => (value / 1e7).round(),
-            ),
-            DataField<int>(
-              name: 'Longitude',
-              value: comm.getLonStream(),
-              formatter: (int value) => (value / 1e7).round(),
-            ),
-            DataField<int>(
-              name: 'Altitude (m)',
-              value: comm.getAltStream(),
-              formatter: (int value) => (value / 1e3).round(),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  DataField<double>(
+                    name: 'Yaw (deg)',
+                    value: comm.getYawStream(),
+                    formatter: (double value) => (value / pi * 180.0).round(),
+                  ),
+                  DataField<double>(
+                    name: 'Pitch (deg)',
+                    value: comm.getPitchStream(),
+                    formatter: (double value) => (value / pi * 180.0).round(),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  DataField<double>(
+                    name: 'Roll (deg)',
+                    value: comm.getRollStream(),
+                    formatter: (double value) => (value / pi * 180.0).round(),
+                  ),
+                  // global position
+                  DataField<int>(
+                    name: 'Latitude',
+                    value: comm.getLatStream(),
+                    formatter: (int value) => (value / 1e7).round(),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  // attitude
+                  DataField<int>(
+                    name: 'Longitude',
+                    value: comm.getLonStream(),
+                    formatter: (int value) => (value / 1e7).round(),
+                  ),
+                  DataField<int>(
+                    name: 'Altitude (m)',
+                    value: comm.getAltStream(),
+                    formatter: (int value) => (value / 1e3).round(),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
@@ -95,22 +107,31 @@ class DataField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Text(
-        "$name: ",
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              "$name ",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          StreamBuilder<T>(
+            stream: value,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data != null) {
+                return Text(formatter(snapshot.data as T).toString());
+              } else {
+                return const Text('No data');
+              }
+            },
+          ),
+        ],
       ),
-      StreamBuilder<T>(
-          stream: value,
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data != null) {
-              return Text(formatter(snapshot.data as T).toString());
-            } else {
-              return const Text('No data');
-            }
-          })
-    ]);
+    );
   }
 }
