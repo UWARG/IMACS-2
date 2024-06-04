@@ -9,8 +9,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:imacs/main.dart';
+import 'package:imacs/data_field_widget.dart';
 
 void main() {
   testWidgets('DataField displays "No Data" when stream has no data',
