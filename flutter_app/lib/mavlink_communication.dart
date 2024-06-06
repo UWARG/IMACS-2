@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:io';
 import 'dart:async';
+import 'dart:collection';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
@@ -33,6 +34,8 @@ class MavlinkCommunication {
   final StreamController<int> _latStreamController = StreamController<int>();
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
+
+  final Queue<MavlinkFrame> _waypointQueue = Queue<MavlinkFrame>();
 
   final MavlinkCommunicationType _connectionType;
 
@@ -167,5 +170,22 @@ class MavlinkCommunication {
       int sequence, int systemID, int componentID, MavMode baseMode) {
     var frame = setMode(sequence, systemID, componentID, baseMode);
     write(frame);
+  }
+
+  // Adds a waypoint
+  void sendWayPoint(int sequence, int systemID, int componentID,
+      double latitude, double longitude, double altitude) {
+    var waypointFrame = createWaypoint(
+        sequence, systemID, componentID, latitude, longitude, altitude);
+    write(waypointFrame);
+  }
+
+  /// Queues a waypoint to be sent.
+  /// @waypointFrame The MAVLink frame representing the waypoint command.
+  void queueWaypoint(int sequence, int systemID, int componentID,
+      double latitude, double longitude, double altitude) {
+    var waypointFrame = createWaypoint(
+        sequence, systemID, componentID, latitude, longitude, altitude);
+    _waypointQueue.add(waypointFrame);
   }
 }

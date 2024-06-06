@@ -108,3 +108,36 @@ MavlinkFrame setMode(
   var frm = MavlinkFrame.v2(sequence, systemID, componentID, commandLong);
   return frm;
 }
+
+/// Constructs a MAVLink command to add a waypoint.
+///
+/// @sequence The sequence number for the MAVLink frame.
+/// @systemId The MAVLink system ID of the vehicle (normally "1").
+/// @componentId The MAVLink component ID (normally "0").
+/// @latitude The latitude of the waypoint.
+/// @longitude The longitude of the waypoint.
+/// @altitude The altitude of the waypoint.
+///
+/// @return A MAVLink frame representing the waypoint command.
+MavlinkFrame createWaypoint(int sequence, int systemID, int componentID,
+    double latitude, double longitude, double altitude) {
+  var missionItem = MissionItem(
+    targetSystem: systemID,
+    targetComponent: componentID,
+    seq: sequence,
+    frame: 3,
+    command: 16,
+    current: 0,
+    autocontinue: 1,
+    param1: 0,
+    param2: 0,
+    param3: 0,
+    param4: 0,
+    x: latitude,
+    y: longitude,
+    z: altitude,
+    missionType: 0,
+  );
+  var frm = MavlinkFrame.v2(sequence, systemID, componentID, missionItem);
+  return frm;
+}
