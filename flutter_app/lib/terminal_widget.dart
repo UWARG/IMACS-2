@@ -24,7 +24,6 @@ class _TerminalScreenState extends State<TerminalScreen> {
     } else if (Platform.isWindows) {
       return 'cmd.exe';
     }
-
     return 'sh'; // Android
   }
 
