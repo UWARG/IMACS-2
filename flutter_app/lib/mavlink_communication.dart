@@ -35,7 +35,7 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
-  final Queue<MavlinkFrame> _waypointQueue = Queue<MavlinkFrame>();
+  final List<MissionItem> _waypointQueue = [];
 
   final MavlinkCommunicationType _connectionType;
 
@@ -173,7 +173,7 @@ class MavlinkCommunication {
   }
 
   // Adds a waypoint
-  void sendWayPoint(int sequence, int systemID, int componentID,
+  void sendWaypointWithoutQueue(int sequence, int systemID, int componentID,
       double latitude, double longitude, double altitude) {
     var waypointFrame = createWaypoint(
         sequence, systemID, componentID, latitude, longitude, altitude);
@@ -187,5 +187,15 @@ class MavlinkCommunication {
     var waypointFrame = createWaypoint(
         sequence, systemID, componentID, latitude, longitude, altitude);
     _waypointQueue.add(waypointFrame);
+  }
+
+  /// Takes first waypoint in the queue and send its to the drone
+  void sendNextWaypointInQueue() {
+    if (_waypointQueue.isNotEmpty) {
+      var wayPoint = _waypointQueue.removeAt(0);
+      var frame = MavlinkFrame.v2(wayPoint.seq, wayPoint.targetSystem,
+          wayPoint.targetComponent, wayPoint);
+      write(frame);
+    }
   }
 }

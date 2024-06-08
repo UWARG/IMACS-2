@@ -119,25 +119,29 @@ MavlinkFrame setMode(
 /// @altitude The altitude of the waypoint.
 ///
 /// @return A MAVLink frame representing the waypoint command.
-MavlinkFrame createWaypoint(int sequence, int systemID, int componentID,
-    double latitude, double longitude, double altitude) {
+MissionItem createWaypoint(int sequence, int systemID, int componentID,
+    double latitude, double longitude, double altitude,
+    {double param1 = 0,
+    double param2 = 0,
+    double param3 = 0,
+    double param4 = 0}) {
   var missionItem = MissionItem(
     targetSystem: systemID,
     targetComponent: componentID,
     seq: sequence,
-    frame: 3,
-    command: 16,
-    current: 0,
+    frame: mavFrameGlobalRelativeAlt,
+    command: mavCmdNavWaypoint,
+    current: 1,
     autocontinue: 1,
-    param1: 0,
-    param2: 0,
-    param3: 0,
-    param4: 0,
+    param1: param1,
+    param2: param2,
+    param3: param3,
+    param4: param4,
     x: latitude,
     y: longitude,
     z: altitude,
     missionType: 0,
   );
-  var frm = MavlinkFrame.v2(sequence, systemID, componentID, missionItem);
-  return frm;
+
+  return missionItem;
 }
