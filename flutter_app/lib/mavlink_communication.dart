@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:io';
 import 'dart:async';
-import 'dart:collection';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
@@ -177,7 +176,10 @@ class MavlinkCommunication {
       double latitude, double longitude, double altitude) {
     var waypointFrame = createWaypoint(
         sequence, systemID, componentID, latitude, longitude, altitude);
-    write(waypointFrame);
+
+    var frame = MavlinkFrame.v2(waypointFrame.seq, waypointFrame.targetSystem,
+        waypointFrame.targetComponent, waypointFrame);
+    write(frame);
   }
 
   /// Queues a waypoint to be sent.
