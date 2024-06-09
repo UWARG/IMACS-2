@@ -34,7 +34,7 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
-  final List<MissionItem> _waypointQueue = [];
+  final List<MissionItem> waypointQueue = [];
 
   final MavlinkCommunicationType _connectionType;
 
@@ -174,11 +174,11 @@ class MavlinkCommunication {
   // Adds a waypoint
   void sendWaypointWithoutQueue(int sequence, int systemID, int componentID,
       double latitude, double longitude, double altitude) {
-    var waypointFrame = createWaypoint(
+    var new_waypoint = createWaypoint(
         sequence, systemID, componentID, latitude, longitude, altitude);
 
-    var frame = MavlinkFrame.v2(waypointFrame.seq, waypointFrame.targetSystem,
-        waypointFrame.targetComponent, waypointFrame);
+    var frame = MavlinkFrame.v2(new_waypoint.seq, new_waypoint.targetSystem,
+        new_waypoint.targetComponent, new_waypoint);
     write(frame);
   }
 
@@ -186,17 +186,17 @@ class MavlinkCommunication {
   /// @waypointFrame The MAVLink frame representing the waypoint command.
   void queueWaypoint(int sequence, int systemID, int componentID,
       double latitude, double longitude, double altitude) {
-    var waypointFrame = createWaypoint(
+    var new_waypoint = createWaypoint(
         sequence, systemID, componentID, latitude, longitude, altitude);
-    _waypointQueue.add(waypointFrame);
+    waypointQueue.add(new_waypoint);
   }
 
   /// Takes first waypoint in the queue and send its to the drone
   void sendNextWaypointInQueue() {
-    if (_waypointQueue.isNotEmpty) {
-      var wayPoint = _waypointQueue.removeAt(0);
-      var frame = MavlinkFrame.v2(wayPoint.seq, wayPoint.targetSystem,
-          wayPoint.targetComponent, wayPoint);
+    if (waypointQueue.isNotEmpty) {
+      var waypoint = waypointQueue.removeAt(0);
+      var frame = MavlinkFrame.v2(waypoint.seq, waypoint.targetSystem,
+          waypoint.targetComponent, waypoint);
       write(frame);
     }
   }

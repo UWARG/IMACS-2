@@ -109,7 +109,7 @@ MavlinkFrame setMode(
   return frm;
 }
 
-/// Constructs a MAVLink command to add a waypoint.
+/// Constructs a MissionItem command to create a new waypoint using MAV_CMD_NAV_WAYPOINT (16).
 ///
 /// @sequence The sequence number for the MAVLink frame.
 /// @systemId The MAVLink system ID of the vehicle (normally "1").
@@ -117,8 +117,12 @@ MavlinkFrame setMode(
 /// @latitude The latitude of the waypoint.
 /// @longitude The longitude of the waypoint.
 /// @altitude The altitude of the waypoint.
+/// @param1 Hold time in decimal seconds.
+/// @param2 Acceptance radius in meters (how close the vehicle must get to the waypoint before it moves to the next waypoint).
+/// @param3 Orbit radius in meters (for circle mode, set to 0 to disable).
+/// @param4 Desired yaw angle in degrees (set to NaN to use the default yaw angle).
 ///
-/// @return A MAVLink frame representing the waypoint command.
+/// @return A MissionItem representing the waypoint command.
 MissionItem createWaypoint(int sequence, int systemID, int componentID,
     double latitude, double longitude, double altitude,
     {double param1 = 0,
@@ -140,7 +144,7 @@ MissionItem createWaypoint(int sequence, int systemID, int componentID,
     x: latitude,
     y: longitude,
     z: altitude,
-    missionType: 0,
+    missionType: mavMissionTypeMission,
   );
 
   return missionItem;
