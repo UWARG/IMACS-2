@@ -34,6 +34,8 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
+  final List<MissionItem> waypointQueue = [];
+
   final MavlinkCommunicationType _connectionType;
 
   late Stream<Uint8List> _stream;
@@ -167,5 +169,35 @@ class MavlinkCommunication {
       int sequence, int systemID, int componentID, MavMode baseMode) {
     var frame = setMode(sequence, systemID, componentID, baseMode);
     write(frame);
+  }
+
+  // Adds a waypoint
+  void sendWaypointWithoutQueue(int sequence, int systemID, int componentID,
+      double latitude, double longitude, double altitude) {
+    var new_waypoint = createWaypoint(
+        sequence, systemID, componentID, latitude, longitude, altitude);
+
+    var frame = MavlinkFrame.v2(new_waypoint.seq, new_waypoint.targetSystem,
+        new_waypoint.targetComponent, new_waypoint);
+    write(frame);
+  }
+
+  /// Queues a waypoint to be sent.
+  /// @waypointFrame The MAVLink frame representing the waypoint command.
+  void queueWaypoint(int sequence, int systemID, int componentID,
+      double latitude, double longitude, double altitude) {
+    var new_waypoint = createWaypoint(
+        sequence, systemID, componentID, latitude, longitude, altitude);
+    waypointQueue.add(new_waypoint);
+  }
+
+  /// Takes first waypoint in the queue and send its to the drone
+  void sendNextWaypointInQueue() {
+    if (waypointQueue.isNotEmpty) {
+      var waypoint = waypointQueue.removeAt(0);
+      var frame = MavlinkFrame.v2(waypoint.seq, waypoint.targetSystem,
+          waypoint.targetComponent, waypoint);
+      write(frame);
+    }
   }
 }
