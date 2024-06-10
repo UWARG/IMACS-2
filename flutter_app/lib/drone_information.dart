@@ -17,7 +17,7 @@ class DroneInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       crossAxisCount: 3,
-      shrinkWrap: true,
+      childAspectRatio: 1.5,
       children: <DataField>[
         DataField<double>(
           name: 'Yaw (deg)',
