@@ -25,46 +25,56 @@ class DroneInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      /// describes how many items in one row.
-      crossAxisCount: 2,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+        ),
+      ),
+      child: GridView.count(
+        /// describes how many items in one row.
+        crossAxisCount: 2,
 
-      /// describes how spaced out things are.
-      childAspectRatio: 4,
+        /// describes how spaced out things are.
+        childAspectRatio: 2,
 
-      children: <DataField>[
-        DataField<double>(
-          name: 'Yaw (deg)',
-          value: comm.getYawStream(),
-          formatter: (double value) => (value / pi * 180.0).toStringAsFixed(2),
-        ),
-        DataField<double>(
-          name: 'Pitch (deg)',
-          value: comm.getPitchStream(),
-          formatter: (double value) => (value / pi * 180.0).toStringAsFixed(2),
-        ),
-        DataField<double>(
-          name: 'Roll (deg)',
-          value: comm.getRollStream(),
-          formatter: (double value) => (value / pi * 180.0).toStringAsFixed(2),
-        ),
-        // global position
-        DataField<int>(
-          name: 'Latitude',
-          value: comm.getLatStream(),
-          formatter: (int value) => (value / 1e7).toStringAsFixed(2),
-        ),
-        DataField<int>(
-          name: 'Longitude',
-          value: comm.getLonStream(),
-          formatter: (int value) => (value / 1e7).toStringAsFixed(2),
-        ),
-        DataField<int>(
-          name: 'Altitude (m)',
-          value: comm.getAltStream(),
-          formatter: (int value) => (value / 1e3).toStringAsFixed(2),
-        ),
-      ],
+        children: <DataField>[
+          DataField<double>(
+            name: 'Yaw (deg)',
+            value: comm.getYawStream(),
+            formatter: (double value) =>
+                (value / pi * 180.0).toStringAsFixed(2),
+          ),
+          DataField<double>(
+            name: 'Pitch (deg)',
+            value: comm.getPitchStream(),
+            formatter: (double value) =>
+                (value / pi * 180.0).toStringAsFixed(2),
+          ),
+          DataField<double>(
+            name: 'Roll (deg)',
+            value: comm.getRollStream(),
+            formatter: (double value) =>
+                (value / pi * 180.0).toStringAsFixed(2),
+          ),
+          // global position
+          DataField<int>(
+            name: 'Latitude',
+            value: comm.getLatStream(),
+            formatter: (int value) => (value / 1e7).toStringAsFixed(2),
+          ),
+          DataField<int>(
+            name: 'Longitude',
+            value: comm.getLonStream(),
+            formatter: (int value) => (value / 1e7).toStringAsFixed(2),
+          ),
+          DataField<int>(
+            name: 'Altitude (m)',
+            value: comm.getAltStream(),
+            formatter: (int value) => (value / 1e3).toStringAsFixed(2),
+          ),
+        ],
+      ),
     );
   }
 }

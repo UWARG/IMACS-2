@@ -49,7 +49,7 @@ class DataField<T> extends StatelessWidget {
               return Text(
                 formatter(snapshot.data as T).toString(),
                 style: const TextStyle(
-                  fontSize: 50,
+                  fontSize: 38,
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
                 ),

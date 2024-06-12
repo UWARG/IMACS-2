@@ -38,7 +38,14 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Center(child: Text(title)),
       ),
-      body: SizedBox(height: 500, child: DroneInformation(comm: comm)),
+      body: Align(
+        alignment: Alignment.bottomLeft,
+        child: SizedBox(
+          width: 500,
+          height: 400,
+          child: DroneInformation(comm: comm),
+        ),
+      ),
     );
   }
 }
