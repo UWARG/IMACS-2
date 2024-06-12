@@ -44,7 +44,8 @@ class DroneModeChanger extends StatefulWidget {
 /// State for the DroneModeChanger widget.
 class DroneModeChangerState extends State<DroneModeChanger> {
   int _sequence = 0;
-  int? _selectedMode = mavModePreflight;
+  MavMode? _selectedMode = mavModePreflight;
+  MavMode? _confirmedMode = mavModePreflight;
 
   /// Holding onto mode selected by the user.
 
@@ -65,6 +66,8 @@ class DroneModeChangerState extends State<DroneModeChanger> {
       );
       setState(() {
         _sequence++;
+        _confirmedMode = _selectedMode;
+
       });
     } else {
       print('No mode selected');
@@ -77,15 +80,15 @@ class DroneModeChangerState extends State<DroneModeChanger> {
       children: [
         DropdownMenu<MavMode>(
           initialSelection: _selectedMode,
-          onSelected: (int? value) {
+          onSelected: (MavMode? value) {
             // This is called when the user selects an item.
             setState(() {
               _selectedMode = value;
             });
           },
           dropdownMenuEntries:
-              mavModes.entries.map<DropdownMenuEntry<int>>((entry) {
-            return DropdownMenuEntry<int>(
+              mavModes.entries.map<DropdownMenuEntry<MavMode>>((entry) {
+            return DropdownMenuEntry<MavMode>(
               value: entry.key,
               label: entry.value,
             );
@@ -98,8 +101,8 @@ class DroneModeChangerState extends State<DroneModeChanger> {
         ),
         const SizedBox(height: 16),
         Text(
-          'Current Mode: ${mavModes[_selectedMode]}',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          'Current Mode: ${mavModes[_confirmedMode]}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ],
     );
