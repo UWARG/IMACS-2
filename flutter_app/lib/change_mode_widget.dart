@@ -67,7 +67,6 @@ class DroneModeChangerState extends State<DroneModeChanger> {
       setState(() {
         _sequence++;
         _confirmedMode = _selectedMode;
-
       });
     } else {
       print('No mode selected');
