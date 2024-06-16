@@ -34,6 +34,8 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
+  int _sequence = 0; // sequence of current message
+
   final List<MissionItem> waypointQueue = [];
 
   final MavlinkCommunicationType _connectionType;
@@ -165,29 +167,30 @@ class MavlinkCommunication {
   }
 
   // Change drone mode using MAVLink messages
-  void changeMode(
-      int sequence, int systemID, int componentID, MavMode baseMode) {
-    var frame = setMode(sequence, systemID, componentID, baseMode);
+  void changeMode(int systemID, int componentID, MavMode baseMode) {
+    var frame = setMode(_sequence, systemID, componentID, baseMode);
+    _sequence++;
     write(frame);
   }
 
   // Adds a waypoint
-  void sendWaypointWithoutQueue(int sequence, int systemID, int componentID,
-      double latitude, double longitude, double altitude) {
+  void sendWaypointWithoutQueue(int systemID, int componentID, double latitude,
+      double longitude, double altitude) {
     var new_waypoint = createWaypoint(
-        sequence, systemID, componentID, latitude, longitude, altitude);
-
+        _sequence, systemID, componentID, latitude, longitude, altitude);
     var frame = MavlinkFrame.v2(new_waypoint.seq, new_waypoint.targetSystem,
         new_waypoint.targetComponent, new_waypoint);
+    _sequence++;
     write(frame);
   }
 
   /// Queues a waypoint to be sent.
   /// @waypointFrame The MAVLink frame representing the waypoint command.
-  void queueWaypoint(int sequence, int systemID, int componentID,
-      double latitude, double longitude, double altitude) {
+  void queueWaypoint(int systemID, int componentID, double latitude,
+      double longitude, double altitude) {
     var new_waypoint = createWaypoint(
-        sequence, systemID, componentID, latitude, longitude, altitude);
+        _sequence, systemID, componentID, latitude, longitude, altitude);
+    _sequence++;
     waypointQueue.add(new_waypoint);
   }
 
