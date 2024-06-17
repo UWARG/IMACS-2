@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:imacs/mavlink_communication.dart';
 import 'package:dart_mavlink/dialects/common.dart';
+import 'package:imacs/mavlink_communication.dart';
 
 /// Define the MavMode constants and their string representations.
 const Map<int, String> mavModes = {
@@ -27,14 +27,12 @@ class DroneModeChanger extends StatefulWidget {
   final MavlinkCommunication mavlinkCommunication;
   final int systemId;
   final int componentId;
-  final int initialSequence;
 
   const DroneModeChanger({
     Key? key,
     required this.mavlinkCommunication,
     required this.systemId,
     required this.componentId,
-    required this.initialSequence,
   }) : super(key: key);
 
   @override
@@ -43,29 +41,18 @@ class DroneModeChanger extends StatefulWidget {
 
 /// State for the DroneModeChanger widget.
 class DroneModeChangerState extends State<DroneModeChanger> {
-  int _sequence = 0;
-  MavMode? _selectedMode = mavModePreflight;
-  MavMode? _confirmedMode = mavModePreflight;
-
-  /// Holding onto mode selected by the user.
-
-  @override
-  void initState() {
-    super.initState();
-    _sequence = widget.initialSequence;
-  }
+  MavMode? _selectedMode;
+  MavMode? _confirmedMode;
 
   /// Sends a command to change the drone's mode.
   void _changeMode() {
     if (_selectedMode != null) {
       widget.mavlinkCommunication.changeMode(
-        _sequence,
         widget.systemId,
         widget.componentId,
         _selectedMode!,
       );
       setState(() {
-        _sequence++;
         _confirmedMode = _selectedMode;
       });
     } else {
@@ -95,12 +82,12 @@ class DroneModeChangerState extends State<DroneModeChanger> {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: _changeMode,
+          onPressed: _selectedMode != null ? _changeMode : null,
           child: const Text('Change Mode'),
         ),
         const SizedBox(height: 16),
         Text(
-          'Current Mode: ${mavModes[_confirmedMode]}',
+          'Current Mode: ${_confirmedMode != null ? mavModes[_confirmedMode] : 'No Mode Selected'}',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ],
