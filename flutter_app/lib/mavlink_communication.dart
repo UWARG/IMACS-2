@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
@@ -10,6 +11,7 @@ import 'package:imacs/command_constructor.dart';
 enum MavlinkCommunicationType {
   tcp,
   serial,
+  airside,
 }
 
 class MavlinkCommunication {
@@ -34,11 +36,12 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
-  final MavlinkCommunicationType _connectionType;
+  final MavlinkCommunicationType _connectionType; 
+
+  late Directory dir; 
 
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
-
   late Socket _tcpSocket;
 
   MavlinkCommunication(MavlinkCommunicationType connectionType,
@@ -52,6 +55,10 @@ class MavlinkCommunication {
       case MavlinkCommunicationType.serial:
         _startupSerialPort(connectionAddress);
         break;
+      case MavlinkCommunicationType.airside:
+        _LogReader(connectionAddress);
+        break;
+
     }
 
     _parseMavlinkMessage();
@@ -79,6 +86,21 @@ class MavlinkCommunication {
     });
   }
 
+  _LogReader(String connectionAddress){
+    dir = Directory(connectionAddress); //idk for example
+    Iterable<File> files = dir.listSync().whereType<File>();
+
+    for (var file in files) {
+      file.readAsString().then((String contents) {
+      print(contents); // need to return these values somehow i think
+      });
+    }
+
+    Iterable<String> filenames = files.map((files) => files.path);
+    print(filenames); // i want to return this value 
+    //if the airside log data produces invalid info, do we destroy the whole thing?
+  }
+  
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
   }
@@ -86,6 +108,11 @@ class MavlinkCommunication {
   _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
   }
+
+  _writeToAirside(MavlinkFrame frame){
+    //dir.write(frame.serialize());
+  }
+
 
   _parseMavlinkMessage() {
     _parser.stream.listen((MavlinkFrame frame) {
@@ -158,6 +185,9 @@ class MavlinkCommunication {
         break;
       case MavlinkCommunicationType.serial:
         _writeToSerialPort(frame);
+        break;
+      case MavlinkCommunicationType.airside:
+        _writeToAirside(frame);
         break;
     }
   }
