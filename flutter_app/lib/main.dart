@@ -8,7 +8,9 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +28,17 @@ class App extends StatelessWidget {
 // DroneInformation is responsible for showing all the data fetched
 // from Mission Planner MAVLink
 class HomePage extends StatelessWidget {
-  HomePage({Key? key, required this.title}) : super(key: key);
+  HomePage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
 
   final String title;
-  final comm =
-      MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
+  final comm = MavlinkCommunication(
+    MavlinkCommunicationType.tcp,
+    '127.0.0.1',
+    14550,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +46,10 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Center(child: Text(title)),
       ),
-      body: Align(
-        alignment: Alignment.bottomLeft,
-        child: SizedBox(
-          width: 500,
-          height: 400,
-          child: DroneInformation(comm: comm),
-        ),
+      body: SizedBox(
+        width: 500,
+        height: 400,
+        child: DroneInformation(comm: comm),
       ),
     );
   }
