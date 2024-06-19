@@ -56,9 +56,8 @@ class MavlinkCommunication {
         _startupSerialPort(connectionAddress);
         break;
       case MavlinkCommunicationType.airside:
-        _LogReader(connectionAddress);
+        _logReader(connectionAddress);
         break;
-
     }
 
     _parseMavlinkMessage();
@@ -86,20 +85,24 @@ class MavlinkCommunication {
     });
   }
 
-  _LogReader(String connectionAddress){
-    dir = Directory(connectionAddress); //idk for example
-    Iterable<File> files = dir.listSync().whereType<File>();
+  _logReader(String connectionAddress){
+    dir = Directory(connectionAddress); //accesses the folder
+    Iterable<Directory> subDirectories = dir.listSync().whereType<Directory>(); // gets the subfolders in the folder
 
-    for (var file in files) {
-      file.readAsString().then((String contents) {
-      print(contents); // need to return these values somehow i think
-      });
-    }
-
-    Iterable<String> filenames = files.map((files) => files.path);
-    print(filenames); // i want to return this value 
-    //if the airside log data produces invalid info, do we destroy the whole thing?
+    return subDirectories; // i want to display these on the ui
   }
+
+  void _logDisplay(Iterable<Directory> subDirectories){
+    for (var directory in subDirectories){
+      Iterable<File> files = directory.listSync().whereType<File>(); // list all files in a given directory
+      for (var file in files) {
+        file.readAsString().then((String contents) {
+          print(contents); // displays file contents 
+        });
+      }
+    }
+  }
+
   
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
@@ -108,11 +111,6 @@ class MavlinkCommunication {
   _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
   }
-
-  _writeToAirside(MavlinkFrame frame){
-    //dir.write(frame.serialize());
-  }
-
 
   _parseMavlinkMessage() {
     _parser.stream.listen((MavlinkFrame frame) {
@@ -187,7 +185,6 @@ class MavlinkCommunication {
         _writeToSerialPort(frame);
         break;
       case MavlinkCommunicationType.airside:
-        _writeToAirside(frame);
         break;
     }
   }
