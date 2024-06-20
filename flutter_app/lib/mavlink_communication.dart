@@ -11,7 +11,6 @@ import 'package:imacs/command_constructor.dart';
 enum MavlinkCommunicationType {
   tcp,
   serial,
-  airside,
 }
 
 class MavlinkCommunication {
@@ -55,9 +54,6 @@ class MavlinkCommunication {
       case MavlinkCommunicationType.serial:
         _startupSerialPort(connectionAddress);
         break;
-      case MavlinkCommunicationType.airside:
-        _logReader(connectionAddress);
-        break;
     }
 
     _parseMavlinkMessage();
@@ -84,26 +80,24 @@ class MavlinkCommunication {
       _parser.parse(data);
     });
   }
-
-  _logReader(String connectionAddress){
-    dir = Directory(connectionAddress); //accesses the folder
-    Iterable<Directory> subDirectories = dir.listSync().whereType<Directory>(); // gets the subfolders in the folder
-
-    return subDirectories; // i want to display these on the ui
-  }
-
-  void _logDisplay(Iterable<Directory> subDirectories){
-    for (var directory in subDirectories){
-      Iterable<File> files = directory.listSync().whereType<File>(); // list all files in a given directory
-      for (var file in files) {
-        file.readAsString().then((String contents) {
-          print(contents); // displays file contents 
-        });
-      }
-    }
-  }
-
   
+  void _logInfo (String pathToDirectory, List <String> fileDisplay, List <String> names){
+    Directory dir = Directory(pathToDirectory);
+    Iterable <File> files = dir.listSync(recursive: true, followLinks: true).whereType<File>();
+    Iterable <String> filenames = files.map((files) => (files.path)); 
+
+    for (var file in files){
+      file.readAsString().then((String contents){
+        fileDisplay.add(contents);
+      });
+    }
+
+    filenames.forEach((filename) {
+      names.add(filename);
+    });
+  }
+  // implementation of this function and airside logs not finalized yet
+ 
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
   }
@@ -183,8 +177,6 @@ class MavlinkCommunication {
         break;
       case MavlinkCommunicationType.serial:
         _writeToSerialPort(frame);
-        break;
-      case MavlinkCommunicationType.airside:
         break;
     }
   }
