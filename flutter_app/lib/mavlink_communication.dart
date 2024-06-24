@@ -176,10 +176,10 @@ class MavlinkCommunication {
   // Adds a waypoint
   void sendWaypointWithoutQueue(int systemID, int componentID, double latitude,
       double longitude, double altitude) {
-    var new_waypoint = createWaypoint(
+    var newWaypoint = createWaypoint(
         _sequence, systemID, componentID, latitude, longitude, altitude);
-    var frame = MavlinkFrame.v2(new_waypoint.seq, new_waypoint.targetSystem,
-        new_waypoint.targetComponent, new_waypoint);
+    var frame = MavlinkFrame.v2(newWaypoint.seq, newWaypoint.targetSystem,
+        newWaypoint.targetComponent, newWaypoint);
     _sequence++;
     write(frame);
   }
@@ -188,10 +188,10 @@ class MavlinkCommunication {
   /// @waypointFrame The MAVLink frame representing the waypoint command.
   void queueWaypoint(int systemID, int componentID, double latitude,
       double longitude, double altitude) {
-    var new_waypoint = createWaypoint(
+    var newWaypoint = createWaypoint(
         _sequence, systemID, componentID, latitude, longitude, altitude);
     _sequence++;
-    waypointQueue.add(new_waypoint);
+    waypointQueue.add(newWaypoint);
   }
 
   /// Takes first waypoint in the queue and send its to the drone
