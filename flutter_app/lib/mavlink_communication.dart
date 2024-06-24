@@ -44,6 +44,7 @@ class MavlinkCommunication {
   late SerialPort _serialPort;
 
   late Socket _tcpSocket;
+  final Completer<void> _tcpSocketInitializationFlag = Completer<void>();
 
   MavlinkCommunication(MavlinkCommunicationType connectionType,
       String connectionAddress, int tcpPort)
@@ -71,6 +72,8 @@ class MavlinkCommunication {
       log(error);
       _tcpSocket.destroy();
     });
+
+    _tcpSocketInitializationFlag.complete();
   }
 
   _startupSerialPort(String connectionAddress) {
@@ -167,7 +170,11 @@ class MavlinkCommunication {
   }
 
   // Change drone mode using MAVLink messages
-  void changeMode(int systemID, int componentID, MavMode baseMode) {
+  void changeMode(int systemID, int componentID, MavMode baseMode) async {
+    if (_connectionType == MavlinkCommunicationType.tcp) {
+      await _tcpSocketInitializationFlag.future;
+    }
+
     var frame = setMode(_sequence, systemID, componentID, baseMode);
     _sequence++;
     write(frame);
@@ -175,11 +182,15 @@ class MavlinkCommunication {
 
   // Adds a waypoint
   void sendWaypointWithoutQueue(int systemID, int componentID, double latitude,
-      double longitude, double altitude) {
-    var new_waypoint = createWaypoint(
+      double longitude, double altitude) async {
+    if (_connectionType == MavlinkCommunicationType.tcp) {
+      await _tcpSocketInitializationFlag.future;
+    }
+
+    var newWaypoint = createWaypoint(
         _sequence, systemID, componentID, latitude, longitude, altitude);
-    var frame = MavlinkFrame.v2(new_waypoint.seq, new_waypoint.targetSystem,
-        new_waypoint.targetComponent, new_waypoint);
+    var frame = MavlinkFrame.v2(newWaypoint.seq, newWaypoint.targetSystem,
+        newWaypoint.targetComponent, newWaypoint);
     _sequence++;
     write(frame);
   }
@@ -188,14 +199,18 @@ class MavlinkCommunication {
   /// @waypointFrame The MAVLink frame representing the waypoint command.
   void queueWaypoint(int systemID, int componentID, double latitude,
       double longitude, double altitude) {
-    var new_waypoint = createWaypoint(
+    var newWaypoint = createWaypoint(
         _sequence, systemID, componentID, latitude, longitude, altitude);
     _sequence++;
-    waypointQueue.add(new_waypoint);
+    waypointQueue.add(newWaypoint);
   }
 
   /// Takes first waypoint in the queue and send its to the drone
-  void sendNextWaypointInQueue() {
+  void sendNextWaypointInQueue() async {
+    if (_connectionType == MavlinkCommunicationType.tcp) {
+      await _tcpSocketInitializationFlag.future;
+    }
+
     if (waypointQueue.isNotEmpty) {
       var waypoint = waypointQueue.removeAt(0);
       var frame = MavlinkFrame.v2(waypoint.seq, waypoint.targetSystem,
