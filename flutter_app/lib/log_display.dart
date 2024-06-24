@@ -37,21 +37,20 @@ class LogReader extends StatefulWidget{
 
 class _LogReaderState extends State<LogReader>{
 
-  late Directory dir;
-  // late String pathToDirectory = " "; // for respective location of data 
+  //late Directory dir;
+  //late String pathToDirectory = " "; // for respective location of data 
   late List <File> files;
 
-  //late MavlinkCommunication comm; // for when i can run mavlink communications
+  late MavlinkCommunication comm;
 
   @override
   void initState(){
     super.initState();
-    //comm = MavlinkCommunication(MavlinkCommunicationType.tcp, "C:\\Users\\emmao\\Documents\\logs", 14550);
+    comm = MavlinkCommunication(MavlinkCommunicationType.airside, "C:\\Users\\emmao\\Documents\\logs", 14550);
 
-    dir = Directory("C:\\Users\\emmao\\Documents\\logs"); // opens directory 
-    files = dir.listSync(recursive: true, followLinks: true).whereType<File>().toList();
-    //files = comm.loadDirectory("C:\\Users\\emmao\\Documents\\logs").listSync(recursive: true, followLinks: true).whereType<File>().toList(); 
-    // when mavlink is used
+    //dir = Directory("C:\\Users\\emmao\\Documents\\logs"); // opens directory 
+    //files = dir.listSync(recursive: true, followLinks: true).whereType<File>().toList();
+    files = comm.loadDirectory("C:\\Users\\emmao\\Documents\\logs").listSync(recursive: true, followLinks: true).whereType<File>().toList(); 
   }
 
   @override

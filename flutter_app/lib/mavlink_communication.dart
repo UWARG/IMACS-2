@@ -11,6 +11,7 @@ import 'package:imacs/command_constructor.dart';
 enum MavlinkCommunicationType {
   tcp,
   serial,
+  airside,
 }
 
 class MavlinkCommunication {
@@ -53,6 +54,9 @@ class MavlinkCommunication {
         break;
       case MavlinkCommunicationType.serial:
         _startupSerialPort(connectionAddress);
+        break;
+      case MavlinkCommunicationType.airside:
+        loadDirectory(connectionAddress);
         break;
     }
 
@@ -166,6 +170,8 @@ class MavlinkCommunication {
         break;
       case MavlinkCommunicationType.serial:
         _writeToSerialPort(frame);
+        break;
+      case MavlinkCommunicationType.airside:
         break;
     }
   }
