@@ -81,20 +81,9 @@ class MavlinkCommunication {
     });
   }
   
-  void _logInfo (String pathToDirectory, List <String> fileDisplay, List <String> names){
+  loadDirectory (String pathToDirectory){
     Directory dir = Directory(pathToDirectory);
-    Iterable <File> files = dir.listSync(recursive: true, followLinks: true).whereType<File>();
-    Iterable <String> filenames = files.map((files) => (files.path)); 
-
-    for (var file in files){
-      file.readAsString().then((String contents){
-        fileDisplay.add(contents);
-      });
-    }
-
-    filenames.forEach((filename) {
-      names.add(filename);
-    });
+    return dir;
   }
   // implementation of this function and airside logs not finalized yet
  
