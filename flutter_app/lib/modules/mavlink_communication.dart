@@ -1,11 +1,11 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
-import 'package:imacs/command_constructor.dart';
+import 'package:imacs/command_constructors/create_waypoint_constructor.dart';
+import 'package:imacs/command_constructors/set_mode_constructor.dart';
 
 enum MavlinkCommunicationType {
   tcp,
@@ -69,7 +69,7 @@ class MavlinkCommunication {
       _parser.parse(data);
     }, onError: (error) {
       // print if log does not work, I can't really test it, just avoid the warning
-      log(error);
+      print(error);
       _tcpSocket.destroy();
     });
 

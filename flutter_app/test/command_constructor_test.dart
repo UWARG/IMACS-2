@@ -1,6 +1,9 @@
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
-import 'package:imacs/command_constructor.dart';
+import 'package:imacs/command_constructors/create_waypoint_constructor.dart';
+import 'package:imacs/command_constructors/request_message_constructor.dart';
+import 'package:imacs/command_constructors/set_message_interval_constructor.dart';
+import 'package:imacs/command_constructors/set_mode_constructor.dart';
 import 'package:test/test.dart';
 
 void main() {

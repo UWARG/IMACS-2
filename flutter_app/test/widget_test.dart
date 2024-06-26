@@ -10,9 +10,9 @@ import 'dart:async';
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:imacs/data_field_widget.dart';
-import 'package:imacs/mavlink_communication.dart';
-import 'package:imacs/change_mode_widget.dart';
+import 'package:imacs/widgets/data_field_widget.dart';
+import 'package:imacs/modules/mavlink_communication.dart';
+import 'package:imacs/widgets/change_mode_widget.dart';
 
 void main() {
   group('DataField widget', () {
