@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:imacs/data_field_widget.dart';
 import 'package:imacs/mavlink_communication.dart';
 
+import 'package:imacs/log_display.dart';
+
 void main() async {
   runApp(const App());
 }
@@ -30,7 +32,8 @@ class HomePage extends StatelessWidget {
   final String title;
   final comm =
       MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-
+  final comm2 = 
+      MavlinkCommunication(MavlinkCommunicationType.airside, "C:\\Users\\emmao\\Documents\\logs", 14550);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +74,9 @@ class HomePage extends StatelessWidget {
             name: 'Altitude (m)',
             value: comm.getAltStream(),
             formatter: (int value) => (value / 1e3).round(),
+          ),
+          LogReader(
+            files: comm2.loadFiles("C:\\Users\\emmao\\Documents\\logs"),
           ),
         ],
       ),

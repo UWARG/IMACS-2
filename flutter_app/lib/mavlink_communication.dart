@@ -39,6 +39,7 @@ class MavlinkCommunication {
   final MavlinkCommunicationType _connectionType; 
 
   late Directory dir; 
+  late List <File> files;
 
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
@@ -56,7 +57,7 @@ class MavlinkCommunication {
         _startupSerialPort(connectionAddress);
         break;
       case MavlinkCommunicationType.airside:
-        loadDirectory(connectionAddress);
+        loadFiles(connectionAddress);
         break;
     }
 
@@ -85,9 +86,10 @@ class MavlinkCommunication {
     });
   }
   
-  loadDirectory (String pathToDirectory){
+  loadFiles (String pathToDirectory){
     Directory dir = Directory(pathToDirectory);
-    return dir;
+    files = dir.listSync(recursive: true, followLinks: true).whereType<File>().toList();
+    return files;
   }
   // implementation of this function and airside logs not finalized yet
  
