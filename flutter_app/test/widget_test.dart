@@ -69,7 +69,7 @@ void main() {
       /// Longitude, Altitude with the source of communication provided. If communication not available
       /// then looks for 'No Data'
       testWidgets(
-        'Checking for all Data Points',
+        'Checking for all Data Headings',
         (WidgetTester tester) async {
           final comm = MavlinkCommunication(
             MavlinkCommunicationType.tcp,
@@ -91,7 +91,43 @@ void main() {
           expect(
             find.widgetWithText(
               DataField<double>,
-              'Yaw',
+              'Yaw (deg) ',
+            ),
+            findsOneWidget,
+          );
+          expect(
+            find.widgetWithText(
+              DataField<double>,
+              'Pitch (deg) ',
+            ),
+            findsOneWidget,
+          );
+
+          expect(
+            find.widgetWithText(
+              DataField<double>,
+              'Roll (deg) ',
+            ),
+            findsOneWidget,
+          );
+          expect(
+            find.widgetWithText(
+              DataField<int>,
+              'Latitude ',
+            ),
+            findsOneWidget,
+          );
+          expect(
+            find.widgetWithText(
+              DataField<int>,
+              'Longitude ',
+            ),
+            findsOneWidget,
+          );
+          expect(
+            find.widgetWithText(
+              DataField<int>,
+              'Altitude (m) ',
             ),
             findsOneWidget,
           );

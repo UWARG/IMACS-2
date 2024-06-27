@@ -32,8 +32,12 @@ class DroneInformation extends StatelessWidget {
         ),
       ),
       child: GridView.count(
-        crossAxisCount: 2, /// describes how many items in one row.
-        childAspectRatio: 2, /// describes how spaced out things are. 
+        crossAxisCount: 2,
+
+        /// describes how many items in one row.
+        childAspectRatio: 2,
+
+        /// describes how spaced out things are.
         children: <DataField>[
           DataField<double>(
             name: 'Yaw (deg)',
