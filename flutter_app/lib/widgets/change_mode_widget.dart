@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
+import 'package:imacs/modules/change_drone_mode.dart';
 
 /// Define the MavMode constants and their string representations.
 const Map<int, String> mavModes = {

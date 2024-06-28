@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/widgets/data_field_widget.dart';
+import 'package:imacs/modules/get_drone_information.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
