@@ -4,8 +4,6 @@ import 'dart:async';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
-// import 'package:imacs/command_constructors/create_waypoint_constructor.dart';
-// import 'package:imacs/command_constructors/set_mode_constructor.dart';
 
 enum MavlinkCommunicationType {
   tcp,
@@ -115,46 +113,6 @@ class MavlinkCommunication {
     });
   }
 
-  // Stream<double> getYawStream() {
-  //   return _yawStreamController.stream;
-  // }
-
-  // Stream<double> getPitchStream() {
-  //   return _pitchStreamController.stream;
-  // }
-
-  // Stream<double> getRollStream() {
-  //   return _rollStreamController.stream;
-  // }
-
-  // Stream<double> getRollSpeedStream() {
-  //   return _rollSpeedController.stream;
-  // }
-
-  // Stream<double> getPitchSpeedStream() {
-  //   return _pitchSpeedController.stream;
-  // }
-
-  // Stream<double> getYawSpeedStream() {
-  //   return _yawSpeedController.stream;
-  // }
-
-  // Stream<int> getTimeBootMsPitchStream() {
-  //   return _timeBootMsPitchController.stream;
-  // }
-
-  // Stream<int> getLatStream() {
-  //   return _latStreamController.stream;
-  // }
-
-  // Stream<int> getLonStream() {
-  //   return _lonStreamController.stream;
-  // }
-
-  // Stream<int> getAltStream() {
-  //   return _altStreamController.stream;
-  // }
-
   // Send MAVLink messages
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
@@ -183,54 +141,4 @@ class MavlinkCommunication {
   StreamController<int> get latStreamController => _latStreamController;
   StreamController<int> get lonStreamController => _lonStreamController;
   StreamController<int> get altStreamController => _altStreamController;
-
-  // Change drone mode using MAVLink messages
-  // void changeMode(int systemID, int componentID, MavMode baseMode) async {
-  //   if (_connectionType == MavlinkCommunicationType.tcp) {
-  //     await _tcpSocketInitializationFlag.future;
-  //   }
-
-  //   var frame = setMode(_sequence, systemID, componentID, baseMode);
-  //   _sequence++;
-  //   write(frame);
-  // }
-
-  // Adds a waypoint
-  // void sendWaypointWithoutQueue(int systemID, int componentID, double latitude,
-  //     double longitude, double altitude) async {
-  //   if (_connectionType == MavlinkCommunicationType.tcp) {
-  //     await _tcpSocketInitializationFlag.future;
-  //   }
-
-  //   var newWaypoint = createWaypoint(
-  //       _sequence, systemID, componentID, latitude, longitude, altitude);
-  //   var frame = MavlinkFrame.v2(newWaypoint.seq, newWaypoint.targetSystem,
-  //       newWaypoint.targetComponent, newWaypoint);
-  //   _sequence++;
-  //   write(frame);
-  // }
-
-  /// Queues a waypoint to be sent.
-  /// @waypointFrame The MAVLink frame representing the waypoint command.
-  // void queueWaypoint(int systemID, int componentID, double latitude,
-  //     double longitude, double altitude) {
-  //   var newWaypoint = createWaypoint(
-  //       _sequence, systemID, componentID, latitude, longitude, altitude);
-  //   _sequence++;
-  //   waypointQueue.add(newWaypoint);
-  // }
-
-  /// Takes first waypoint in the queue and send its to the drone
-  // void sendNextWaypointInQueue() async {
-  //   if (_connectionType == MavlinkCommunicationType.tcp) {
-  //     await _tcpSocketInitializationFlag.future;
-  //   }
-
-  //   if (waypointQueue.isNotEmpty) {
-  //     var waypoint = waypointQueue.removeAt(0);
-  //     var frame = MavlinkFrame.v2(waypoint.seq, waypoint.targetSystem,
-  //         waypoint.targetComponent, waypoint);
-  //     write(frame);
-  //   }
-  // }
 }
