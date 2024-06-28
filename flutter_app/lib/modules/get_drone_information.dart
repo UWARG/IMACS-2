@@ -1,44 +1,48 @@
 import 'dart:async';
 import 'package:imacs/modules/mavlink_communication.dart';
 
-extension GetDroneInformation on MavlinkCommunication {
+class GetDroneInformation {
+  final MavlinkCommunication comm;
+
+  GetDroneInformation({required this.comm});
+
   Stream<double> getYawStream() {
-    return yawStreamController.stream;
+    return comm.yawStreamController.stream;
   }
 
   Stream<double> getPitchStream() {
-    return pitchStreamController.stream;
+    return comm.pitchStreamController.stream;
   }
 
   Stream<double> getRollStream() {
-    return rollStreamController.stream;
+    return comm.rollStreamController.stream;
   }
 
   Stream<double> getRollSpeedStream() {
-    return rollSpeedController.stream;
+    return comm.rollSpeedController.stream;
   }
 
   Stream<double> getPitchSpeedStream() {
-    return pitchSpeedController.stream;
+    return comm.pitchSpeedController.stream;
   }
 
   Stream<double> getYawSpeedStream() {
-    return yawSpeedController.stream;
+    return comm.yawSpeedController.stream;
   }
 
   Stream<int> getTimeBootMsPitchStream() {
-    return timeBootMsPitchController.stream;
+    return comm.timeBootMsPitchController.stream;
   }
 
   Stream<int> getLatStream() {
-    return latStreamController.stream;
+    return comm.latStreamController.stream;
   }
 
   Stream<int> getLonStream() {
-    return lonStreamController.stream;
+    return comm.lonStreamController.stream;
   }
 
   Stream<int> getAltStream() {
-    return altStreamController.stream;
+    return comm.altStreamController.stream;
   }
 }

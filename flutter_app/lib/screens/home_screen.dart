@@ -10,6 +10,7 @@ class HomePage extends StatelessWidget {
   final String title;
   final comm =
       MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
+  late final GetDroneInformation getDroneInfo = GetDroneInformation(comm: comm);
 
   @override
   Widget build(BuildContext context) {
@@ -22,34 +23,34 @@ class HomePage extends StatelessWidget {
           // attitude
           DataField<double>(
             name: 'Yaw (deg)',
-            value: comm.getYawStream(),
+            value: getDroneInfo.getYawStream(),
             formatter: (double value) => (value / pi * 180.0).round(),
           ),
           DataField<double>(
             name: 'Pitch (deg)',
-            value: comm.getPitchStream(),
+            value: getDroneInfo.getPitchStream(),
             formatter: (double value) => (value / pi * 180.0).round(),
           ),
           DataField<double>(
             name: 'Roll (deg)',
-            value: comm.getRollStream(),
+            value: getDroneInfo.getRollStream(),
             formatter: (double value) => (value / pi * 180.0).round(),
           ),
 
           // global position
           DataField<int>(
             name: 'Latitude',
-            value: comm.getLatStream(),
+            value: getDroneInfo.getLatStream(),
             formatter: (int value) => (value / 1e7).round(),
           ),
           DataField<int>(
             name: 'Longitude',
-            value: comm.getLonStream(),
+            value: getDroneInfo.getLonStream(),
             formatter: (int value) => (value / 1e7).round(),
           ),
           DataField<int>(
             name: 'Altitude (m)',
-            value: comm.getAltStream(),
+            value: getDroneInfo.getAltStream(),
             formatter: (int value) => (value / 1e3).round(),
           ),
         ],

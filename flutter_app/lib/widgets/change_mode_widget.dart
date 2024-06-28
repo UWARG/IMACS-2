@@ -44,11 +44,18 @@ class DroneModeChanger extends StatefulWidget {
 class DroneModeChangerState extends State<DroneModeChanger> {
   MavMode? _selectedMode;
   MavMode? _confirmedMode;
+  late final ChangeDroneMode _changeDroneMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _changeDroneMode = ChangeDroneMode(comm: widget.mavlinkCommunication);
+  }
 
   /// Sends a command to change the drone's mode.
   void _changeMode() {
     if (_selectedMode != null) {
-      widget.mavlinkCommunication.changeMode(
+      _changeDroneMode.changeMode(
         widget.systemId,
         widget.componentId,
         _selectedMode!,
@@ -60,6 +67,22 @@ class DroneModeChangerState extends State<DroneModeChanger> {
       print('No mode selected');
     }
   }
+
+  // /// Sends a command to change the drone's mode.
+  // void _changeMode() {
+  //   if (_selectedMode != null) {
+  //     widget.mavlinkCommunication.changeMode(
+  //       widget.systemId,
+  //       widget.componentId,
+  //       _selectedMode!,
+  //     );
+  //     setState(() {
+  //       _confirmedMode = _selectedMode;
+  //     });
+  //   } else {
+  //     print('No mode selected');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
