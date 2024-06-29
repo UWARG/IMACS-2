@@ -32,7 +32,7 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
-  int _sequence = 0; // sequence of current message
+  int sequence = 0; // sequence of current message
 
   final List<MissionItem> waypointQueue = [];
 
@@ -128,16 +128,16 @@ class MavlinkCommunication {
   }
 
   MavlinkCommunicationType get connectionType => _connectionType;
-  int get sequence => _sequence;
-  set sequence(int seq) => _sequence = seq;
-  Completer<void> get tcpSocketInitializationFlag => _tcpSocketInitializationFlag;
+  Completer<void> get tcpSocketInitializationFlag =>
+      _tcpSocketInitializationFlag;
   StreamController<double> get yawStreamController => _yawStreamController;
   StreamController<double> get pitchStreamController => _pitchStreamController;
   StreamController<double> get rollStreamController => _rollStreamController;
   StreamController<double> get rollSpeedController => _rollSpeedController;
   StreamController<double> get pitchSpeedController => _pitchSpeedController;
   StreamController<double> get yawSpeedController => _yawSpeedController;
-  StreamController<int> get timeBootMsPitchController => _timeBootMsPitchController;
+  StreamController<int> get timeBootMsPitchController =>
+      _timeBootMsPitchController;
   StreamController<int> get latStreamController => _latStreamController;
   StreamController<int> get lonStreamController => _lonStreamController;
   StreamController<int> get altStreamController => _altStreamController;
