@@ -28,7 +28,7 @@ void main() {
       }
     });
 
-    parser.parse(
-        setMode(sequence, systemID, componentID, baseMode).serialize());
+    parser
+        .parse(setMode(sequence, systemID, componentID, baseMode).serialize());
   });
 }

@@ -32,7 +32,8 @@ void main() {
       }
     });
 
-    var waypointCommand = createWaypoint(sequence, systemID, componentID, latitude, longitude, altitude);
+    var waypointCommand = createWaypoint(
+        sequence, systemID, componentID, latitude, longitude, altitude);
 
     parser.parse(waypointCommand.serialize().buffer.asUint8List());
   });

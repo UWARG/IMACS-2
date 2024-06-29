@@ -18,7 +18,8 @@ void main() {
   const messageID = 33; // GLOBAL_POSITION_INT
 
   test('Request Message', () {
-    const requestMessageCommandNumber = 512; // MAV_CMD (MavLink Command) Number for requesting a single instance of a particular MAVLink message ID
+    const requestMessageCommandNumber =
+        512; // MAV_CMD (MavLink Command) Number for requesting a single instance of a particular MAVLink message ID
 
     var parser = MavlinkParser(dialect);
     parser.stream.listen((MavlinkFrame frm) {
@@ -29,7 +30,7 @@ void main() {
       }
     });
 
-    parser.parse(requestMessage(sequence, systemID, componentID, messageID)
-        .serialize());
+    parser.parse(
+        requestMessage(sequence, systemID, componentID, messageID).serialize());
   });
 }

@@ -19,7 +19,8 @@ void main() {
 
   test('Set Message Interval', () {
     const interval = 1000000; // Time interval in microseconds == 1 second
-    const setIntervalCommandNumber = 511; // MAV_CMD (MavLink Command) Number for setting an interval between messages for a particular MAVLink message ID
+    const setIntervalCommandNumber =
+        511; // MAV_CMD (MavLink Command) Number for setting an interval between messages for a particular MAVLink message ID
 
     var parser = MavlinkParser(dialect);
     parser.stream.listen((MavlinkFrame frm) {
@@ -31,7 +32,8 @@ void main() {
       }
     });
 
-    parser.parse(setMessageInterval(sequence, systemID, componentID, messageID, interval)
-        .serialize());
+    parser.parse(
+        setMessageInterval(sequence, systemID, componentID, messageID, interval)
+            .serialize());
   });
 }
