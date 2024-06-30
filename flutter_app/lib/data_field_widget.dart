@@ -33,7 +33,7 @@ class DataField<T> extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "$name ",
+          name,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),

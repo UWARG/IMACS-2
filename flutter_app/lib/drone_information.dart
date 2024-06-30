@@ -6,9 +6,8 @@ import 'data_field_widget.dart';
 
 /// Widget to arrange multiple data widgets in tabular form.
 ///
-/// This widget  displays all the data fetched from
-/// Mission Planner MAVLink. It automatically sets the data in a two
-/// column layout.
+/// This widget selective data made available by MavlinkCommunication.
+/// Arranges the data in a grid with two columns and applies a border.
 ///
 class DroneInformation extends StatelessWidget {
   /// @brief Constructs a DroneInformation widget.

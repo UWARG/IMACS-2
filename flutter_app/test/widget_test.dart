@@ -91,14 +91,14 @@ void main() {
           expect(
             find.widgetWithText(
               DataField<double>,
-              'Yaw (deg) ',
+              'Yaw (deg)',
             ),
             findsOneWidget,
           );
           expect(
             find.widgetWithText(
               DataField<double>,
-              'Pitch (deg) ',
+              'Pitch (deg)',
             ),
             findsOneWidget,
           );
@@ -106,28 +106,28 @@ void main() {
           expect(
             find.widgetWithText(
               DataField<double>,
-              'Roll (deg) ',
+              'Roll (deg)',
             ),
             findsOneWidget,
           );
           expect(
             find.widgetWithText(
               DataField<int>,
-              'Latitude ',
+              'Latitude',
             ),
             findsOneWidget,
           );
           expect(
             find.widgetWithText(
               DataField<int>,
-              'Longitude ',
+              'Longitude',
             ),
             findsOneWidget,
           );
           expect(
             find.widgetWithText(
               DataField<int>,
-              'Altitude (m) ',
+              'Altitude (m)',
             ),
             findsOneWidget,
           );
