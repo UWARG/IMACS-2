@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dart_mavlink/dialects/common.dart';
-import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/change_drone_mode.dart';
 
 /// Define the MavMode constants and their string representations.
@@ -25,15 +24,26 @@ const Map<int, String> mavModes = {
 /// and a sequence number as inputs. The selected mode is sent to the drone
 /// when the button is pressed.
 class DroneModeChanger extends StatefulWidget {
-  final MavlinkCommunication mavlinkCommunication;
+  /// @brief Constructs a DroneModeChanger widget.
+  ///
+  /// @param changeDroneMode
+  /// ChangeDroneMode class instance
+  ///
+  /// @param systemID
+  /// system ID for command constructor
+  ///
+  /// @param componentID
+  /// component ID for command constructor
+  ///
+  final ChangeDroneMode changeDroneMode;
   final int systemId;
   final int componentId;
 
   const DroneModeChanger({
     Key? key,
-    required this.mavlinkCommunication,
     required this.systemId,
     required this.componentId,
+    required this.changeDroneMode,
   }) : super(key: key);
 
   @override
@@ -44,18 +54,11 @@ class DroneModeChanger extends StatefulWidget {
 class DroneModeChangerState extends State<DroneModeChanger> {
   MavMode? _selectedMode;
   MavMode? _confirmedMode;
-  late final ChangeDroneMode _changeDroneMode;
-
-  @override
-  void initState() {
-    super.initState();
-    _changeDroneMode = ChangeDroneMode(comm: widget.mavlinkCommunication);
-  }
 
   /// Sends a command to change the drone's mode.
   void _changeMode() {
     if (_selectedMode != null) {
-      _changeDroneMode.changeMode(
+      widget.changeDroneMode.changeMode(
         widget.systemId,
         widget.componentId,
         _selectedMode!,
@@ -67,22 +70,6 @@ class DroneModeChangerState extends State<DroneModeChanger> {
       print('No mode selected');
     }
   }
-
-  // /// Sends a command to change the drone's mode.
-  // void _changeMode() {
-  //   if (_selectedMode != null) {
-  //     widget.mavlinkCommunication.changeMode(
-  //       widget.systemId,
-  //       widget.componentId,
-  //       _selectedMode!,
-  //     );
-  //     setState(() {
-  //       _confirmedMode = _selectedMode;
-  //     });
-  //   } else {
-  //     print('No mode selected');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

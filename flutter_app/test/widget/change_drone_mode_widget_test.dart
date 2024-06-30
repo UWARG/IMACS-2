@@ -1,6 +1,7 @@
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:imacs/modules/change_drone_mode.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/widgets/change_mode_widget.dart';
 
@@ -14,7 +15,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: DroneModeChanger(
-            mavlinkCommunication: mavlinkCommunication,
+            changeDroneMode: ChangeDroneMode(comm: mavlinkCommunication),
             systemId: 0,
             componentId: 0,
           ),
@@ -33,7 +34,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: DroneModeChanger(
-            mavlinkCommunication: mavlinkCommunication,
+            changeDroneMode: ChangeDroneMode(comm: mavlinkCommunication),
             systemId: 0,
             componentId: 0,
           ),
