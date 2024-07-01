@@ -1,17 +1,13 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:io';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
-import 'package:imacs/command_constructor.dart';
 
 enum MavlinkCommunicationType {
   tcp,
   serial,
-  airside,
 }
 
 class MavlinkCommunication {
@@ -36,14 +32,17 @@ class MavlinkCommunication {
   final StreamController<int> _lonStreamController = StreamController<int>();
   final StreamController<int> _altStreamController = StreamController<int>();
 
-  final MavlinkCommunicationType _connectionType; 
+  int sequence = 0; // sequence of current message
 
-  late Directory dir; 
-  late List <File> files;
+  final List<MissionItem> waypointQueue = [];
+
+  final MavlinkCommunicationType _connectionType;
 
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
+
   late Socket _tcpSocket;
+  final Completer<void> _tcpSocketInitializationFlag = Completer<void>();
 
   MavlinkCommunication(MavlinkCommunicationType connectionType,
       String connectionAddress, int tcpPort)
@@ -55,9 +54,6 @@ class MavlinkCommunication {
         break;
       case MavlinkCommunicationType.serial:
         _startupSerialPort(connectionAddress);
-        break;
-      case MavlinkCommunicationType.airside:
-        loadFiles(connectionAddress);
         break;
     }
 
@@ -71,9 +67,11 @@ class MavlinkCommunication {
       _parser.parse(data);
     }, onError: (error) {
       // print if log does not work, I can't really test it, just avoid the warning
-      log(error);
+      print(error);
       _tcpSocket.destroy();
     });
+
+    _tcpSocketInitializationFlag.complete();
   }
 
   _startupSerialPort(String connectionAddress) {
@@ -85,14 +83,7 @@ class MavlinkCommunication {
       _parser.parse(data);
     });
   }
-  
-  loadFiles (String pathToDirectory){
-    Directory dir = Directory(pathToDirectory);
-    files = dir.listSync(recursive: true, followLinks: true).whereType<File>().toList();
-    return files;
-  }
-  // implementation of this function and airside logs not finalized yet
- 
+
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
   }
@@ -122,46 +113,6 @@ class MavlinkCommunication {
     });
   }
 
-  Stream<double> getYawStream() {
-    return _yawStreamController.stream;
-  }
-
-  Stream<double> getPitchStream() {
-    return _pitchStreamController.stream;
-  }
-
-  Stream<double> getRollStream() {
-    return _rollStreamController.stream;
-  }
-
-  Stream<double> getRollSpeedStream() {
-    return _rollSpeedController.stream;
-  }
-
-  Stream<double> getPitchSpeedStream() {
-    return _pitchSpeedController.stream;
-  }
-
-  Stream<double> getYawSpeedStream() {
-    return _yawSpeedController.stream;
-  }
-
-  Stream<int> getTimeBootMsPitchStream() {
-    return _timeBootMsPitchController.stream;
-  }
-
-  Stream<int> getLatStream() {
-    return _latStreamController.stream;
-  }
-
-  Stream<int> getLonStream() {
-    return _lonStreamController.stream;
-  }
-
-  Stream<int> getAltStream() {
-    return _altStreamController.stream;
-  }
-
   // Send MAVLink messages
   // Refer to the link below to see how MAVLink frames are sent
   // https://github.com/nus/dart_mavlink/blob/main/example/parameter.dart
@@ -173,15 +124,21 @@ class MavlinkCommunication {
       case MavlinkCommunicationType.serial:
         _writeToSerialPort(frame);
         break;
-      case MavlinkCommunicationType.airside:
-        break;
     }
   }
 
-  // Change drone mode using MAVLink messages
-  void changeMode(
-      int sequence, int systemID, int componentID, MavMode baseMode) {
-    var frame = setMode(sequence, systemID, componentID, baseMode);
-    write(frame);
-  }
+  MavlinkCommunicationType get connectionType => _connectionType;
+  Completer<void> get tcpSocketInitializationFlag =>
+      _tcpSocketInitializationFlag;
+  StreamController<double> get yawStreamController => _yawStreamController;
+  StreamController<double> get pitchStreamController => _pitchStreamController;
+  StreamController<double> get rollStreamController => _rollStreamController;
+  StreamController<double> get rollSpeedController => _rollSpeedController;
+  StreamController<double> get pitchSpeedController => _pitchSpeedController;
+  StreamController<double> get yawSpeedController => _yawSpeedController;
+  StreamController<int> get timeBootMsPitchController =>
+      _timeBootMsPitchController;
+  StreamController<int> get latStreamController => _latStreamController;
+  StreamController<int> get lonStreamController => _lonStreamController;
+  StreamController<int> get altStreamController => _altStreamController;
 }

@@ -29,23 +29,38 @@ class DataField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
-      Text(
-        "$name: ",
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          name,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
         ),
-      ),
-      StreamBuilder<T>(
-        stream: value,
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            return Text(formatter(snapshot.data as T).toString());
-          } else {
-            return const Text('No data');
-          }
-        },
-      )
-    ]);
+        const SizedBox(
+          height: 10,
+        ),
+        StreamBuilder<T>(
+          stream: value,
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data != null) {
+              return Text(
+                formatter(snapshot.data as T).toString(),
+                style: const TextStyle(
+                  fontSize: 38,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              );
+            } else {
+              return const Text('No data');
+            }
+          },
+        ),
+      ],
+    );
   }
 }
