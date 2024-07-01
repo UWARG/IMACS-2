@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:imacs/main.dart';
 import 'package:imacs/mavlink_communication.dart';
 import 'package:imacs/data_field_widget.dart';
 
-import 'dart:math';
 import 'dart:io';
 /*
 void main() {
@@ -30,14 +28,16 @@ class MainPage extends StatelessWidget{
 }
 */
 class LogReader extends StatelessWidget{
-  final List <File> files;
+  late List <File> files;
   
   LogReader ({Key? key, required this.files}) : super(key: key);
    
   @override
   Widget build (BuildContext context){
-    return Align(
-      alignment: Alignment.topLeft,
+    return SizedBox(
+      height: 300,
+      child: AspectRatio(
+        aspectRatio: 16/9,
         child: ListView.builder(
           itemCount: files.length,
           itemBuilder: (context, index){
@@ -45,9 +45,10 @@ class LogReader extends StatelessWidget{
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton (
                 child: Text (files[index].path),
-                onPressed: () {
+                onPressed: () async {
+                  String fileContent = await files[index].readAsString();
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => LogDisplayer(fileContext: files[index].readAsStringSync()),
+                    builder: (context) => LogDisplayer(fileContext: fileContent),
                     )
                   ); // i want it to make a unique button for all the files in the iterable file list 
                 } // i also need access to that index so that i can use it retun the corresponding file content 
@@ -55,6 +56,7 @@ class LogReader extends StatelessWidget{
             );
           },
         ),
+      ),
     );
   }
 }
@@ -64,14 +66,16 @@ class LogDisplayer extends StatelessWidget{
   LogDisplayer ({Key? key, required this.fileContext}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
-    return Align(
-      alignment: Alignment.topLeft,
-        child: ListView(
-          children: [
-            Text(fileContext),
-          ], // content from the file coming from its respective filename button
-        ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Log Displayer'),
+      ),
+      body: ListView(
+        children: [
+          Text(fileContext),
+        ],
+      ),
     );
   }
 }
