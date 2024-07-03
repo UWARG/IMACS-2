@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:imacs/screens/home_screen.dart';
-import 'package:imacs/screens/log_display_screen.dart';
 
 void main() async {
   runApp(const App());
@@ -8,7 +7,6 @@ void main() async {
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
-  final String fileContent;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +17,6 @@ class App extends StatelessWidget {
       ),
       routes: {
         '/': (BuildContext context) => HomePage(title: 'WARG IMACS'),
-        '/': (BuildContext context) => LogDisplayer(fileContext: fileContent),
       },
     );
   }

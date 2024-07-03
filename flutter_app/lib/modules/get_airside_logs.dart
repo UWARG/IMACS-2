@@ -6,7 +6,7 @@ class GetAirsideLogs{
   GetAirsideLogs({required this.pathToDirectory});
 
   List <File> getFiles(){
-    return Directory(pathToDirectory).listSync().whereType<File>().toList();
+    return Directory(pathToDirectory).listSync(recursive: true, followLinks: true).whereType<File>().toList();
   }
 
 }
