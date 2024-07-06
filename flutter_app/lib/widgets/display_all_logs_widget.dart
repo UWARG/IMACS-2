@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:imacs/modules/get_airside_logs.dart';
+import 'package:imacs/screens/log_displayer_screen.dart';
 
-class LogReader extends StatelessWidget{
+class LogsList extends StatelessWidget{
 
-  const LogReader ({super.key, required this.getAirsideLogs});
+  const LogsList ({super.key, required this.getAirsideLogs,});
 
   final GetAirsideLogs getAirsideLogs;
    
@@ -16,40 +17,22 @@ class LogReader extends StatelessWidget{
         child: ListView.builder(
           itemCount: getAirsideLogs.getFiles().length,
           itemBuilder: (context, index){
-            return Padding (
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton (
+            return ListTile (
+              trailing: ElevatedButton (
                 child: Text (getAirsideLogs.getFiles()[index].path),
                 onPressed: () async {
                   String fileContent = await getAirsideLogs.getFiles()[index].readAsString();
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => LogDisplayer(fileContext: fileContent),
-                    )
+                  Navigator.restorablePush(
+                    context,
+                    (context, arguments) => MaterialPageRoute(
+                      builder: (context) => LogDisplayerScreen(fileContext: fileContent),
+                    ),
                   );  
                 } 
               ),
             );
           },
         ),
-      ),
-    );
-  }
-}
-
-class LogDisplayer extends StatelessWidget{
-  final String fileContext;
-  const LogDisplayer ({Key? key, required this.fileContext}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Log Displayer'),
-      ),
-      body: ListView(
-        children: [
-          Text(fileContext),
-        ],
       ),
     );
   }

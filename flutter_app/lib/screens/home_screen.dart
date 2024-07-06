@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
           DroneInformation(
             getDroneInformation: GetDroneInformation(comm: comm),
           ),
-          LogReader(
+          LogsList(
             getAirsideLogs: GetAirsideLogs(pathToDirectory: pathToDirectory),
           ),
         ],
