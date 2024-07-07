@@ -11,10 +11,10 @@ class LogDisplayerScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Log Displayer'),
       ),
-      body: ListView(
-        children: [
-          Text(fileContext),
-        ],
+      body: SingleChildScrollView(
+        child: ListTile(
+          title: Text(fileContext),
+        ),
       ),
     );
   }

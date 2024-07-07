@@ -10,31 +10,40 @@ class LogsList extends StatelessWidget {
 
   final GetAirsideLogs getAirsideLogs;
 
+  static Route _logDisplayerRoute(BuildContext context, Object? arguments) {
+    final String fileContent = arguments as String;
+    return MaterialPageRoute(
+      builder: (context) => LogDisplayerScreen(fileContext: fileContent),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 300,
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: ListView.builder(
-          itemCount: getAirsideLogs.getFiles().length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              trailing: ElevatedButton(
-                  child: Text(getAirsideLogs.getFiles()[index].path),
-                  onPressed: () async {
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: 600,
+        child: AspectRatio(
+          aspectRatio: 4 / 3,
+          child: ListView.builder(
+            itemCount: getAirsideLogs.getFiles().length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListTile(
+                  tileColor: Colors.blue.withOpacity(0.2),
+                  title: Text(getAirsideLogs.getFiles()[index].path),
+                  onTap: () {
                     String fileContent =
-                        await getAirsideLogs.getFiles()[index].readAsString();
-                    Navigator.restorablePush(
-                      context,
-                      (context, arguments) => MaterialPageRoute(
-                        builder: (context) =>
-                            LogDisplayerScreen(fileContext: fileContent),
-                      ),
+                      getAirsideLogs.getFiles()[index].readAsStringSync();
+                    Navigator.of(context).restorablePush(
+                      _logDisplayerRoute, // restorable push wouldn't function without static method
+                      arguments: fileContent,
                     );
-                  }),
-            );
-          },
+                  },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

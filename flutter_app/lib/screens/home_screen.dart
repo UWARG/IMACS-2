@@ -19,15 +19,17 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Column(
-        children: [
-          DroneInformation(
-            getDroneInformation: GetDroneInformation(comm: comm),
-          ),
-          LogsList(
-            getAirsideLogs: GetAirsideLogs(pathToDirectory: pathToDirectory),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            DroneInformation(
+              getDroneInformation: GetDroneInformation(comm: comm),
+            ),
+            LogsList(
+              getAirsideLogs: GetAirsideLogs(pathToDirectory: pathToDirectory),
+            ),
+          ],
+        ),
       ),
     );
   }
