@@ -34,7 +34,7 @@ class LogsList extends StatelessWidget {
                   title: Text(getAirsideLogs.getFiles()[index].path),
                   onTap: () {
                     String fileContent =
-                      getAirsideLogs.getFiles()[index].readAsStringSync();
+                        getAirsideLogs.getFiles()[index].readAsStringSync();
                     Navigator.of(context).restorablePush(
                       _logDisplayerRoute, // restorable push wouldn't function without static method
                       arguments: fileContent,
