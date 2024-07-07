@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LogDisplayerScreen extends StatelessWidget{
+class LogDisplayerScreen extends StatelessWidget {
   final String fileContext;
-  const LogDisplayerScreen ({Key? key, required this.fileContext}) : super(key: key);
+  const LogDisplayerScreen({Key? key, required this.fileContext})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
