@@ -20,14 +20,14 @@ class HomePage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          DroneInformation(
-            getDroneInformation: GetDroneInformation(comm: comm),
-          ),
           DroneModeChanger(
             systemId: 1,
             componentId: 1,
             changeDroneMode: ChangeDroneMode(comm: comm),
-          )
+          ),
+          DroneInformation(
+            getDroneInformation: GetDroneInformation(comm: comm),
+          ),
         ],
       ),
     );
