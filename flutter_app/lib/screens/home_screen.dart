@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:imacs/modules/change_drone_mode.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/get_drone_information.dart';
+import 'package:imacs/widgets/change_mode_widget.dart';
 import 'package:imacs/widgets/drone_information_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -21,6 +23,11 @@ class HomePage extends StatelessWidget {
           DroneInformation(
             getDroneInformation: GetDroneInformation(comm: comm),
           ),
+          DroneModeChanger(
+            systemId: 1,
+            componentId: 1,
+            changeDroneMode: ChangeDroneMode(comm: comm),
+          )
         ],
       ),
     );

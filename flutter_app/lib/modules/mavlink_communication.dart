@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:io';
+import 'dart:developer';
 import 'dart:async';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
@@ -67,7 +68,7 @@ class MavlinkCommunication {
       _parser.parse(data);
     }, onError: (error) {
       // print if log does not work, I can't really test it, just avoid the warning
-      print(error);
+      log(error);
       _tcpSocket.destroy();
     });
 

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:imacs/modules/change_drone_mode.dart';
@@ -66,8 +67,9 @@ class DroneModeChangerState extends State<DroneModeChanger> {
       setState(() {
         _confirmedMode = _selectedMode;
       });
+      log("${mavModes[_selectedMode]} mode selected.");
     } else {
-      print('No mode selected');
+      log('No mode selected.');
     }
   }
 

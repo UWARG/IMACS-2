@@ -24,8 +24,8 @@ class DroneInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
-      width: 400,
+      height: 400,
+      width: 500,
       decoration: BoxDecoration(
         border: Border.all(
           color: Colors.black,
