@@ -9,7 +9,7 @@ import 'package:imacs/widgets/data_field_widget.dart';
 /// This widget selective data made available by MavlinkgetDroneInformationunication.
 /// Arranges the data in a grid with two columns and applies a border.
 ///
-class DroneInformation extends StatelessWidget {
+class DroneInformation extends StatefulWidget {
   /// @brief Constructs a DroneInformation widget.
   ///
   /// @param getDroneInformation The communication channel (MAVLink) where to get
@@ -23,13 +23,18 @@ class DroneInformation extends StatelessWidget {
   final GetDroneInformation getDroneInformation;
 
   @override
-  Widget build(BuildContext context) {
-    // This method will be executed after widget will be completed.
-    Future.delayed(Duration.zero, () {
-      developer.log('Drone Information Widget rendered completely!');
-    });
+  State<DroneInformation> createState() => _DroneInformationState();
+}
 
-    // return of the build method
+class _DroneInformationState extends State<DroneInformation> {
+  @override
+  void initState() {
+    developer.log('Drone Information Widget rendered completely!');
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: 400,
       width: 500,
@@ -48,36 +53,36 @@ class DroneInformation extends StatelessWidget {
         children: <DataField>[
           DataField<double>(
             name: 'Yaw (deg)',
-            value: getDroneInformation.getYawStream(),
+            value: widget.getDroneInformation.getYawStream(),
             formatter: (double value) =>
                 (value / pi * 180.0).toStringAsFixed(2),
           ),
           DataField<double>(
             name: 'Pitch (deg)',
-            value: getDroneInformation.getPitchStream(),
+            value: widget.getDroneInformation.getPitchStream(),
             formatter: (double value) =>
                 (value / pi * 180.0).toStringAsFixed(2),
           ),
           DataField<double>(
             name: 'Roll (deg)',
-            value: getDroneInformation.getRollStream(),
+            value: widget.getDroneInformation.getRollStream(),
             formatter: (double value) =>
                 (value / pi * 180.0).toStringAsFixed(2),
           ),
           // global position
           DataField<int>(
             name: 'Latitude',
-            value: getDroneInformation.getLatStream(),
+            value: widget.getDroneInformation.getLatStream(),
             formatter: (int value) => (value / 1e7).toStringAsFixed(2),
           ),
           DataField<int>(
             name: 'Longitude',
-            value: getDroneInformation.getLonStream(),
+            value: widget.getDroneInformation.getLonStream(),
             formatter: (int value) => (value / 1e7).toStringAsFixed(2),
           ),
           DataField<int>(
             name: 'Altitude (m)',
-            value: getDroneInformation.getAltStream(),
+            value: widget.getDroneInformation.getAltStream(),
             formatter: (int value) => (value / 1e3).toStringAsFixed(2),
           ),
         ],
