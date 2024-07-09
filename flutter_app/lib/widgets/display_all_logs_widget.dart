@@ -14,8 +14,7 @@ class LogsList extends StatelessWidget {
     final args = arguments as Map<String, String>;
     return MaterialPageRoute(
       builder: (context) => LogDisplayerScreen(
-        fileContext: args['fileContent']!, 
-        fileName: args['fileName']!),
+          fileContext: args['fileContent']!, fileName: args['fileName']!),
     );
   }
 
@@ -37,14 +36,13 @@ class LogsList extends StatelessWidget {
                     title: Text(fileName),
                     onTap: () {
                       String fileContent =
-                        getAirsideLogs.getFiles()[index].readAsStringSync();
+                          getAirsideLogs.getFiles()[index].readAsStringSync();
                       Navigator.of(context).restorablePush(
-                        _logDisplayerRoute, // restorable push wouldn't function without static method
-                        arguments: {
-                          'fileContent': fileContent,
-                          'fileName': fileName,
-                        }
-                      );
+                          _logDisplayerRoute, // restorable push wouldn't function without static method
+                          arguments: {
+                            'fileContent': fileContent,
+                            'fileName': fileName,
+                          });
                     },
                   ),
                 ),

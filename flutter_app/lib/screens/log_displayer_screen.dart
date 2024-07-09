@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class LogDisplayerScreen extends StatelessWidget {
   final String fileContext;
   final String fileName;
-  const LogDisplayerScreen({Key? key, required this.fileContext, required this.fileName})
+  const LogDisplayerScreen(
+      {Key? key, required this.fileContext, required this.fileName})
       : super(key: key);
 
   @override
