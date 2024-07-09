@@ -11,9 +11,11 @@ class LogsList extends StatelessWidget {
   final GetAirsideLogs getAirsideLogs;
 
   static Route _logDisplayerRoute(BuildContext context, Object? arguments) {
-    final String fileContent = arguments as String;
+    final args = arguments as Map<String, String>;
     return MaterialPageRoute(
-      builder: (context) => LogDisplayerScreen(fileContext: fileContent),
+      builder: (context) => LogDisplayerScreen(
+        fileContext: args['fileContent']!, 
+        fileName: args['fileName']!),
     );
   }
 
@@ -27,19 +29,24 @@ class LogsList extends StatelessWidget {
           child: ListView.builder(
             itemCount: getAirsideLogs.getFiles().length,
             itemBuilder: (context, index) {
+              String fileName = getAirsideLogs.getFiles()[index].path;
               return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ListTile(
-                  tileColor: Colors.blue.withOpacity(0.2),
-                  title: Text(getAirsideLogs.getFiles()[index].path),
-                  onTap: () {
-                    String fileContent =
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  child: ListTile(
+                    title: Text(fileName),
+                    onTap: () {
+                      String fileContent =
                         getAirsideLogs.getFiles()[index].readAsStringSync();
-                    Navigator.of(context).restorablePush(
-                      _logDisplayerRoute, // restorable push wouldn't function without static method
-                      arguments: fileContent,
-                    );
-                  },
+                      Navigator.of(context).restorablePush(
+                        _logDisplayerRoute, // restorable push wouldn't function without static method
+                        arguments: {
+                          'fileContent': fileContent,
+                          'fileName': fileName,
+                        }
+                      );
+                    },
+                  ),
                 ),
               );
             },

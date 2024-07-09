@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   final String title;
   final comm =
       MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-  final String pathToDirectory = "C:\\Users\\emmao\\Documents\\logs";
+  static const String pathToDirectory = "C:\\Users\\emmao\\Documents\\logs";
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +19,15 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DroneInformation(
-              getDroneInformation: GetDroneInformation(comm: comm),
-            ),
-            LogsList(
-              getAirsideLogs: GetAirsideLogs(pathToDirectory: pathToDirectory),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          DroneInformation(
+            getDroneInformation: GetDroneInformation(comm: comm),
+          ),
+          LogsList(
+            getAirsideLogs: GetAirsideLogs(pathToDirectory: pathToDirectory),
+          ),
+        ],
       ),
     );
   }
