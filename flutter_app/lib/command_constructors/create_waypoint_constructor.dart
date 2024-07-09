@@ -1,4 +1,5 @@
 import 'package:dart_mavlink/dialects/common.dart';
+import 'dart:developer';
 
 /// Constructs a MissionItem command to create a new waypoint using MAV_CMD_NAV_WAYPOINT (16).
 ///
@@ -37,6 +38,8 @@ MissionItem createWaypoint(int sequence, int systemID, int componentID,
     z: altitude,
     missionType: mavMissionTypeMission,
   );
+
+  log('Created a waypoint at ($latitude, $longitude)');
 
   return missionItem;
 }
