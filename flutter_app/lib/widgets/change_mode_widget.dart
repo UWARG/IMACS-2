@@ -78,6 +78,12 @@ class DroneModeChangerState extends State<DroneModeChanger> {
 
   @override
   Widget build(BuildContext context) {
+    // This method will be executed after widget will be completed.
+    Future.delayed(Duration.zero, () {
+      log('Change Drone Mode Widget rendered completely!');
+    });
+
+    // return of the build method
     return Column(
       children: [
         DropdownMenu<MavMode>(

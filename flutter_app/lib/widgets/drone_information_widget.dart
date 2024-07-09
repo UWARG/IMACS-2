@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:imacs/modules/get_drone_information.dart';
 import 'package:imacs/widgets/data_field_widget.dart';
@@ -23,6 +24,12 @@ class DroneInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // This method will be executed after widget will be completed.
+    Future.delayed(Duration.zero, () {
+      developer.log('Drone Information Widget rendered completely!');
+    });
+
+    // return of the build method
     return Container(
       height: 400,
       width: 500,
