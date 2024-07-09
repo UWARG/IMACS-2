@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:imacs/modules/change_drone_mode.dart';
-import 'package:imacs/modules/custom_log_functions.dart';
 
 /// Define the MavMode constants and their string representations.
 const Map<int, String> mavModes = {
@@ -69,11 +70,10 @@ class DroneModeChangerState extends State<DroneModeChanger> {
           _confirmedMode = _selectedMode;
         },
       );
+      log("${mavModes[_selectedMode]} mode selected.");
+    } else {
+      log('No mode selected.');
     }
-    logDroneMode(
-      _selectedMode,
-      _selectedMode != null ? mavModes[_selectedMode] : null,
-    );
   }
 
   @override
