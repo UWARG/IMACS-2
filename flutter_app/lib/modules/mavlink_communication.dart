@@ -52,9 +52,11 @@ class MavlinkCommunication {
     switch (_connectionType) {
       case MavlinkCommunicationType.tcp:
         _startupTcpPort(connectionAddress, tcpPort);
+        log('Started listening for a TCP connection');
         break;
       case MavlinkCommunicationType.serial:
         _startupSerialPort(connectionAddress);
+        log('Started listening for a Serial connection');
         break;
     }
 
@@ -67,12 +69,12 @@ class MavlinkCommunication {
     _tcpSocket.listen((Uint8List data) {
       _parser.parse(data);
     }, onError: (error) {
-      // print if log does not work, I can't really test it, just avoid the warning
-      log(error);
+      log('ERROR: $error');
       _tcpSocket.destroy();
     });
 
     _tcpSocketInitializationFlag.complete();
+    log('TCP Port successfully initialized!');
   }
 
   _startupSerialPort(String connectionAddress) {
@@ -82,15 +84,22 @@ class MavlinkCommunication {
     _stream = serialPortReader.stream;
     _stream.listen((Uint8List data) {
       _parser.parse(data);
+    }, onError: (error) {
+      log('ERROR: $error');
+      _serialPort.dispose();
     });
+
+    log('Serial Port successfully initialized!');
   }
 
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
+    log('Wrote a message to TCP Port');
   }
 
   _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
+    log('Wrote a message to Serial Port');
   }
 
   _parseMavlinkMessage() {

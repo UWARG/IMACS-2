@@ -72,7 +72,7 @@ class DroneModeChangerState extends State<DroneModeChanger> {
       );
       log("${mavModes[_selectedMode]} mode selected.");
     } else {
-      log('No mode selected.');
+      log('ERROR: No mode selected.');
     }
   }
 

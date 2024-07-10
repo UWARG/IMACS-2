@@ -2,6 +2,7 @@ import 'package:dart_mavlink/mavlink.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/command_constructors/create_waypoint_constructor.dart';
 import 'package:dart_mavlink/dialects/common.dart';
+import 'dart:developer';
 
 class QueueWaypoints {
   final MavlinkCommunication comm;
@@ -23,6 +24,8 @@ class QueueWaypoints {
         newWaypoint.targetComponent, newWaypoint);
     comm.sequence++;
     comm.write(frame);
+
+    log('Created a waypoint at ($latitude, $longitude)');
   }
 
   /// Queues a waypoint to be sent.
