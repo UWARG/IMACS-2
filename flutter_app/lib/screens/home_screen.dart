@@ -21,9 +21,11 @@ class HomePage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          /*
           DroneInformation(
             getDroneInformation: GetDroneInformation(comm: comm),
           ),
+          */
           LogsList(
             getAirsideLogs: GetAirsideLogs(pathToDirectory: pathToDirectory),
           ),

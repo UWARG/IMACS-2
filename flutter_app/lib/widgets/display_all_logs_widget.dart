@@ -28,7 +28,13 @@ class LogsList extends StatelessWidget {
           child: ListView.builder(
             itemCount: getAirsideLogs.getFiles().length,
             itemBuilder: (context, index) {
-              String fileName = getAirsideLogs.getFiles()[index].path;
+              List<String> filePath =
+                  getAirsideLogs.getFiles()[index].uri.pathSegments;
+              String fileName = filePath.length == 1
+                  ? filePath.last
+                  : filePath
+                      .sublist(filePath.length - 2, filePath.length)
+                      .join('/');
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -38,11 +44,12 @@ class LogsList extends StatelessWidget {
                       String fileContent =
                           getAirsideLogs.getFiles()[index].readAsStringSync();
                       Navigator.of(context).restorablePush(
-                          _logDisplayerRoute, // restorable push wouldn't function without static method
-                          arguments: {
-                            'fileContent': fileContent,
-                            'fileName': fileName,
-                          });
+                        _logDisplayerRoute, // restorable push wouldn't function without static method
+                        arguments: {
+                          'fileContent': fileContent,
+                          'fileName': fileName,
+                        },
+                      );
                     },
                   ),
                 ),

@@ -14,8 +14,9 @@ class LogDisplayerScreen extends StatelessWidget {
         title: Text(fileName),
       ),
       body: SingleChildScrollView(
-        child: ListTile(
-          title: Text(fileContext),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(fileContext),
         ),
       ),
     );
