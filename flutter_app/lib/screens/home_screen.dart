@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   final String title;
   final comm =
       MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-  static const String pathToDirectory = "C:\\Users\\emmao\\Documents\\logs";
+  static const String pathToDirectory = 'C:\\Users\\emmao\\Documents\\logs';
 
   @override
   Widget build(BuildContext context) {
