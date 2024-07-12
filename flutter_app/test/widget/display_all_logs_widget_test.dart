@@ -11,7 +11,7 @@ void main() {
       testWidgets(
         'Displays airside logs by showing their respective path',
         (WidgetTester tester) async {
-          const String pathToDirectory = 'C:\\Users\\emmao\\Documents\\logs';
+          const String pathToDirectory = 'test\\test_logs';
           final getAirsideLogs =
               GetAirsideLogs(pathToDirectory: pathToDirectory);
 
@@ -50,8 +50,7 @@ void main() {
               find.byType(SingleChildScrollView), const Offset(0, -400));
           await tester.pumpAndSettle();
 
-          expect(find.text(lastFileName),
-              findsOneWidget); // don't know if this effectively checks if it can scroll
+          expect(find.text(lastFileName), findsOneWidget);
 
           // test if all files show up
           expect(find.byType(Card), findsNWidgets(expectedFiles.length));
