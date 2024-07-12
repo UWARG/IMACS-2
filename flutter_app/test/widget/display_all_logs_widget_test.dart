@@ -11,7 +11,7 @@ void main() {
       testWidgets(
         'Displays airside logs by showing their respective path',
         (WidgetTester tester) async {
-          const String pathToDirectory = 'test\\test_logs';
+          const String pathToDirectory = 'test/test_logs';
           final getAirsideLogs =
               GetAirsideLogs(pathToDirectory: pathToDirectory);
 
