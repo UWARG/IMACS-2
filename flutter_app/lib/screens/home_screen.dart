@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:imacs/modules/get_airside_logs.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/get_drone_information.dart';
 import 'package:imacs/widgets/drone_information_widget.dart';
-import 'package:imacs/widgets/display_all_logs_widget.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
@@ -11,7 +9,6 @@ class HomePage extends StatelessWidget {
   final String title;
   final comm =
       MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-  static const String pathToDirectory = 'test\\test_logs';
 
   @override
   Widget build(BuildContext context) {
