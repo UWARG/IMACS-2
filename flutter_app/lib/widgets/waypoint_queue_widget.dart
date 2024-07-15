@@ -52,6 +52,7 @@ class WaypointQueueState extends State<WaypointQueue> {
       print('Enter valid numbers.');
     }
   }
+
   /// Sends a command to queue a waypoint.
   void _queueWaypoint() {
     _getWaypointsFromInput();
@@ -79,16 +80,22 @@ class WaypointQueueState extends State<WaypointQueue> {
     );
   }
 
+  /// Sends the first waypoint in the queue to the drone.
   void _sendNextWaypointInQueue() {
-    /// send waypoint
-    /// update row numbers
+    widget.queueWaypoints.sendNextWaypointInQueue();
+    setState(() {
+      _widgetKey.currentState?.reassemble();
+    });
   }
   
   @override
   Widget build(BuildContext context) {
-    /// could map a list to a table, table updates to the list
     return Column(
       children: [
+        const Text(
+          'Waypoint Queue', 
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         DataTable(
           columns: const [
             DataColumn(label: Text('Latitude')),
@@ -105,20 +112,58 @@ class WaypointQueueState extends State<WaypointQueue> {
           )),
         ).toList(),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: TextField(controller: _latitudeInput),
-             ),
-            Expanded(
-              child: TextField(controller: _longitudeInput),
-            ),  
-            Expanded(
-              child: TextField(controller: _altitudeInput),
-            ),
-          ],
+        const SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: _sendNextWaypointInQueue, 
+          child: const Text('Send Next Waypoint in Queue to Drone')
         ),
+        const SizedBox(height: 16),
+        const Text(
+          'Enter a Waypoint Below', 
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 120,
+                height: 40,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Latitude',
+                  ),
+                  controller: _latitudeInput,
+                ),
+              ),
+              SizedBox(
+                width: 120,
+                height: 40,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Longitude',
+                  ),
+                  controller: _longitudeInput,
+                ),
+              ),
+              SizedBox(
+                width: 120,
+                height: 40,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Altitude',
+                  ),
+                  controller: _altitudeInput,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
         ElevatedButton(
           onPressed: _queueWaypoint, 
           child: const Text('Add Waypoint to Queue')
