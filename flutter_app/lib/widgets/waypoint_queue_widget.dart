@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:imacs/modules/queue_waypoints.dart';
 
 /// Widget to queue waypoints of a drone using MAVLink communication.
-/// 
+///
 /// This widget displays a table that contains a queue of waypoints to be
 /// sent to the drone. It provides functionality to add a waypoint to the
 /// queue as well as bypass the queue and send a waypoint to the drone
 /// immediately.
 class WaypointQueue extends StatefulWidget {
   /// @brief Constructs a WaypointQueue widget.
-  /// 
+  ///
   /// @param queueWaypoints
   /// QueueWaypoints class instance
-  /// 
+  ///
   /// @param systemId
   /// system ID for command constructor
-  /// 
+  ///
   /// @param componentId
   /// component ID for command constructor
-  /// 
+  ///
   final QueueWaypoints queueWaypoints;
   final int systemId;
   final int componentId;
@@ -44,7 +44,7 @@ class WaypointQueueState extends State<WaypointQueue> {
   late double _latitude;
   late double _longitude;
   late double _altitude;
-  
+
   /// Gets the waypoints from the TextFields
   void _getWaypointsFromInput() {
     try {
@@ -60,12 +60,7 @@ class WaypointQueueState extends State<WaypointQueue> {
   void _queueWaypoint() {
     _getWaypointsFromInput();
     widget.queueWaypoints.queueWaypoint(
-      widget.systemId,
-      widget.componentId,
-      _latitude,
-      _longitude,
-      _altitude
-    );
+        widget.systemId, widget.componentId, _latitude, _longitude, _altitude);
     setState(() {
       _widgetKey.currentState?.reassemble();
     });
@@ -75,12 +70,7 @@ class WaypointQueueState extends State<WaypointQueue> {
   void _queueWaypointWithoutQueue() {
     _getWaypointsFromInput();
     widget.queueWaypoints.sendWaypointWithoutQueue(
-      widget.systemId,
-      widget.componentId,
-      _latitude,
-      _longitude,
-      _altitude
-    );
+        widget.systemId, widget.componentId, _latitude, _longitude, _altitude);
   }
 
   /// Sends the first waypoint in the queue to the drone.
@@ -90,13 +80,13 @@ class WaypointQueueState extends State<WaypointQueue> {
       _widgetKey.currentState?.reassemble();
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const Text(
-          'Waypoint Queue', 
+          'Waypoint Queue',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         DataTable(
@@ -105,24 +95,25 @@ class WaypointQueueState extends State<WaypointQueue> {
             DataColumn(label: Text('Longitude')),
             DataColumn(label: Text('Altitude')),
           ],
-          rows: widget.queueWaypoints.waypointQueue.map(
-            ((element) => DataRow(
-            cells: <DataCell>[
-              DataCell(Text(element.x.toString())),
-              DataCell(Text(element.y.toString())),
-              DataCell(Text(element.z.toString())),
-            ],
-          )),
-        ).toList(),
+          rows: widget.queueWaypoints.waypointQueue
+              .map(
+                ((element) => DataRow(
+                      cells: <DataCell>[
+                        DataCell(Text(element.x.toString())),
+                        DataCell(Text(element.y.toString())),
+                        DataCell(Text(element.z.toString())),
+                      ],
+                    )),
+              )
+              .toList(),
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: _sendNextWaypointInQueue, 
-          child: const Text('Send Next Waypoint in Queue to Drone')
-        ),
+            onPressed: _sendNextWaypointInQueue,
+            child: const Text('Send Next Waypoint in Queue to Drone')),
         const SizedBox(height: 16),
         const Text(
-          'Enter a Waypoint Below', 
+          'Enter a Waypoint Below',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         Padding(
@@ -168,14 +159,12 @@ class WaypointQueueState extends State<WaypointQueue> {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: _queueWaypoint, 
-          child: const Text('Add Waypoint to Queue')
-        ),
+            onPressed: _queueWaypoint,
+            child: const Text('Add Waypoint to Queue')),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: _queueWaypointWithoutQueue, 
-          child: const Text('Send Waypoint Immediately')
-        ),
+            onPressed: _queueWaypointWithoutQueue,
+            child: const Text('Send Waypoint Immediately')),
       ],
     );
   }
