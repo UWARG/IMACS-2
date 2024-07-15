@@ -3,7 +3,10 @@ import 'package:imacs/modules/queue_waypoints.dart';
 
 /// Widget to queue waypoints of a drone using MAVLink communication.
 /// 
-/// [DESCRIPTION]
+/// This widget displays a table that contains a queue of waypoints to be
+/// sent to the drone. It provides functionality to add a waypoint to the
+/// queue as well as bypass the queue and send a waypoint to the drone
+/// immediately.
 class WaypointQueue extends StatefulWidget {
   /// @brief Constructs a WaypointQueue widget.
   /// 
