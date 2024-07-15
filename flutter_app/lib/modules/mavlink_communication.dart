@@ -51,12 +51,12 @@ class MavlinkCommunication {
         _connectionType = connectionType {
     switch (_connectionType) {
       case MavlinkCommunicationType.tcp:
+        // Trying to start TCP connection
         _startupTcpPort(connectionAddress, tcpPort);
-        log('Started listening for a TCP connection');
         break;
       case MavlinkCommunicationType.serial:
+        // Trying to start Serial connection
         _startupSerialPort(connectionAddress);
-        log('Started listening for a Serial connection');
         break;
     }
 
@@ -94,12 +94,14 @@ class MavlinkCommunication {
 
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
-    log('Wrote a message to TCP Port');
+    log('Wrote a message to TCP Port. Frame ID: ${frame.componentId}');
+    log('Message: ${frame.message}');
   }
 
   _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
-    log('Wrote a message to Serial Port');
+    log('Wrote a message to Serial Port. Frame ID: ${frame.componentId}');
+    log('Message: ${frame.message}');
   }
 
   _parseMavlinkMessage() {

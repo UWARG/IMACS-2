@@ -1,6 +1,9 @@
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/command_constructors/set_mode_constructor.dart';
+import 'dart:developer';
+
+import 'package:imacs/widgets/change_mode_widget.dart';
 
 class ChangeDroneMode {
   final MavlinkCommunication comm;
@@ -15,5 +18,7 @@ class ChangeDroneMode {
     var frame = setMode(comm.sequence, systemID, componentID, baseMode);
     comm.sequence++;
     comm.write(frame);
+
+    log('${mavModes[baseMode]} mode set.');
   }
 }

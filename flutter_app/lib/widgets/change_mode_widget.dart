@@ -77,12 +77,6 @@ class DroneModeChangerState extends State<DroneModeChanger> {
   }
 
   @override
-  void initState() {
-    log('Change Drone Mode Widget rendered completely!');
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [

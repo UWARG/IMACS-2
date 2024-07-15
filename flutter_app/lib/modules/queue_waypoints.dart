@@ -25,7 +25,7 @@ class QueueWaypoints {
     comm.sequence++;
     comm.write(frame);
 
-    log('Created a waypoint at ($latitude, $longitude)');
+    log('Added a waypoint at (Latitude: $latitude, Longitude: $longitude, Altitude: $altitude).');
   }
 
   /// Queues a waypoint to be sent.
@@ -36,6 +36,8 @@ class QueueWaypoints {
         comm.sequence, systemID, componentID, latitude, longitude, altitude);
     comm.sequence++;
     waypointQueue.add(newWaypoint);
+
+    log('Queued a waypoint to be sent at (Latitude: $latitude, Longitude: $longitude, Altitude: $altitude).');
   }
 
   /// Takes first waypoint in the queue and send its to the drone
@@ -49,6 +51,7 @@ class QueueWaypoints {
       var frame = MavlinkFrame.v2(waypoint.seq, waypoint.targetSystem,
           waypoint.targetComponent, waypoint);
       comm.write(frame);
+      log('Sent waypoint to the drone from the queue (Latitude: ${waypoint.x}, Longitude: ${waypoint.y}, Altitude: ${waypoint.z}).');
     }
   }
 }
