@@ -6,6 +6,8 @@ import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 
+const String moduleName = "Mavlink Communication";
+
 enum MavlinkCommunicationType {
   tcp,
   serial,
@@ -51,11 +53,11 @@ class MavlinkCommunication {
         _connectionType = connectionType {
     switch (_connectionType) {
       case MavlinkCommunicationType.tcp:
-        // Trying to start TCP connection
+        log('[$moduleName] Trying to start TCP connection');
         _startupTcpPort(connectionAddress, tcpPort);
         break;
       case MavlinkCommunicationType.serial:
-        // Trying to start Serial connection
+        log('[$moduleName] Trying to start Serial connection');
         _startupSerialPort(connectionAddress);
         break;
     }
@@ -69,12 +71,12 @@ class MavlinkCommunication {
     _tcpSocket.listen((Uint8List data) {
       _parser.parse(data);
     }, onError: (error) {
-      log('ERROR: $error');
+      log('[$moduleName] ERROR: $error');
       _tcpSocket.destroy();
     });
 
     _tcpSocketInitializationFlag.complete();
-    log('TCP Port successfully initialized!');
+    log('[$moduleName] TCP Port successfully initialized!');
   }
 
   _startupSerialPort(String connectionAddress) {
@@ -85,23 +87,23 @@ class MavlinkCommunication {
     _stream.listen((Uint8List data) {
       _parser.parse(data);
     }, onError: (error) {
-      log('ERROR: $error');
+      log('[$moduleName] ERROR: $error');
       _serialPort.dispose();
     });
 
-    log('Serial Port successfully initialized!');
+    log('[$moduleName] Serial Port successfully initialized!');
   }
 
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
-    log('Wrote a message to TCP Port. Frame ID: ${frame.componentId}');
-    log('Message: ${frame.message}');
+    log('[$moduleName] Wrote a message to TCP Port. Frame ID: ${frame.componentId}');
+    log('[$moduleName] Message: ${frame.message}');
   }
 
   _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
-    log('Wrote a message to Serial Port. Frame ID: ${frame.componentId}');
-    log('Message: ${frame.message}');
+    log('[$moduleName] Wrote a message to Serial Port. Frame ID: ${frame.componentId}');
+    log('[$moduleName] Message: ${frame.message}');
   }
 
   _parseMavlinkMessage() {
