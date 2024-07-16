@@ -28,10 +28,37 @@ class GetDroneInformation {
   final StreamController<int> _altStreamController = StreamController<int>();
 
   GetDroneInformation({required this.comm}) {
+    if (comm.connectionType == MavlinkCommunicationType.tcp) {
+      _listenTcpPort();
+    } else if (comm.connectionType == MavlinkCommunicationType.serial) {
+      _listenSerialPort();
+    }
     _parseMavlinkMessage();
-    comm.stream.listen((Uint8List data) {
-      _parser.parse(data);
-    });
+  }
+
+  _listenTcpPort() async {
+    await comm.tcpSocketInitializationFlag.future;
+    comm.tcpSocket.listen(
+      (Uint8List data) {
+        _parser.parse(data);
+      },
+      onError: (error) {
+        print(error);
+        comm.tcpSocket.destroy();
+      },
+    );
+  }
+
+  _listenSerialPort() async {
+    comm.stream.listen(
+      (Uint8List data) {
+        _parser.parse(data);
+      },
+      onError: (error) {
+        print(error);
+        comm.serialPort.close();
+      },
+    );
   }
 
   void _parseMavlinkMessage() {

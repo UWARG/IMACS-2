@@ -39,12 +39,6 @@ class MavlinkCommunication {
   _startupTcpPort(String connectionAddress, int tcpPort) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
-    _tcpSocket.listen((Uint8List data) {}, onError: (error) {
-      // print if log does not work, I can't really test it, just avoid the warning
-      print(error);
-      _tcpSocket.destroy();
-    });
-
     _tcpSocketInitializationFlag.complete();
   }
 
@@ -53,7 +47,6 @@ class MavlinkCommunication {
     _serialPort.openReadWrite();
     SerialPortReader serialPortReader = SerialPortReader(_serialPort);
     _stream = serialPortReader.stream;
-    _stream.listen((Uint8List data) {});
   }
 
   _writeToTcpPort(MavlinkFrame frame) {
@@ -81,8 +74,7 @@ class MavlinkCommunication {
   MavlinkCommunicationType get connectionType => _connectionType;
   Completer<void> get tcpSocketInitializationFlag =>
       _tcpSocketInitializationFlag;
-  Stream<Uint8List> get stream =>
-      _connectionType == MavlinkCommunicationType.tcp
-          ? _tcpSocket.asBroadcastStream()
-          : _stream;
+  Socket get tcpSocket => _tcpSocket;
+  SerialPort get serialPort => _serialPort;
+  Stream<Uint8List> get stream => _stream;
 }
