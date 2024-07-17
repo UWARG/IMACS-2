@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:imacs/modules/change_drone_mode.dart';
 
-const String moduleName = "Change Drone Mode Widget";
+const String widgetName = "Change Drone Mode Widget";
 
 /// Widget to change the mode of a drone using MAVLink communication.
 ///
@@ -57,9 +57,9 @@ class DroneModeChangerState extends State<DroneModeChanger> {
           _confirmedMode = _selectedMode;
         },
       );
-      log("[$moduleName] ${mavModes[_selectedMode]} mode selected.");
+      log("[$widgetName] ${mavModes[_selectedMode]} mode selected.");
     } else {
-      log('[$moduleName] ERROR: No mode selected.');
+      log('[$widgetName] ERROR: No mode selected.');
     }
   }
 
