@@ -14,27 +14,6 @@ enum MavlinkCommunicationType {
 }
 
 class MavlinkCommunication {
-  final MavlinkParser _parser;
-
-  final StreamController<double> _yawStreamController =
-      StreamController<double>();
-  final StreamController<double> _pitchStreamController =
-      StreamController<double>();
-  final StreamController<double> _rollStreamController =
-      StreamController<double>();
-  final StreamController<double> _rollSpeedController =
-      StreamController<double>();
-  final StreamController<double> _pitchSpeedController =
-      StreamController<double>();
-  final StreamController<double> _yawSpeedController =
-      StreamController<double>();
-  final StreamController<int> _timeBootMsPitchController =
-      StreamController<int>();
-
-  final StreamController<int> _latStreamController = StreamController<int>();
-  final StreamController<int> _lonStreamController = StreamController<int>();
-  final StreamController<int> _altStreamController = StreamController<int>();
-
   int sequence = 0; // sequence of current message
 
   final List<MissionItem> waypointQueue = [];
@@ -49,8 +28,7 @@ class MavlinkCommunication {
 
   MavlinkCommunication(MavlinkCommunicationType connectionType,
       String connectionAddress, int tcpPort)
-      : _parser = MavlinkParser(MavlinkDialectCommon()),
-        _connectionType = connectionType {
+      : _connectionType = connectionType {
     switch (_connectionType) {
       case MavlinkCommunicationType.tcp:
         log('[$moduleName] Trying to start TCP connection');
@@ -61,20 +39,11 @@ class MavlinkCommunication {
         _startupSerialPort(connectionAddress);
         break;
     }
-
-    _parseMavlinkMessage();
   }
 
   _startupTcpPort(String connectionAddress, int tcpPort) async {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
-    _tcpSocket.listen((Uint8List data) {
-      _parser.parse(data);
-    }, onError: (error) {
-      log('[$moduleName] ERROR: $error');
-      _tcpSocket.destroy();
-    });
-
     _tcpSocketInitializationFlag.complete();
     log('[$moduleName] TCP Port successfully initialized!');
   }
@@ -84,14 +53,6 @@ class MavlinkCommunication {
     _serialPort.openReadWrite();
     SerialPortReader serialPortReader = SerialPortReader(_serialPort);
     _stream = serialPortReader.stream;
-    _stream.listen((Uint8List data) {
-      _parser.parse(data);
-    }, onError: (error) {
-      log('[$moduleName] ERROR: $error');
-      _serialPort.dispose();
-    });
-
-    log('[$moduleName] Serial Port successfully initialized!');
   }
 
   _writeToTcpPort(MavlinkFrame frame) {
@@ -104,27 +65,6 @@ class MavlinkCommunication {
     _serialPort.write(frame.serialize());
     log('[$moduleName] Wrote a message to Serial Port. Frame ID: ${frame.componentId}');
     log('[$moduleName] Message: ${frame.message}');
-  }
-
-  _parseMavlinkMessage() {
-    _parser.stream.listen((MavlinkFrame frame) {
-      if (frame.message is Attitude) {
-        // Append data to appropriate stream
-        var attitude = frame.message as Attitude;
-        _yawStreamController.add(attitude.yaw);
-        _pitchStreamController.add(attitude.pitch);
-        _rollStreamController.add(attitude.roll);
-        _rollSpeedController.add(attitude.rollspeed);
-        _pitchSpeedController.add(attitude.pitchspeed);
-        _yawSpeedController.add(attitude.yawspeed);
-        _timeBootMsPitchController.add(attitude.timeBootMs);
-      } else if (frame.message is GlobalPositionInt) {
-        var globalPositionInt = frame.message as GlobalPositionInt;
-        _latStreamController.add(globalPositionInt.lat);
-        _lonStreamController.add(globalPositionInt.lon);
-        _altStreamController.add(globalPositionInt.relativeAlt);
-      }
-    });
   }
 
   // Send MAVLink messages
@@ -144,15 +84,7 @@ class MavlinkCommunication {
   MavlinkCommunicationType get connectionType => _connectionType;
   Completer<void> get tcpSocketInitializationFlag =>
       _tcpSocketInitializationFlag;
-  StreamController<double> get yawStreamController => _yawStreamController;
-  StreamController<double> get pitchStreamController => _pitchStreamController;
-  StreamController<double> get rollStreamController => _rollStreamController;
-  StreamController<double> get rollSpeedController => _rollSpeedController;
-  StreamController<double> get pitchSpeedController => _pitchSpeedController;
-  StreamController<double> get yawSpeedController => _yawSpeedController;
-  StreamController<int> get timeBootMsPitchController =>
-      _timeBootMsPitchController;
-  StreamController<int> get latStreamController => _latStreamController;
-  StreamController<int> get lonStreamController => _lonStreamController;
-  StreamController<int> get altStreamController => _altStreamController;
+  Socket get tcpSocket => _tcpSocket;
+  SerialPort get serialPort => _serialPort;
+  Stream<Uint8List> get stream => _stream;
 }
