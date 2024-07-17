@@ -1,9 +1,12 @@
 import 'dart:typed_data';
 import 'dart:io';
+import 'dart:developer';
 import 'dart:async';
 import 'package:flutter_libserialport/flutter_libserialport.dart';
 import 'package:dart_mavlink/mavlink.dart';
 import 'package:dart_mavlink/dialects/common.dart';
+
+const String moduleName = "Mavlink Communication";
 
 enum MavlinkCommunicationType {
   tcp,
@@ -28,9 +31,11 @@ class MavlinkCommunication {
       : _connectionType = connectionType {
     switch (_connectionType) {
       case MavlinkCommunicationType.tcp:
+        log('[$moduleName] Trying to start TCP connection');
         _startupTcpPort(connectionAddress, tcpPort);
         break;
       case MavlinkCommunicationType.serial:
+        log('[$moduleName] Trying to start Serial connection');
         _startupSerialPort(connectionAddress);
         break;
     }
@@ -40,6 +45,7 @@ class MavlinkCommunication {
     // Connect to the socket
     _tcpSocket = await Socket.connect(connectionAddress, tcpPort);
     _tcpSocketInitializationFlag.complete();
+    log('[$moduleName] TCP Port successfully initialized!');
   }
 
   _startupSerialPort(String connectionAddress) {
@@ -51,10 +57,14 @@ class MavlinkCommunication {
 
   _writeToTcpPort(MavlinkFrame frame) {
     _tcpSocket.write(frame.serialize());
+    log('[$moduleName] Wrote a message to TCP Port. Frame ID: ${frame.componentId}');
+    log('[$moduleName] Message: ${frame.message}');
   }
 
   _writeToSerialPort(MavlinkFrame frame) {
     _serialPort.write(frame.serialize());
+    log('[$moduleName] Wrote a message to Serial Port. Frame ID: ${frame.componentId}');
+    log('[$moduleName] Message: ${frame.message}');
   }
 
   // Send MAVLink messages

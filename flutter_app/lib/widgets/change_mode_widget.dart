@@ -1,21 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:dart_mavlink/dialects/common.dart';
 import 'package:imacs/modules/change_drone_mode.dart';
 
-/// Define the MavMode constants and their string representations.
-const Map<int, String> mavModes = {
-  mavModePreflight: "Preflight",
-  mavModeManualDisarmed: "Manual Disarmed",
-  mavModeTestDisarmed: "Test Disarmed",
-  mavModeStabilizeDisarmed: "Stabilize Disarmed",
-  mavModeGuidedDisarmed: "Guided Disarmed",
-  mavModeAutoDisarmed: "Auto Disarmed",
-  mavModeManualArmed: "Manual Armed",
-  mavModeTestArmed: "Test Armed",
-  mavModeStabilizeArmed: "Stabilize Armed",
-  mavModeGuidedArmed: "Guided Armed",
-  mavModeAutoArmed: "Auto Armed",
-};
+const String widgetName = "Change Drone Mode Widget";
 
 /// Widget to change the mode of a drone using MAVLink communication.
 ///
@@ -63,11 +52,14 @@ class DroneModeChangerState extends State<DroneModeChanger> {
         widget.componentId,
         _selectedMode!,
       );
-      setState(() {
-        _confirmedMode = _selectedMode;
-      });
+      setState(
+        () {
+          _confirmedMode = _selectedMode;
+        },
+      );
+      log("[$widgetName] ${mavModes[_selectedMode]} mode selected.");
     } else {
-      print('No mode selected');
+      log('[$widgetName] ERROR: No mode selected.');
     }
   }
 
