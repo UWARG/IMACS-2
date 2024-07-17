@@ -1,48 +1,124 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'package:dart_mavlink/mavlink.dart';
+import 'package:dart_mavlink/dialects/common.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 
 class GetDroneInformation {
+  final MavlinkParser _parser = MavlinkParser(MavlinkDialectCommon());
   final MavlinkCommunication comm;
 
-  GetDroneInformation({required this.comm});
+  final StreamController<double> _yawStreamController =
+      StreamController<double>();
+  final StreamController<double> _pitchStreamController =
+      StreamController<double>();
+  final StreamController<double> _rollStreamController =
+      StreamController<double>();
+  final StreamController<double> _rollSpeedController =
+      StreamController<double>();
+  final StreamController<double> _pitchSpeedController =
+      StreamController<double>();
+  final StreamController<double> _yawSpeedController =
+      StreamController<double>();
+  final StreamController<int> _timeBootMsPitchController =
+      StreamController<int>();
+
+  final StreamController<int> _latStreamController = StreamController<int>();
+  final StreamController<int> _lonStreamController = StreamController<int>();
+  final StreamController<int> _altStreamController = StreamController<int>();
+
+  GetDroneInformation({required this.comm}) {
+    if (comm.connectionType == MavlinkCommunicationType.tcp) {
+      _listenTcpPort();
+    } else if (comm.connectionType == MavlinkCommunicationType.serial) {
+      _listenSerialPort();
+    }
+    _parseMavlinkMessage();
+  }
+
+  _listenTcpPort() async {
+    await comm.tcpSocketInitializationFlag.future;
+    comm.tcpSocket.listen(
+      (Uint8List data) {
+        _parser.parse(data);
+      },
+      onError: (error) {
+        print(error);
+        comm.tcpSocket.destroy();
+      },
+    );
+  }
+
+  _listenSerialPort() async {
+    comm.stream.listen(
+      (Uint8List data) {
+        _parser.parse(data);
+      },
+      onError: (error) {
+        print(error);
+        comm.serialPort.close();
+      },
+    );
+  }
+
+  void _parseMavlinkMessage() {
+    _parser.stream.listen((MavlinkFrame frame) {
+      if (frame.message is Attitude) {
+        // Append data to appropriate stream
+        var attitude = frame.message as Attitude;
+        _yawStreamController.add(attitude.yaw);
+        _pitchStreamController.add(attitude.pitch);
+        _rollStreamController.add(attitude.roll);
+        _rollSpeedController.add(attitude.rollspeed);
+        _pitchSpeedController.add(attitude.pitchspeed);
+        _yawSpeedController.add(attitude.yawspeed);
+        _timeBootMsPitchController.add(attitude.timeBootMs);
+      } else if (frame.message is GlobalPositionInt) {
+        var globalPositionInt = frame.message as GlobalPositionInt;
+        _latStreamController.add(globalPositionInt.lat);
+        _lonStreamController.add(globalPositionInt.lon);
+        _altStreamController.add(globalPositionInt.relativeAlt);
+      }
+    });
+  }
 
   Stream<double> getYawStream() {
-    return comm.yawStreamController.stream;
+    return _yawStreamController.stream;
   }
 
   Stream<double> getPitchStream() {
-    return comm.pitchStreamController.stream;
+    return _pitchStreamController.stream;
   }
 
   Stream<double> getRollStream() {
-    return comm.rollStreamController.stream;
+    return _rollStreamController.stream;
   }
 
   Stream<double> getRollSpeedStream() {
-    return comm.rollSpeedController.stream;
+    return _rollSpeedController.stream;
   }
 
   Stream<double> getPitchSpeedStream() {
-    return comm.pitchSpeedController.stream;
+    return _pitchSpeedController.stream;
   }
 
   Stream<double> getYawSpeedStream() {
-    return comm.yawSpeedController.stream;
+    return _yawSpeedController.stream;
   }
 
   Stream<int> getTimeBootMsPitchStream() {
-    return comm.timeBootMsPitchController.stream;
+    return _timeBootMsPitchController.stream;
   }
 
   Stream<int> getLatStream() {
-    return comm.latStreamController.stream;
+    return _latStreamController.stream;
   }
 
   Stream<int> getLonStream() {
-    return comm.lonStreamController.stream;
+    return _lonStreamController.stream;
   }
 
   Stream<int> getAltStream() {
-    return comm.altStreamController.stream;
+    return _altStreamController.stream;
   }
 }
