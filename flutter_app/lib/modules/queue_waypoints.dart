@@ -2,6 +2,9 @@ import 'package:dart_mavlink/mavlink.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/command_constructors/create_waypoint_constructor.dart';
 import 'package:dart_mavlink/dialects/common.dart';
+import 'dart:developer';
+
+const String moduleName = "Queue Waypoints";
 
 class QueueWaypoints {
   final MavlinkCommunication comm;
@@ -23,6 +26,8 @@ class QueueWaypoints {
         newWaypoint.targetComponent, newWaypoint);
     comm.sequence++;
     comm.write(frame);
+
+    log('[$moduleName] Added a waypoint at (Latitude: $latitude, Longitude: $longitude, Altitude: $altitude).');
   }
 
   /// Queues a waypoint to be sent.
@@ -33,6 +38,8 @@ class QueueWaypoints {
         comm.sequence, systemID, componentID, latitude, longitude, altitude);
     comm.sequence++;
     waypointQueue.add(newWaypoint);
+
+    log('[$moduleName] Queued a waypoint to be sent at (Latitude: $latitude, Longitude: $longitude, Altitude: $altitude).');
   }
 
   /// Takes first waypoint in the queue and send its to the drone
@@ -46,6 +53,7 @@ class QueueWaypoints {
       var frame = MavlinkFrame.v2(waypoint.seq, waypoint.targetSystem,
           waypoint.targetComponent, waypoint);
       comm.write(frame);
+      log('[$moduleName] Sent waypoint to the drone from the queue (Latitude: ${waypoint.x}, Longitude: ${waypoint.y}, Altitude: ${waypoint.z}).');
     }
   }
 }
