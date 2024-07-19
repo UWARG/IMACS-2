@@ -36,7 +36,6 @@ class WaypointQueue extends StatefulWidget {
 
 /// State for the QueueWaypoints widget.
 class WaypointQueueState extends State<WaypointQueue> {
-  final GlobalKey _widgetKey = GlobalKey(); // GlobalKey for the widget
   final TextEditingController _latitudeInput = TextEditingController();
   final TextEditingController _longitudeInput = TextEditingController();
   final TextEditingController _altitudeInput = TextEditingController();
@@ -66,9 +65,7 @@ class WaypointQueueState extends State<WaypointQueue> {
       _longitude,
       _altitude,
     );
-    setState(() {
-      _widgetKey.currentState?.reassemble();
-    });
+    setState(() {});
   }
 
   /// Sends a command to send a waypoint, bypassing the queue.
@@ -86,9 +83,7 @@ class WaypointQueueState extends State<WaypointQueue> {
   /// Sends the first waypoint in the queue to the drone.
   void _sendNextWaypointInQueue() {
     widget.queueWaypoints.sendNextWaypointInQueue();
-    setState(() {
-      _widgetKey.currentState?.reassemble();
-    });
+    setState(() {});
   }
 
   @override
