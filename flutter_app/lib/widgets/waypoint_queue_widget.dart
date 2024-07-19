@@ -93,93 +93,95 @@ class WaypointQueueState extends State<WaypointQueue> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const Text(
-          'Waypoint Queue',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        DataTable(
-          columns: const [
-            DataColumn(label: Text('Latitude')),
-            DataColumn(label: Text('Longitude')),
-            DataColumn(label: Text('Altitude')),
-          ],
-          rows: widget.queueWaypoints.waypointQueue
-              .map(
-                ((element) => DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text(element.x.toString())),
-                        DataCell(Text(element.y.toString())),
-                        DataCell(Text(element.z.toString())),
-                      ],
-                    )),
-              )
-              .toList(),
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-            onPressed: _sendNextWaypointInQueue,
-            child: const Text('Send Next Waypoint in Queue to Drone')),
-        const SizedBox(height: 16),
-        const Text(
-          'Enter a Waypoint Below',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 120,
-                height: 40,
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Latitude',
-                  ),
-                  controller: _latitudeInput,
-                ),
-              ),
-              SizedBox(
-                width: 120,
-                height: 40,
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Longitude',
-                  ),
-                  controller: _longitudeInput,
-                ),
-              ),
-              SizedBox(
-                width: 120,
-                height: 40,
-                child: TextField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Altitude',
-                  ),
-                  controller: _altitudeInput,
-                ),
-              ),
-            ],
+    return Expanded(
+      child: ListView(
+        children: [
+          const Text(
+            'Waypoint Queue',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-        ),
-        const SizedBox(height: 16),
-        OverflowBar(spacing: 10, children: [
-          ElevatedButton(
-            onPressed: _queueWaypoint,
-            child: const Text('Add Waypoint to Queue'),
+          DataTable(
+            columns: const [
+              DataColumn(label: Text('Latitude')),
+              DataColumn(label: Text('Longitude')),
+              DataColumn(label: Text('Altitude')),
+            ],
+            rows: widget.queueWaypoints.waypointQueue
+                .map(
+                  ((element) => DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text(element.x.toString())),
+                          DataCell(Text(element.y.toString())),
+                          DataCell(Text(element.z.toString())),
+                        ],
+                      )),
+                )
+                .toList(),
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: _queueWaypointWithoutQueue,
-            child: const Text('Send Waypoint Immediately'),
+              onPressed: _sendNextWaypointInQueue,
+              child: const Text('Send Next Waypoint in Queue to Drone')),
+          const SizedBox(height: 16),
+          const Text(
+            'Enter a Waypoint Below',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-        ]),
-      ],
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 120,
+                  height: 40,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Latitude',
+                    ),
+                    controller: _latitudeInput,
+                  ),
+                ),
+                SizedBox(
+                  width: 120,
+                  height: 40,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Longitude',
+                    ),
+                    controller: _longitudeInput,
+                  ),
+                ),
+                SizedBox(
+                  width: 120,
+                  height: 40,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Altitude',
+                    ),
+                    controller: _altitudeInput,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          OverflowBar(spacing: 10, children: [
+            ElevatedButton(
+              onPressed: _queueWaypoint,
+              child: const Text('Add Waypoint to Queue'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _queueWaypointWithoutQueue,
+              child: const Text('Send Waypoint Immediately'),
+            ),
+          ]),
+        ],
+      ),
     );
   }
 }
