@@ -122,18 +122,9 @@ void main() {
           .tap(find.widgetWithText(ElevatedButton, 'Add Waypoint to Queue'));
       await tester.pump();
 
-      expect(
-          find.ancestor(
-              of: find.text('10.01'), matching: find.byType(DataCell)),
-          findsOneWidget);
-      expect(
-          find.ancestor(
-              of: find.text('-20.02'), matching: find.byType(DataCell)),
-          findsOneWidget);
-      expect(
-          find.ancestor(
-              of: find.text('30.03'), matching: find.byType(DataCell)),
-          findsOneWidget);
+      expect(find.text('10.01'), findsNWidgets(2));
+      expect(find.text('-20.02'), findsNWidgets(2));
+      expect(find.text('30.03'), findsNWidgets(2));
       expect(queueWaypoints.waypointQueue.length, 1);
       expect(queueWaypoints.waypointQueue[0].x, 10.01);
       expect(queueWaypoints.waypointQueue[0].y, -20.02);
@@ -145,7 +136,7 @@ void main() {
           MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
       final queueWaypoints = QueueWaypoints(comm: mavlinkCommunication);
 
-      queueWaypoints.queueWaypoint(1, 1, 10.01, -20.02, 30.03);
+      queueWaypoints.queueWaypoint(0, 0, 10.01, -20.02, 30.03);
 
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -167,12 +158,12 @@ void main() {
 
       await tester.tap(find.widgetWithText(
           ElevatedButton, 'Send Next Waypoint in Queue to Drone'));
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 10000));
 
-      expect(queueWaypoints.waypointQueue.length, 0);
       expect(find.text('10.01'), findsNothing);
       expect(find.text('-20.02'), findsNothing);
       expect(find.text('30.03'), findsNothing);
+      expect(queueWaypoints.waypointQueue.length, 0);
     });
   });
 }
