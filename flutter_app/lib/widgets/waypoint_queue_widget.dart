@@ -60,7 +60,12 @@ class WaypointQueueState extends State<WaypointQueue> {
   void _queueWaypoint() {
     _getWaypointsFromInput();
     widget.queueWaypoints.queueWaypoint(
-        widget.systemId, widget.componentId, _latitude, _longitude, _altitude);
+      widget.systemId,
+      widget.componentId,
+      _latitude,
+      _longitude,
+      _altitude,
+    );
     setState(() {
       _widgetKey.currentState?.reassemble();
     });
@@ -70,7 +75,12 @@ class WaypointQueueState extends State<WaypointQueue> {
   void _queueWaypointWithoutQueue() {
     _getWaypointsFromInput();
     widget.queueWaypoints.sendWaypointWithoutQueue(
-        widget.systemId, widget.componentId, _latitude, _longitude, _altitude);
+      widget.systemId,
+      widget.componentId,
+      _latitude,
+      _longitude,
+      _altitude,
+    );
   }
 
   /// Sends the first waypoint in the queue to the drone.
@@ -83,7 +93,7 @@ class WaypointQueueState extends State<WaypointQueue> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         const Text(
           'Waypoint Queue',
@@ -158,13 +168,17 @@ class WaypointQueueState extends State<WaypointQueue> {
           ),
         ),
         const SizedBox(height: 16),
-        ElevatedButton(
+        OverflowBar(spacing: 10, children: [
+          ElevatedButton(
             onPressed: _queueWaypoint,
-            child: const Text('Add Waypoint to Queue')),
-        const SizedBox(height: 16),
-        ElevatedButton(
+            child: const Text('Add Waypoint to Queue'),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
             onPressed: _queueWaypointWithoutQueue,
-            child: const Text('Send Waypoint Immediately')),
+            child: const Text('Send Waypoint Immediately'),
+          ),
+        ]),
       ],
     );
   }
