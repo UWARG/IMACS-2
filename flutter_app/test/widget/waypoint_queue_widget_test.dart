@@ -134,6 +134,7 @@ void main() {
         (WidgetTester tester) async {
       final mavlinkCommunication = MavlinkCommunication(
           MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
+      await mavlinkCommunication.tcpSocketInitializationFlag.future;
       final queueWaypoints = QueueWaypoints(comm: mavlinkCommunication);
 
       queueWaypoints.queueWaypoint(0, 0, 10.01, -20.02, 30.03);
@@ -158,7 +159,7 @@ void main() {
 
       await tester.tap(find.widgetWithText(
           ElevatedButton, 'Send Next Waypoint in Queue to Drone'));
-      await tester.pump(const Duration(milliseconds: 10000));
+      await tester.pumpAndSettle();
 
       expect(find.text('10.01'), findsNothing);
       expect(find.text('-20.02'), findsNothing);
