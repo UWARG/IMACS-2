@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/get_drone_information.dart';
 import 'package:imacs/widgets/drone_information_widget.dart';
+import 'package:imacs/widgets/terminal_widget.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
@@ -21,6 +22,7 @@ class HomePage extends StatelessWidget {
           DroneInformation(
             getDroneInformation: GetDroneInformation(comm: comm),
           ),
+          FilePickerDemo(),
         ],
       ),
     );
