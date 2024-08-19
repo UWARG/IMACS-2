@@ -90,9 +90,28 @@ class _NativeFilePickerState extends State<NativeFilePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: _pickFiles,
-      child: const Text("Select Files"),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: _pickFiles,
+              child: const Text("Select Files"),
+            ),
+            const SizedBox(
+              width: 30,
+            ),
+            ElevatedButton(
+                onPressed: _resetState, child: const Text("Send Files"))
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+            "The files selected are: ${_fileName != null ? _fileName : "None"}"),
+      ],
     );
   }
 }
