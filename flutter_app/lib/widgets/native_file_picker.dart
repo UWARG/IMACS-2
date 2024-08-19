@@ -3,6 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Widget to pick multiple files from the device
+///
+/// This widget arranges a button which, when clicked, opens up the native
+/// file picker of the device, and follows the user to select multiple files.
+///
 class NativeFilePicker extends StatefulWidget {
   const NativeFilePicker({
     Key? key,
@@ -17,9 +22,9 @@ class _NativeFilePickerState extends State<NativeFilePicker> {
   final _dialogTitleController = TextEditingController();
   final _initialDirectoryController = TextEditingController();
   final _fileExtensionController = TextEditingController();
-  String? _fileName;
-  List<PlatformFile>? _paths;
-  String? _extension;
+  String? _fileName; // name of the files selected
+  List<PlatformFile>? _paths; // extracted paths
+  String? _extension; // extensions allowed for picking
   final bool _lockParentWindow = false;
   final FileType _pickingType = FileType.any;
 
@@ -30,6 +35,7 @@ class _NativeFilePickerState extends State<NativeFilePicker> {
         .addListener(() => _extension = _fileExtensionController.text);
   }
 
+  // opens a dialogue window, allows the user to pick multiple files, and returns the file paths
   void _pickFiles() async {
     _resetState();
     try {
