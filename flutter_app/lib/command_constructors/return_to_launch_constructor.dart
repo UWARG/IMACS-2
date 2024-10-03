@@ -1,16 +1,19 @@
 import 'package:dart_mavlink/dialects/common.dart';
 
-// Construction of MissionItem
-// targetSystem is the ID of the drone / vehicle (default is 1 for single drones)
-// targetComponent ngl no clue what this does
-// seq is what order this command should be executed
-// frame is something to do with its currentl cords
-// command is the command id of the return to launch (default is 20)
-// current the 1 sets this task to the highest priority
-// autocontinous just sets this mission to automatically continue
-// no clue what the params are
-// x,y,z are the latitude, longitude, and altitude where the altitude is defaulted to 15
-// missionType 0 means it is a normal mission
+/// Constructs a MissionItem command to return to launch using MAV_CMD_NAV_RETURN_TO_LAUNCH (20).
+///
+/// @sequence The sequence number for the MAVLink frame.
+/// @systemId The MAVLink system ID of the vehicle (normally "1").
+/// @componentId The MAVLink component ID (normally "0").
+/// @latitude The latitude of the launchpad (Defaults to where it was armed).
+/// @longitude The longitude of the launchpad (Defaults to where it was armed).
+/// @altitude The altitude of the waypoint (Defaults to 15m)
+/// @param1 Unused
+/// @param2 Unused
+/// @param3 Unused
+/// @param4 Unused
+///
+/// @return A MissionItem representing the reutrn to launch command.
 
 MissionItem returnToLaunch(int sequence, int systemID, int componentID,
     {double latitude = 0.0,

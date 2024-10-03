@@ -9,8 +9,10 @@ class ReturnToLaunch {
   final MavlinkCommunication comm;
   final MissionItem returnToLaunchConstructor;
 
+  // Requires both the constructor (Mission Item) and comm
   ReturnToLaunch({required this.comm, required this.returnToLaunchConstructor});
 
+  // Skips the queues and forces the drone to return
   void returnNoQueue() async {
     if (comm.connectionType == MavlinkCommunicationType.tcp) {
       await comm.tcpSocketInitializationFlag.future;

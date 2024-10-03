@@ -4,6 +4,12 @@ import 'package:imacs/command_constructors/return_to_launch_constructor.dart';
 import 'package:test/test.dart';
 
 void main() {
+  /// dialect: Selected MAVLink dialect
+  /// sequence: The sequence number for the MAVLink frame.
+  /// Each component counts up its send sequence.
+  /// Allows to detect packet loss.
+  /// systemId: The MAVLink system ID of the vehicle (normally "1").
+  /// componentId: The MAVLink component ID (normally "0").
   var dialect = MavlinkDialectCommon();
   const sequence = 0;
   const systemID = 1;

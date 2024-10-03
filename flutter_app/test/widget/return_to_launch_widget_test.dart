@@ -16,6 +16,7 @@ void main() {
           comm: mavlinkCommunication,
           returnToLaunchConstructor: returnToLaunch(0, 1, 0));
 
+      // Tests to see if the button renders
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
               body: ReturnToLaunchButton(returnToLaunchCommand: command))));
