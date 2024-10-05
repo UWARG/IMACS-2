@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/get_drone_information.dart';
-import 'package:imacs/widgets/change_port_protocol_widget.dart';
 import 'package:imacs/widgets/drone_information_widget.dart';
 
 class HomePage extends StatelessWidget {
