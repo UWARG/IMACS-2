@@ -1,4 +1,3 @@
-import 'package:dart_mavlink/dialects/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
@@ -21,7 +20,13 @@ void main() {
           home: Scaffold(
               body: ReturnToLaunchButton(returnToLaunchCommand: command))));
 
+      // Waits for all frames and animations to settle
+      await tester.pumpAndSettle();
+
       expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.text("Return To Launch"), findsOneWidget);
     });
+
+    testWidgets("Button sends MavLink command", (WidgetTester tester) async {});
   });
 }
