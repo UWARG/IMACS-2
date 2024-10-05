@@ -39,7 +39,7 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
         border: Border.all(color: Colors.black),
       ),
       width: 400,
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
           DropdownMenu<MavlinkCommunicationType>(
@@ -81,14 +81,14 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
                 return;
               }
 
-              widget.updateCommunicationParams(selectedType ?? widget.communicationType, addressController.text, int.parse(portController.text));
+              widget.updateCommunicationParams(selectedType ?? widget.communicationType, addressController.text, tcpPort);
               setState(() {
                 statusMsg = "Successfully changed";
               });
             },
           ),
           Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 5),
             child: Text(statusMsg)
           ),
         ]
