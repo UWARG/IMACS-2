@@ -24,6 +24,8 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
 
   late MavlinkCommunicationType? selectedType = widget.communicationType;
 
+  var statusMsg = "";
+
   @override
   void dispose() {
     addressController.dispose();
@@ -32,8 +34,12 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+      ),
       width: 400,
+      padding: EdgeInsets.all(10.0),
       child: Column(
         children: [
           DropdownMenu<MavlinkCommunicationType>(
@@ -66,10 +72,25 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
           ElevatedButton(
             child: const Text("Update Connection Params"),
             onPressed: () {
-              // TODO: add input validation
+              var tcpPort = int.tryParse(portController.text);
+
+              if (tcpPort == null) {
+                setState(() {
+                  statusMsg = "Invalid port";
+                });
+                return;
+              }
+
               widget.updateCommunicationParams(selectedType ?? widget.communicationType, addressController.text, int.parse(portController.text));
+              setState(() {
+                statusMsg = "Successfully changed";
+              });
             },
-          )
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 5),
+            child: Text(statusMsg)
+          ),
         ]
       )
     );
