@@ -14,8 +14,8 @@ class HomePage extends StatelessWidget {
   final defaultCommunicationAddress = '127.0.0.1';
   final defaultTcpPort = 14550;
 
-  late var comm =
-      MavlinkCommunication(defaultCommunicationType, defaultCommunicationAddress, defaultTcpPort);
+  late var comm = MavlinkCommunication(
+      defaultCommunicationType, defaultCommunicationAddress, defaultTcpPort);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void updateCommunicationParams(MavlinkCommunicationType connectionType, String connectionAddress, int tcpPort) {
+  void updateCommunicationParams(MavlinkCommunicationType connectionType,
+      String connectionAddress, int tcpPort) {
     log('[Change Port/Protocol] Updating communication params: $connectionType, $connectionAddress, $tcpPort');
     comm = MavlinkCommunication(connectionType, connectionAddress, tcpPort);
   }
