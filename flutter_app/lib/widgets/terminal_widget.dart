@@ -1,5 +1,7 @@
-import 'package:file_picker/file_picker.dart';
 import 'dart:developer';
+
+import 'package:cli_script/cli_script.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,16 +10,16 @@ import 'package:flutter/services.dart';
 /// This widget arranges a button which, when clicked, opens up the native
 /// file picker of the device, and follows the user to select multiple files.
 ///
-class NativeFilePicker extends StatefulWidget {
-  const NativeFilePicker({
+class TerminalWidget extends StatefulWidget {
+  const TerminalWidget({
     Key? key,
   }) : super(key: key);
 
   @override
-  _NativeFilePickerState createState() => _NativeFilePickerState();
+  _TerminalWidgetState createState() => _TerminalWidgetState();
 }
 
-class _NativeFilePickerState extends State<NativeFilePicker> {
+class _TerminalWidgetState extends State<TerminalWidget> {
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   final _dialogTitleController = TextEditingController();
   final _initialDirectoryController = TextEditingController();
@@ -35,9 +37,9 @@ class _NativeFilePickerState extends State<NativeFilePicker> {
         .addListener(() => _extension = _fileExtensionController.text);
   }
 
-  // opens a dialogue window, allows the user to pick multiple files, and returns the file paths
+  // opens a dialogue window, allows the user to pick multiple files,
+  // and returns the file paths
   void _pickFiles() async {
-    _resetState();
     try {
       _paths = (await FilePicker.platform.pickFiles(
         compressionQuality: 30,
@@ -78,7 +80,10 @@ class _NativeFilePickerState extends State<NativeFilePicker> {
     );
   }
 
-  void _resetState() {
+  void _runCode() {
+    wrapMain(() async {
+      await run('echo "Hello, world!"');
+    });
     if (!mounted) {
       return;
     }
@@ -92,25 +97,20 @@ class _NativeFilePickerState extends State<NativeFilePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Text("The file selected is: ${_fileName != null ? _fileName : "None"}"),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed: _pickFiles,
-              child: const Text("Select Files"),
+              child: const Text("Select File"),
             ),
             const SizedBox(
               width: 30,
             ),
-            ElevatedButton(
-                onPressed: _resetState, child: const Text("Send Files"))
+            IconButton(onPressed: _runCode, icon: const Icon(Icons.play_arrow)),
           ],
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-            "The files selected are: ${_fileName != null ? _fileName : "None"}"),
       ],
     );
   }
