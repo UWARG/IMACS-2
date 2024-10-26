@@ -15,7 +15,7 @@ class NavBar extends StatelessWidget {
       onTap: (int index) {
         switch (index) {
           case 0:
-            Navigator.pushReplacementNamed(context, '/logs');
+            Navigator.pushReplacementNamed(context, '/');
             break;
           case 1:
             Navigator.popAndPushNamed(context, '/logs');
