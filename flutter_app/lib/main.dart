@@ -18,9 +18,9 @@ class App extends StatelessWidget {
       ),
       routes: {
         '/': (BuildContext context) => HomePage(title: 'WARG IMACS'),
-        '/logs': (BuildContext context) => const Placeholder(child: NavBar()),
-        '/camera': (BuildContext context) => const Placeholder(child: NavBar()),
-        '/sitl': (BuildContext context) => const Placeholder(child: NavBar()),
+        '/logs': (BuildContext context) => const PlaceholderScreen(title: 'Logs'),
+        '/camera': (BuildContext context) => const PlaceholderScreen(title: 'Camera'),
+        '/sitl': (BuildContext context) => const PlaceholderScreen(title: 'SITL'),
       },
     );
   }

@@ -1,64 +1,67 @@
 import 'package:flutter/material.dart';
 
-class NavBar extends StatefulWidget {
-  const NavBar({super.key});
-
-  @override
-  NavBarState createState() => NavBarState();
-}
-
-class NavBarState extends State<NavBar> {
-  int _index = 0;
-
-  void _onItemClicked(int index) {
-    setState(() {
-      _index = index;
-    });
-
-    switch (index) {
-      case 0:
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/logs');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/camera');
-        break;
-      default:
-        Navigator.pushNamed(context, '/sitl');
-        break;
-    }
-  }
+/// Widget for navigating between different screens
+/// 
+/// This widget displays the different sceeens in tabs along a bar at
+/// the bottom of the screen. When clicked, each tab will navigate to
+/// the corresponding screen. 
+class NavBar extends StatelessWidget {
+  /// @brief Constructs a NavBar widget.
+  const NavBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: _index,
-      onTap: _onItemClicked,
+      onTap: (int index) {
+        switch (index) {
+          case 0:
+            Navigator.pushReplacementNamed(context, '/logs');
+            break;
+          case 1:
+            Navigator.popAndPushNamed(context, '/logs');
+            break;
+          case 2:
+            Navigator.popAndPushNamed(context, '/camera');
+            break;
+          default:
+            Navigator.popAndPushNamed(context, '/sitl');
+            break;
+        }
+      },
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.home_sharp),
           label: 'Home',
           backgroundColor: Colors.black,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.format_list_bulleted_sharp),
           label: 'Logs',
-          backgroundColor: Colors.black,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.camera_sharp),
           label: 'Camera',
-          backgroundColor: Colors.black,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.check_box_sharp),
           label: 'SITL',
-          backgroundColor: Colors.black,
         )
       ],
-      showUnselectedLabels: true,
     );
+  }
+}
+
+class PlaceholderScreen extends StatelessWidget {
+  const PlaceholderScreen({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: const Placeholder(),
+        bottomNavigationBar: const NavBar());
   }
 }
