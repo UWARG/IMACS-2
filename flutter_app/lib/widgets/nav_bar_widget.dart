@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 /// Widget for navigating between different screens
-/// 
+///
 /// This widget displays the different sceeens in tabs along a bar at
 /// the bottom of the screen. When clicked, each tab will navigate to
-/// the corresponding screen. 
+/// the corresponding screen.
 class NavBar extends StatelessWidget {
   /// @brief Constructs a NavBar widget.
   const NavBar({Key? key}) : super(key: key);
