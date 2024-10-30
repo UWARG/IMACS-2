@@ -3,17 +3,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:imacs/widgets/nav_bar_widget.dart';
 
 void main() {
-  group ( 'Navbar widget',
-    () {
-      testWidgets('NavBar navigates to correct route', (WidgetTester tester) async {
+  group('Navbar widget', () {
+    testWidgets('NavBar navigates to correct route',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           initialRoute: '/',
           routes: {
-            '/': (context) => const Scaffold(body: Text('Home Page'), bottomNavigationBar: NavBar()),
-            '/logs': (context) => const Scaffold(body: Text('Logs Page'), bottomNavigationBar: NavBar()),
-            '/camera': (context) => const Scaffold(body: Text('Camera Page'), bottomNavigationBar: NavBar()),
-            '/sitl': (context) => const Scaffold(body: Text('SITL Page'), bottomNavigationBar: NavBar()),
+            '/': (context) => const Scaffold(
+                body: Text('Home Page'), bottomNavigationBar: NavBar()),
+            '/logs': (context) => const Scaffold(
+                body: Text('Logs Page'), bottomNavigationBar: NavBar()),
+            '/camera': (context) => const Scaffold(
+                body: Text('Camera Page'), bottomNavigationBar: NavBar()),
+            '/sitl': (context) => const Scaffold(
+                body: Text('SITL Page'), bottomNavigationBar: NavBar()),
           },
         ),
       );

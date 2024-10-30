@@ -50,12 +50,11 @@ class NavBar extends StatelessWidget {
       selectedItemColor: Colors.black,
       showUnselectedLabels: true,
     );
-    
   }
 }
 
 /// A placeholder screen with title text and the navigation bar
-/// 
+///
 /// This widget is a placeholder screen containing a title,
 /// placeholder body, and the navigation bar.
 class PlaceholderScreen extends StatelessWidget {
