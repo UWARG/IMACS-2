@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// Widget for navigating between different screens
@@ -18,13 +20,13 @@ class NavBar extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/');
             break;
           case 1:
-            Navigator.popAndPushNamed(context, '/logs');
+            Navigator.pushReplacementNamed(context, '/logs');
             break;
           case 2:
-            Navigator.popAndPushNamed(context, '/camera');
+            Navigator.pushReplacementNamed(context, '/camera');
             break;
           default:
-            Navigator.popAndPushNamed(context, '/sitl');
+            Navigator.pushReplacementNamed(context, '/sitl');
             break;
         }
       },
@@ -39,7 +41,7 @@ class NavBar extends StatelessWidget {
           label: 'Logs',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.camera_sharp),
+          icon: Icon(Icons.camera),
           label: 'Camera',
         ),
         BottomNavigationBarItem(
