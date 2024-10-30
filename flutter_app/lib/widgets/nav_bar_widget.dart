@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 /// Widget for navigating between different screens
@@ -20,13 +18,13 @@ class NavBar extends StatelessWidget {
             Navigator.pushReplacementNamed(context, '/');
             break;
           case 1:
-            Navigator.pushReplacementNamed(context, '/logs');
+            Navigator.popAndPushNamed(context, '/logs');
             break;
           case 2:
-            Navigator.pushReplacementNamed(context, '/camera');
+            Navigator.popAndPushNamed(context, '/camera');
             break;
           default:
-            Navigator.pushReplacementNamed(context, '/sitl');
+            Navigator.popAndPushNamed(context, '/sitl');
             break;
         }
       },
@@ -34,14 +32,13 @@ class NavBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.home_sharp),
           label: 'Home',
-          backgroundColor: Colors.black,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.format_list_bulleted_sharp),
           label: 'Logs',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.camera),
+          icon: Icon(Icons.camera_sharp),
           label: 'Camera',
         ),
         BottomNavigationBarItem(
@@ -49,11 +46,20 @@ class NavBar extends StatelessWidget {
           label: 'SITL',
         )
       ],
+      unselectedItemColor: Colors.black,
+      selectedItemColor: Colors.black,
+      showUnselectedLabels: true,
     );
+    
   }
 }
 
+/// A placeholder screen with title text and the navigation bar
+/// 
+/// This widget is a placeholder screen containing a title,
+/// placeholder body, and the navigation bar.
 class PlaceholderScreen extends StatelessWidget {
+  /// @brief Constructs a PlaceholderScreen widget.
   const PlaceholderScreen({Key? key, required this.title}) : super(key: key);
 
   final String title;
