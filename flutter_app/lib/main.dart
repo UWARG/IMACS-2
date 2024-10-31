@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imacs/screens/home_screen.dart';
+import 'package:imacs/widgets/nav_bar_widget.dart';
 
 void main() async {
   runApp(const App());
@@ -17,6 +18,12 @@ class App extends StatelessWidget {
       ),
       routes: {
         '/': (BuildContext context) => HomePage(title: 'WARG IMACS'),
+        '/logs': (BuildContext context) =>
+            const PlaceholderScreen(title: 'Logs'),
+        '/camera': (BuildContext context) =>
+            const PlaceholderScreen(title: 'Camera'),
+        '/sitl': (BuildContext context) =>
+            const PlaceholderScreen(title: 'SITL'),
       },
     );
   }
