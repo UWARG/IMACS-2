@@ -17,23 +17,16 @@ void main() {
 
   test("Return To Launch", () {
     const createReturnToLaunchCommandNumber = mavCmdNavReturnToLaunch;
-    const latitude = 47.938;
-    const longitude = 8.545;
-    const altitude = 15.0;
 
     var parser = MavlinkParser(dialect);
     parser.stream.listen((MavlinkFrame frm) {
       if (frm.message is MissionItem) {
         var mi = frm.message as MissionItem;
         expect(mi.command, equals(createReturnToLaunchCommandNumber));
-        expect(mi.x, equals(latitude));
-        expect(mi.y, equals(longitude));
-        expect(mi.z, equals(altitude));
       }
     });
 
-    var returnToLaunchCommand = returnToLaunch(sequence, systemID, componentID,
-        latitude: latitude, longitude: longitude, altitude: altitude);
+    var returnToLaunchCommand = returnToLaunch(sequence, systemID, componentID);
 
     parser.parse(returnToLaunchCommand.serialize().buffer.asUint8List());
   });

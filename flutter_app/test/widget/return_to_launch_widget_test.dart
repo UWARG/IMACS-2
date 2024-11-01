@@ -11,14 +11,15 @@ void main() {
         (WidgetTester tester) async {
       final mavlinkCommunication = MavlinkCommunication(
           MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-      final ReturnToLaunch command = ReturnToLaunch(
-          comm: mavlinkCommunication,
-          returnToLaunchConstructor: returnToLaunch(0, 1, 0));
+      final ReturnToLaunch command = ReturnToLaunch(comm: mavlinkCommunication);
 
       // Tests to see if the button renders
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
-              body: ReturnToLaunchButton(returnToLaunchCommand: command))));
+              body: ReturnToLaunchButton(
+                  returnToLaunchCommand: command,
+                  systemID: 1,
+                  componentID: 0))));
 
       // Waits for all frames and animations to settle
       await tester.pumpAndSettle();
@@ -27,6 +28,24 @@ void main() {
       expect(find.text("Return To Launch"), findsOneWidget);
     });
 
-    testWidgets("Button sends MavLink command", (WidgetTester tester) async {});
+    testWidgets("Button sends MavLink command", (WidgetTester tester) async {
+      final mavlinkCommunication = MavlinkCommunication(
+          MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
+      final ReturnToLaunch command = ReturnToLaunch(comm: mavlinkCommunication);
+
+      // Tests to see if the button renders
+      await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: ReturnToLaunchButton(
+                  returnToLaunchCommand: command,
+                  systemID: 1,
+                  componentID: 0))));
+
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ReturnToLaunchButton));
+      await tester.pumpAndSettle();
+
+      expect(find.text("Return to Launch Command Sent"), findsOneWidget);
+    });
   });
 }
