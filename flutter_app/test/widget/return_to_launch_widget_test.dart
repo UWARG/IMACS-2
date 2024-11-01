@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/return_to_launch.dart';
-import 'package:imacs/command_constructors/return_to_launch_constructor.dart';
 import 'package:imacs/widgets/return_to_launch_widget.dart';
 
 void main() {
