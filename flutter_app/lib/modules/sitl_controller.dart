@@ -1,22 +1,21 @@
 import 'dart:io';
 import 'dart:async';
-import 'dart:developer';
-import 'package:dart_mavlink/mavlink.dart';
-import 'package:dart_mavlink/dialects/common.dart';
-import 'package:flutter/rendering.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
-//import 'package:imacs/modules/change_drone_mode.dart';
-//import 'package:imacs/modules/get_drone_information.dart';
+import 'package:imacs/modules/sitl_logger.dart';
 
 class SITLController {
   Process? _sitlProcess;
 
   final MavlinkCommunication comm;
   final String vehicleType;
-  final String GPS; //replace with GPS locations
+  final String GPS; //replace with GPS location, or other format of location
+  final SITLLogger logs;
 
   SITLController(
-      {required this.vehicleType, required this.GPS, required this.comm});
+      {required this.vehicleType,
+      required this.GPS,
+      required this.comm,
+      required this.logs});
   //don't know how to use the changeMode() method properly, if needed at all for this
 
   Future<void> startSITL() async {
@@ -27,33 +26,29 @@ class SITLController {
       ); // passing in info to start SITL, not sure if i did this right
 
       // outputs/errors from the SITL itself?
-      _sitlProcess!.stdout.transform(SystemEncoding().decoder).listen((data) {
-        log('SITL Output: $data');
-      });
+      logs.stdoutlogs(_sitlProcess!);
 
-      _sitlProcess!.stderr.transform(SystemEncoding().decoder).listen((data) {
-        log('SITL Error: $data');
-      });
+      logs.stderrlogs(_sitlProcess!);
 
       await comm.tcpSocketInitializationFlag
           .future; // connects to mavlink communication tcp port
 
       _sitlProcess!.exitCode.then((exitCode) {
-        log('SITL process exited with code: $exitCode');
+        logs.logger('SITL process exited with code: $exitCode');
         _sitlProcess = null;
       });
     } catch (e) {
-      log('Failed to start SITL');
+      logs.logger('Failed to start SITL');
     }
   }
 
   void stopSITL() {
     if (_sitlProcess != null) {
       _sitlProcess!.kill();
-      log('Process stopped.');
+      logs.logger('Process stopped');
       _sitlProcess = null;
     } else {
-      log('No process is running.');
+      logs.logger('No process is running');
     }
     // need to close the mavlink socket after stopping, idk how
   }
