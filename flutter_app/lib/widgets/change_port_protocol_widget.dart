@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imacs/modules/change_port_protocol.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 
 const Map<MavlinkCommunicationType, String> mavCommTypes = {
@@ -7,18 +8,12 @@ const Map<MavlinkCommunicationType, String> mavCommTypes = {
 };
 
 class PortProtocolChanger extends StatefulWidget {
-  final MavlinkCommunicationType communicationType;
-  final String communicationAddress;
-  final int tcpPort;
-  final Function(MavlinkCommunicationType communicationType,
-      String communicationAddress, int tcpPort) updateCommunicationParams;
+  final MavlinkCommunication comm;
+  final ChangePortProtocol changePortProtocol;
 
   const PortProtocolChanger(
       {super.key,
-      required this.communicationType,
-      required this.communicationAddress,
-      required this.tcpPort,
-      required this.updateCommunicationParams});
+      required this.comm, required this.changePortProtocol});
 
   @override
   State<PortProtocolChanger> createState() => _PortProtocolChangerState();
@@ -27,11 +22,11 @@ class PortProtocolChanger extends StatefulWidget {
 class _PortProtocolChangerState extends State<PortProtocolChanger> {
   late final TextEditingController addressController =
       TextEditingController.fromValue(
-          TextEditingValue(text: widget.communicationAddress));
+          TextEditingValue(text: widget.comm.connectionAddress));
   late final portController = TextEditingController.fromValue(
-      TextEditingValue(text: widget.tcpPort.toString()));
+      TextEditingValue(text: widget.comm.tcpPort.toString()));
 
-  late MavlinkCommunicationType? selectedType = widget.communicationType;
+  late MavlinkCommunicationType? selectedType = widget.comm.connectionType;
 
   var statusMsg = "";
 
@@ -55,7 +50,7 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
                   .map<DropdownMenuEntry<MavlinkCommunicationType>>((entry) {
                 return DropdownMenuEntry(value: entry.key, label: entry.value);
               }).toList(),
-              initialSelection: widget.communicationType,
+              initialSelection: widget.comm.connectionType,
               onSelected: (MavlinkCommunicationType? newValue) {
                 setState(() {
                   selectedType = newValue;
@@ -82,8 +77,8 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
                 return;
               }
 
-              widget.updateCommunicationParams(
-                  selectedType ?? widget.communicationType,
+              widget.changePortProtocol.updateCommParams(
+                  selectedType ?? widget.comm.connectionType,
                   addressController.text,
                   tcpPort);
               setState(() {

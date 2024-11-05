@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:imacs/defaults.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/get_drone_information.dart';
 import 'package:imacs/widgets/drone_information_widget.dart';
@@ -10,12 +9,8 @@ class HomePage extends StatelessWidget {
 
   final String title;
 
-  final defaultCommunicationType = MavlinkCommunicationType.tcp;
-  final defaultCommunicationAddress = '127.0.0.1';
-  final defaultTcpPort = 14550;
-
   late final comm = MavlinkCommunication(
-      defaultCommunicationType, defaultCommunicationAddress, defaultTcpPort);
+      Defaults.communicationType, Defaults.communicationAddress, Defaults.tcpPort);
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +26,5 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void updateCommunicationParams(MavlinkCommunicationType connectionType,
-      String connectionAddress, int tcpPort) {
-    log('[Change Port/Protocol] Updating communication params: $connectionType, $connectionAddress, $tcpPort');
-    // TODO: implement logic for updating communication params
-    // comm = MavlinkCommunication(connectionType, connectionAddress, tcpPort);
   }
 }
