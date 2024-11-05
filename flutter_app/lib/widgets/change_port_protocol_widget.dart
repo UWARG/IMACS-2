@@ -69,6 +69,7 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
             controller: portController,
             decoration: const InputDecoration(hintText: "Port"),
           ),
+          const SizedBox(height: 8),
           ElevatedButton(
             child: const Text("Update Connection Params"),
             onPressed: () {
