@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:imacs/modules/change_port_protocol.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 
-const Map<MavlinkCommunicationType, String> mavCommTypes = {
-  MavlinkCommunicationType.serial: "Serial",
-  MavlinkCommunicationType.tcp: "TCP"
-};
-
 class PortProtocolChanger extends StatefulWidget {
   final MavlinkCommunication comm;
   final ChangePortProtocol changePortProtocol;
@@ -28,7 +23,7 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
 
   late MavlinkCommunicationType? selectedType = widget.comm.connectionType;
 
-  var statusMsg = "";
+  String statusMsg = "";
 
   @override
   void dispose() {
@@ -46,9 +41,9 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
         padding: const EdgeInsets.all(10.0),
         child: Column(children: [
           DropdownMenu<MavlinkCommunicationType>(
-              dropdownMenuEntries: mavCommTypes.entries
+              dropdownMenuEntries: MavlinkCommunicationType.values
                   .map<DropdownMenuEntry<MavlinkCommunicationType>>((entry) {
-                return DropdownMenuEntry(value: entry.key, label: entry.value);
+                return DropdownMenuEntry(value: entry, label: entry.name);
               }).toList(),
               initialSelection: widget.comm.connectionType,
               onSelected: (MavlinkCommunicationType? newValue) {
