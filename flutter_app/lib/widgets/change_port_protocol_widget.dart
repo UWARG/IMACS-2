@@ -28,6 +28,7 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
   @override
   void dispose() {
     addressController.dispose();
+    portController.dispose();
     super.dispose();
   }
 
@@ -68,6 +69,11 @@ class _PortProtocolChangerState extends State<PortProtocolChanger> {
               if (tcpPort == null) {
                 setState(() {
                   statusMsg = "Invalid port";
+                });
+                return;
+              } else if (tcpPort <= 0) {
+                setState(() {
+                  statusMsg = "Port must be positive integer";
                 });
                 return;
               }
