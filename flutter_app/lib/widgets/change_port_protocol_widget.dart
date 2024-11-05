@@ -7,8 +7,7 @@ class PortProtocolChanger extends StatefulWidget {
   final ChangePortProtocol changePortProtocol;
 
   const PortProtocolChanger(
-      {super.key,
-      required this.comm, required this.changePortProtocol});
+      {super.key, required this.comm, required this.changePortProtocol});
 
   @override
   State<PortProtocolChanger> createState() => _PortProtocolChangerState();

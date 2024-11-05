@@ -10,8 +10,8 @@ class HomePage extends StatelessWidget {
 
   final String title;
 
-  late final comm = MavlinkCommunication(
-      Defaults.communicationType, Defaults.communicationAddress, Defaults.tcpPort);
+  late final comm = MavlinkCommunication(Defaults.communicationType,
+      Defaults.communicationAddress, Defaults.tcpPort);
 
   @override
   Widget build(BuildContext context) {

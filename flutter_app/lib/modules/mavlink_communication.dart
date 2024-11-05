@@ -30,7 +30,9 @@ class MavlinkCommunication {
 
   MavlinkCommunication(MavlinkCommunicationType connectionType,
       String connectionAddress, int tcpPort)
-      : _connectionType = connectionType, _connectionAddress = connectionAddress, _tcpPort = tcpPort {
+      : _connectionType = connectionType,
+        _connectionAddress = connectionAddress,
+        _tcpPort = tcpPort {
     _startupPort(connectionType, connectionAddress, tcpPort);
   }
 

@@ -9,7 +9,8 @@ void main() {
     testWidgets(
         'PortProtocolChanger displays a dropdown menu, a button, and two input fields',
         (WidgetTester tester) async {
-      MavlinkCommunication comm = MavlinkCommunication(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
+      MavlinkCommunication comm = MavlinkCommunication(
+          MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
 
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
