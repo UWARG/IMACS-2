@@ -32,7 +32,7 @@ class MavlinkCommunication {
     switch (_connectionType) {
       case MavlinkCommunicationType.tcp:
         log('[$moduleName] Trying to start TCP connection');
-        _startupTcpPort(connectionAddress, tcpPort);
+        //_startupTcpPort(connectionAddress, tcpPort);
         break;
       case MavlinkCommunicationType.serial:
         log('[$moduleName] Trying to start Serial connection');

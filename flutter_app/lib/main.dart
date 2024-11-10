@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:imacs/screens/camera_screen.dart';
 import 'package:imacs/screens/home_screen.dart';
+import 'package:imacs/screens/log_displayer_screen.dart';
 import 'package:imacs/widgets/nav_bar_widget.dart';
 
 void main() async {
@@ -19,9 +21,9 @@ class App extends StatelessWidget {
       routes: {
         '/': (BuildContext context) => HomePage(title: 'WARG IMACS'),
         '/logs': (BuildContext context) =>
-            const PlaceholderScreen(title: 'Logs'),
+            const LogDisplayerScreen(fileContext: '', fileName: ''), // TODO: pass in ctx & name
         '/camera': (BuildContext context) =>
-            const PlaceholderScreen(title: 'Camera'),
+            CameraScreen(title: 'Camera'),
         '/sitl': (BuildContext context) =>
             const PlaceholderScreen(title: 'SITL'),
       },
