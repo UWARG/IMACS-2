@@ -20,10 +20,9 @@ class App extends StatelessWidget {
       ),
       routes: {
         '/': (BuildContext context) => HomePage(title: 'WARG IMACS'),
-        '/logs': (BuildContext context) =>
-            const LogDisplayerScreen(fileContext: '', fileName: ''), // TODO: pass in ctx & name
-        '/camera': (BuildContext context) =>
-            CameraScreen(title: 'Camera'),
+        '/logs': (BuildContext context) => const LogDisplayerScreen(
+            fileContext: '', fileName: ''), // TODO: pass in ctx & name
+        '/camera': (BuildContext context) => CameraScreen(title: 'Camera'),
         '/sitl': (BuildContext context) =>
             const PlaceholderScreen(title: 'SITL'),
       },

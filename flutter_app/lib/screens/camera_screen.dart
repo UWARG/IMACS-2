@@ -16,6 +16,7 @@ class _CameraScreenState extends State<CameraScreen> {
     super.initState();
     task();
   }
+
   Future<void> task() async {
     await cameraController.initializeCameras();
     await cameraController.initializeCamera(
@@ -28,29 +29,30 @@ class _CameraScreenState extends State<CameraScreen> {
       },
     );
   }
+
   @override
   void dispose() {
     cameraController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Camera(
-        cameraController: cameraController,
-        onCameraNotInit: (context) {
-          return const SizedBox.shrink();
-        },
-        onCameraNotSelect: (context) {
-          return const SizedBox.shrink();
-        },
-        onCameraNotActive: (context) {
-          return const SizedBox.shrink();
-        },
-        onPlatformNotSupported: (context) {
-          return const SizedBox.shrink();
-        },
-      )
-    );
+        body: Camera(
+      cameraController: cameraController,
+      onCameraNotInit: (context) {
+        return const SizedBox.shrink();
+      },
+      onCameraNotSelect: (context) {
+        return const SizedBox.shrink();
+      },
+      onCameraNotActive: (context) {
+        return const SizedBox.shrink();
+      },
+      onPlatformNotSupported: (context) {
+        return const SizedBox.shrink();
+      },
+    ));
   }
 }
