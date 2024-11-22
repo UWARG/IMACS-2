@@ -11,16 +11,20 @@ class ReturnToLaunch {
   ReturnToLaunch({required this.comm});
 
   // Skips the queues and forces the drone to return
-  void returnNoQueue(int systemID, int componentID) async {
-    if (comm.connectionType == MavlinkCommunicationType.tcp) {
-      await comm.tcpSocketInitializationFlag.future;
+  Future returnNoQueue(int systemID, int componentID) async {
+    try {
+      if (comm.connectionType == MavlinkCommunicationType.tcp) {
+        await comm.tcpSocketInitializationFlag.future;
+      }
+      var frame = returnToLaunch(comm.sequence, systemID, componentID);
+      comm.sequence++;
+      comm.write(frame);
+
+      log('[$moduleName] Returning to Launch');
+      return true;
+    } catch (e) {
+      log('[$moduleName] Error occurred: $e');
+      return false;
     }
-
-    var frame = returnToLaunch(comm.sequence, systemID, componentID);
-
-    comm.sequence++;
-    comm.write(frame);
-
-    log('[$moduleName] Returning to Launch');
   }
 }

@@ -15,14 +15,13 @@ void main() {
       // Tests to see if the button renders
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
-              body: ReturnToLaunchButton(
+              body: ReturnToLaunchTemplate(
                   returnToLaunchCommand: command,
                   systemID: 1,
                   componentID: 0))));
 
       // Waits for all frames and animations to settle
       await tester.pumpAndSettle();
-
       expect(find.byType(ElevatedButton), findsOneWidget);
       expect(find.text("Return To Launch"), findsOneWidget);
     });
@@ -35,16 +34,16 @@ void main() {
       // Tests to see if the button renders
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
-              body: ReturnToLaunchButton(
+              body: ReturnToLaunchTemplate(
                   returnToLaunchCommand: command,
                   systemID: 1,
                   componentID: 0))));
 
       await tester.pumpAndSettle();
-      await tester.tap(find.byType(ReturnToLaunchButton));
+      expect(find.byType(ElevatedButton), findsOneWidget);
+      await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
-
-      expect(find.text("Return to Launch Command Sent"), findsOneWidget);
+      expect(find.text("Sent"), findsOneWidget);
     });
   });
 }
