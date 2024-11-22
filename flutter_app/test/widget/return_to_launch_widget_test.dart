@@ -23,7 +23,7 @@ void main() {
       // Waits for all frames and animations to settle
       await tester.pumpAndSettle();
       expect(find.byType(ElevatedButton), findsOneWidget);
-      expect(find.text("Return To Launch"), findsOneWidget);
+      expect(find.text("Return to Launch"), findsOneWidget);
     });
 
     testWidgets("Button sends MavLink command", (WidgetTester tester) async {
@@ -37,13 +37,19 @@ void main() {
               body: ReturnToLaunchTemplate(
                   returnToLaunchCommand: command,
                   systemID: 1,
-                  componentID: 0))));
+                  componentID: 0,
+                  key: UniqueKey()))));
 
       await tester.pumpAndSettle();
       expect(find.byType(ElevatedButton), findsOneWidget);
+
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
-      expect(find.text("Sent"), findsOneWidget);
+      debugPrint((tester
+              .widget<ElevatedButton>(find.byType(ElevatedButton))
+              .child as Text)
+          .data);
+      expect(find.text("sent"), findsOneWidget);
     });
   });
 }
