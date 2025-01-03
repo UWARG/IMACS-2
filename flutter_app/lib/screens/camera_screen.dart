@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:imacs/widgets/nav_bar_widget.dart';
 import 'package:imacs/widgets/camera_widget.dart';
 
-
 class CameraScreen extends StatelessWidget {
   const CameraScreen({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -10,10 +9,10 @@ class CameraScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
           title: Text(title),
         ),
         body: CameraWidget(),
-    bottomNavigationBar: const NavBar());
+        bottomNavigationBar: const NavBar());
   }
 }
