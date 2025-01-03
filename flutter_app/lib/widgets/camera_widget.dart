@@ -1,11 +1,7 @@
-/// Widget to display a camera feed
-
 import 'package:flutter/material.dart';
 import 'package:camera_universal/camera_universal.dart';
 
 /// Widget to display camera feed
-///
-/// This widget 
 class CameraWidget extends StatefulWidget {
   final CameraController cameraController = CameraController();
 
