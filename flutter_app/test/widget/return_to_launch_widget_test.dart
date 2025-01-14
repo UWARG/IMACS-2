@@ -23,7 +23,8 @@ void main() {
       // Waits for all frames and animations to settle
       await tester.pumpAndSettle();
       expect(find.byType(ElevatedButton), findsOneWidget);
-      expect(find.text("Return to Launch"), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(find.text("Return To Launch"), findsOneWidget);
     });
 
     testWidgets("Button sends MavLink command", (WidgetTester tester) async {
