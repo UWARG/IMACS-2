@@ -15,7 +15,7 @@ void main() {
       // Tests to see if the button renders
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
-              body: ReturnToLaunchTemplate(
+              body: ReturnToLaunchButton(
                   returnToLaunchCommand: command,
                   systemID: 1,
                   componentID: 0))));
@@ -34,7 +34,7 @@ void main() {
       // Tests to see if the button renders
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
-              body: ReturnToLaunchTemplate(
+              body: ReturnToLaunchButton(
                   returnToLaunchCommand: command,
                   systemID: 1,
                   componentID: 0,
@@ -45,11 +45,11 @@ void main() {
 
       await tester.tap(find.byType(ElevatedButton));
       await tester.pumpAndSettle();
-      debugPrint((tester
-              .widget<ElevatedButton>(find.byType(ElevatedButton))
-              .child as Text)
-          .data);
-      expect(find.text("sent"), findsOneWidget);
+
+      // Verify the SnackBar appears then disappears
+      expect(find.text('Send Mavlink RTL command'), findsOneWidget);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.text('Send Mavlink RTL command'), findsNothing);
     });
   });
 }
