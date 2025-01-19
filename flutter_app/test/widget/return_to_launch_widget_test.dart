@@ -65,9 +65,9 @@ void main() {
           await tester.pumpAndSettle();
 
           // Verify the SnackBar appears then disappears
-          expect(find.text('Send Mavlink RTL command'), findsOneWidget);
+          expect(find.text('Sent Mavlink RTL command'), findsOneWidget);
           await tester.pumpAndSettle(const Duration(seconds: 2));
-          expect(find.text('Send Mavlink RTL command'), findsNothing);
+          expect(find.text('Sent Mavlink RTL command'), findsNothing);
         },
       );
     },
