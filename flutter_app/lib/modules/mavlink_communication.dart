@@ -18,7 +18,9 @@ class MavlinkCommunication {
 
   final List<MissionItem> waypointQueue = [];
 
-  final MavlinkCommunicationType _connectionType;
+  MavlinkCommunicationType _connectionType;
+  String _connectionAddress;
+  int _tcpPort;
 
   late Stream<Uint8List> _stream;
   late SerialPort _serialPort;
@@ -28,17 +30,10 @@ class MavlinkCommunication {
 
   MavlinkCommunication(MavlinkCommunicationType connectionType,
       String connectionAddress, int tcpPort)
-      : _connectionType = connectionType {
-    switch (_connectionType) {
-      case MavlinkCommunicationType.tcp:
-        log('[$moduleName] Trying to start TCP connection');
-        _startupTcpPort(connectionAddress, tcpPort);
-        break;
-      case MavlinkCommunicationType.serial:
-        log('[$moduleName] Trying to start Serial connection');
-        _startupSerialPort(connectionAddress);
-        break;
-    }
+      : _connectionType = connectionType,
+        _connectionAddress = connectionAddress,
+        _tcpPort = tcpPort {
+    _startupPort(connectionType, connectionAddress, tcpPort);
   }
 
   _startupTcpPort(String connectionAddress, int tcpPort) async {
@@ -53,6 +48,20 @@ class MavlinkCommunication {
     _serialPort.openReadWrite();
     SerialPortReader serialPortReader = SerialPortReader(_serialPort);
     _stream = serialPortReader.stream;
+  }
+
+  _startupPort(MavlinkCommunicationType connectionType,
+      String connectionAddress, int tcpPort) {
+    switch (_connectionType) {
+      case MavlinkCommunicationType.tcp:
+        log('[$moduleName] Trying to start TCP connection');
+        _startupTcpPort(connectionAddress, tcpPort);
+        break;
+      case MavlinkCommunicationType.serial:
+        log('[$moduleName] Trying to start Serial connection');
+        _startupSerialPort(connectionAddress);
+        break;
+    }
   }
 
   _writeToTcpPort(MavlinkFrame frame) {
@@ -81,7 +90,18 @@ class MavlinkCommunication {
     }
   }
 
+  void updateConnectionParams(MavlinkCommunicationType connectionType,
+      String connectionAddress, int tcpPort) {
+    _connectionType = connectionType;
+    _connectionAddress = connectionAddress;
+    _tcpPort = tcpPort;
+
+    _startupPort(connectionType, connectionAddress, tcpPort);
+  }
+
   MavlinkCommunicationType get connectionType => _connectionType;
+  String get connectionAddress => _connectionAddress;
+  int get tcpPort => _tcpPort;
   Completer<void> get tcpSocketInitializationFlag =>
       _tcpSocketInitializationFlag;
   Socket get tcpSocket => _tcpSocket;
