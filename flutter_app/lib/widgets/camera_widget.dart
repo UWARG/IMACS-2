@@ -26,11 +26,11 @@ class CameraWidgetState extends State<CameraWidget> {
   Future<void> initCameraController() async {
     /// Initializes and activates the camera controller.
     ///
-    /// This function initializes the available cameras, configures the camera 
+    /// This function initializes the available cameras, configures the camera
     /// controller, and activates the camera feed.
     ///
     /// @returns A `Future<void>` indicating completion of the setup.
-    
+
     await cameraController.initializeCameras();
     await cameraController.initializeCamera(
       setState: setState,
