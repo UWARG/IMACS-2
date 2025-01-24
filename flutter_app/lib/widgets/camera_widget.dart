@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:camera_universal/camera_universal.dart';
 
-/// Widget to display camera feed
-class CameraWidget extends StatefulWidget {
-  final CameraController cameraController = CameraController();
+const String moduleName = "Camera";
 
-  CameraWidget({super.key});
+/// Widget to display a live feed from a connected camera.
+///
+/// This widget interfaces with the camera hardware to capture and siplay
+/// a real-time video freed on the screen.
+class CameraWidget extends StatefulWidget {
+  const CameraWidget({super.key});
   @override
   State<CameraWidget> createState() => CameraWidgetState();
 }
@@ -15,10 +20,17 @@ class CameraWidgetState extends State<CameraWidget> {
   @override
   void initState() {
     super.initState();
-    task();
+    initCameraController();
   }
 
-  Future<void> task() async {
+  Future<void> initCameraController() async {
+    /// Initializes and activates the camera controller.
+    ///
+    /// This function initializes the available cameras, configures the camera 
+    /// controller, and activates the camera feed.
+    ///
+    /// @returns A `Future<void>` indicating completion of the setup.
+    
     await cameraController.initializeCameras();
     await cameraController.initializeCamera(
       setState: setState,
@@ -43,15 +55,19 @@ class CameraWidgetState extends State<CameraWidget> {
         body: Camera(
       cameraController: cameraController,
       onCameraNotInit: (context) {
+        log('[$moduleName] Camera not initialized');
         return const SizedBox.shrink();
       },
       onCameraNotSelect: (context) {
+        log('[$moduleName] Camera not selected');
         return const SizedBox.shrink();
       },
       onCameraNotActive: (context) {
+        log('[$moduleName] Camera not active');
         return const SizedBox.shrink();
       },
       onPlatformNotSupported: (context) {
+        log('[$moduleName] Unsupported platform');
         return const SizedBox.shrink();
       },
     ));
