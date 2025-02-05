@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:developer';
 
 class SITLLogger {
   late File logFiles;
@@ -11,11 +12,11 @@ class SITLLogger {
 
   void logger(String message) {
     final timestamp = DateTime.now().toIso8601String();
-    final log = '[$timestamp] $message';
+    final logs = '[$timestamp] $message';
 
-    print(log); //print to console
+    log(logs);
 
-    logFiles.writeAsStringSync('$log\n', mode: FileMode.write);
+    logFiles.writeAsStringSync('$logs\n', mode: FileMode.write);
   }
 
   void stdoutlogs(Process sitl) {
@@ -29,6 +30,4 @@ class SITLLogger {
       logger('SITL Error: $data');
     });
   }
-
-  //not sure if there are other types of logging messages (ie. WARNING, INFO, ERROR, etc) to be used
 }
