@@ -27,7 +27,6 @@ class SITLController {
 
       // outputs/errors from the SITL itself?
       logs.stdoutlogs(_sitlProcess!);
-
       logs.stderrlogs(_sitlProcess!);
 
       await comm.tcpSocketInitializationFlag
