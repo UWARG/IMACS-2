@@ -25,7 +25,7 @@ class SITLController {
 
       //check if SITL is correctly initialized
       await for (String line in _sitlProcess!.stdout
-          .transform(SystemEncoding().decoder)
+          .transform(const SystemEncoding().decoder)
           .transform(const LineSplitter())) {
         logs.logger(line);
         if (line.contains("SITL Ready")) {

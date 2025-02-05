@@ -20,13 +20,13 @@ class SITLLogger {
   }
 
   void stdoutlogs(Process sitl) {
-    sitl.stdout.transform(SystemEncoding().decoder).listen((data) {
+    sitl.stdout.transform(const SystemEncoding().decoder).listen((data) {
       logger('SITL Output: $data');
     });
   }
 
   void stderrlogs(Process sitl) {
-    sitl.stderr.transform(SystemEncoding().decoder).listen((data) {
+    sitl.stderr.transform(const SystemEncoding().decoder).listen((data) {
       logger('SITL Error: $data');
     });
   }
