@@ -33,6 +33,11 @@ dependencies:
 
   flutter_libserialport: ^0.3.0
 
+  camera_universal:
+    git:
+      url: https://github.com/azkadev/camera_universal
+      ref: main
+
   dart_mavlink:
     git:
       url: https://github.com/nus/dart_mavlink
@@ -41,7 +46,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  camera_universal: ^0.0.3
+
 
 dev_dependencies:
   flutter_test:
