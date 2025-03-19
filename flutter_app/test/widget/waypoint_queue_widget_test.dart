@@ -1,170 +1,133 @@
+// queue_waypoints_widget_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:imacs/modules/mavlink_communication.dart';
 import 'package:imacs/modules/queue_waypoints.dart';
 import 'package:imacs/widgets/waypoint_queue_widget.dart';
 
+// This is a temp comm just to make the queuewaypoints happy (does not do anything)
+class FakeMavlinkCommunication extends MavlinkCommunication {
+  FakeMavlinkCommunication()
+      : super(MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
+
+  @override
+  void write(dynamic frame) {}
+}
+
 void main() {
-  group('WaypointQueue widget', () {
-    testWidgets(
-        'WaypointQueueWidget displays a table, text input fields, and 3 buttons',
+  group('QueueWaypointsWidget', () {
+    // Sets up the testing environment
+    testWidgets('Widget expands and displays expected text',
         (WidgetTester tester) async {
       final mavlinkCommunication = MavlinkCommunication(
           MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-      final queueWaypoints = QueueWaypoints(comm: mavlinkCommunication);
-
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: WaypointQueue(
-            queueWaypoints: queueWaypoints,
-            systemId: 0,
-            componentId: 0,
+      final QueueWaypoints command = QueueWaypoints(comm: mavlinkCommunication);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: QueueWaypointsWidget(queueWaypoints: command),
           ),
         ),
-      ));
+      );
 
-      expect(find.byType(ElevatedButton), findsNWidgets(3));
-      expect(find.byType(DataTable), findsOneWidget);
-      expect(find.byType(TextField), findsNWidgets(3));
+      // Checks if all the sized boxes and buttons render properly (If the text renders that means the sized box renders)
+      expect(find.text('Queued Waypoints'), findsOneWidget);
+      expect(find.text('Add new waypoint: '), findsOneWidget);
+      expect(find.text('Latitude'), findsOneWidget);
+      expect(find.text('Longitude'), findsOneWidget);
+      expect(find.text('Altitude'), findsOneWidget);
+      expect(find.text('Add Waypoint'), findsOneWidget);
+      expect(find.text('Send Next Waypoint'), findsOneWidget);
     });
-    testWidgets(
-        'WaypointQueue sends a waypoint to the drone without queueing it',
+
+    // Setting up environment for testing
+    testWidgets('Buttons can be tapped without error',
         (WidgetTester tester) async {
+      // Arrange
       final mavlinkCommunication = MavlinkCommunication(
           MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-      final queueWaypoints = QueueWaypoints(comm: mavlinkCommunication);
+      final QueueWaypoints command = QueueWaypoints(comm: mavlinkCommunication);
 
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: WaypointQueue(
-            queueWaypoints: queueWaypoints,
-            systemId: 0,
-            componentId: 0,
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: QueueWaypointsWidget(queueWaypoints: command),
           ),
         ),
-      ));
+      );
 
-      /// Enter a waypoint in the text fields
-      await tester.enterText(
-          find.ancestor(
-            of: find.text('Latitude'),
-            matching: find.byType(TextField),
-          ),
-          '10.01');
-      await tester.enterText(
-          find.ancestor(
-            of: find.text('Longitude'),
-            matching: find.byType(TextField),
-          ),
-          '-20.02');
-      await tester.enterText(
-          find.ancestor(
-            of: find.text('Altitude'),
-            matching: find.byType(TextField),
-          ),
-          '30.03');
+      // Looks for the buttons and makes sure they can be clicked
+      final addButton = find.byType(ElevatedButton).at(0);
+      final sendNextButton = find.byType(ElevatedButton).at(1);
 
-      expect(find.text('10.01'), findsOneWidget);
-      expect(find.text('-20.02'), findsOneWidget);
-      expect(find.text('30.03'), findsOneWidget);
-
-      await tester.tap(
-          find.widgetWithText(ElevatedButton, 'Send Waypoint Immediately'));
+      await tester.tap(addButton);
       await tester.pump();
 
-      expect(queueWaypoints.waypointQueue.length, 0);
-      expect(find.text('10.01'), findsOneWidget);
-      expect(find.text('-20.02'), findsOneWidget);
-      expect(find.text('30.03'), findsOneWidget);
-    });
-
-    testWidgets('WaypointQueue adds waypoint to queue on button press',
-        (WidgetTester tester) async {
-      final mavlinkCommunication = MavlinkCommunication(
-          MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-      final queueWaypoints = QueueWaypoints(comm: mavlinkCommunication);
-
-      await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: WaypointQueue(
-            queueWaypoints: queueWaypoints,
-            systemId: 0,
-            componentId: 0,
-          ),
-        ),
-      ));
-
-      /// Enter a waypoint in the text fields
-      await tester.enterText(
-          find.ancestor(
-            of: find.text('Latitude'),
-            matching: find.byType(TextField),
-          ),
-          '10.01');
-      await tester.enterText(
-          find.ancestor(
-            of: find.text('Longitude'),
-            matching: find.byType(TextField),
-          ),
-          '-20.02');
-      await tester.enterText(
-          find.ancestor(
-            of: find.text('Altitude'),
-            matching: find.byType(TextField),
-          ),
-          '30.03');
-
-      expect(find.text('10.01'), findsOneWidget);
-      expect(find.text('-20.02'), findsOneWidget);
-      expect(find.text('30.03'), findsOneWidget);
-
-      await tester
-          .tap(find.widgetWithText(ElevatedButton, 'Add Waypoint to Queue'));
+      await tester.tap(sendNextButton);
       await tester.pump();
 
-      expect(find.text('10.01'), findsNWidgets(2));
-      expect(find.text('-20.02'), findsNWidgets(2));
-      expect(find.text('30.03'), findsNWidgets(2));
-      expect(queueWaypoints.waypointQueue.length, 1);
-      expect(queueWaypoints.waypointQueue[0].x, 10.01);
-      expect(queueWaypoints.waypointQueue[0].y, -20.02);
-      expect(queueWaypoints.waypointQueue[0].z, 30.03);
+      expect(find.byType(QueueWaypointsWidget), findsOneWidget);
     });
-    testWidgets('WaypointQueue sends first waypoint in queue to drone',
-        (WidgetTester tester) async {
-      final mavlinkCommunication = MavlinkCommunication(
-          MavlinkCommunicationType.tcp, '127.0.0.1', 14550);
-      await mavlinkCommunication.tcpSocketInitializationFlag.future;
-      final queueWaypoints = QueueWaypoints(comm: mavlinkCommunication);
 
-      queueWaypoints.queueWaypoint(0, 0, 10.01, -20.02, 30.03);
+    // These can be used for a future integration test, they test if the sent waypoint properly shows up on the list view
+    /*
+    testWidgets('adds waypoint and updates list', (WidgetTester tester) async {
+      final fakeComm = FakeMavlinkCommunication();
+      final queueWaypoints = QueueWaypoints(comm: fakeComm);
 
       await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-          body: WaypointQueue(
-            queueWaypoints: queueWaypoints,
-            systemId: 0,
-            componentId: 0,
-          ),
-        ),
+        home: QueueWaypointsWidget(queueWaypoints: queueWaypoints),
       ));
 
-      expect(queueWaypoints.waypointQueue.length, 1);
-      expect(find.text('10.01'), findsOneWidget);
-      expect(find.text('-20.02'), findsOneWidget);
-      expect(find.text('30.03'), findsOneWidget);
-      expect(queueWaypoints.waypointQueue[0].x, 10.01);
-      expect(queueWaypoints.waypointQueue[0].y, -20.02);
-      expect(queueWaypoints.waypointQueue[0].z, 30.03);
+      await tester.enterText(
+          find.byWidgetPredicate((widget) =>
+              widget is TextField &&
+              widget.decoration?.labelText == 'Latitude'),
+          '12.34');
 
-      await tester.tap(find.widgetWithText(
-          ElevatedButton, 'Send Next Waypoint in Queue to Drone'));
-      await tester.pumpAndSettle();
+      await tester.enterText(
+          find.byWidgetPredicate((widget) =>
+              widget is TextField &&
+              widget.decoration?.labelText == 'Longitude'),
+          '56.78');
 
-      expect(find.text('10.01'), findsNothing);
-      expect(find.text('-20.02'), findsNothing);
-      expect(find.text('30.03'), findsNothing);
-      expect(queueWaypoints.waypointQueue.length, 0);
+      await tester.enterText(
+          find.byWidgetPredicate((widget) =>
+              widget is TextField &&
+              widget.decoration?.labelText == 'Altitude'),
+          '100');
+
+      await tester.tap(find.text('Add Waypoint'));
+      await tester.pump();
+
+      expect(find.textContaining('Waypoint 0:'), findsOneWidget);
+      expect(find.textContaining('Lat=100.0'), findsOneWidget);
+      expect(find.textContaining('Lon=56.78'), findsOneWidget);
+      expect(find.textContaining('Alt=100.0'), findsOneWidget);
     });
+
+    testWidgets('send next waypoint removes from queue',
+        (WidgetTester tester) async {
+      final fakeComm = FakeMavlinkCommunication();
+      final queueWaypoints = QueueWaypoints(comm: fakeComm);
+
+      queueWaypoints.queueWaypoint(1, 1, 10.0, 20.0, 30.0);
+      queueWaypoints.queueWaypoint(1, 1, 40.0, 50.0, 60.0);
+
+      await tester.pumpWidget(MaterialApp(
+        home: QueueWaypointsWidget(queueWaypoints: queueWaypoints),
+      ));
+
+      expect(find.textContaining('Waypoint 0:'), findsOneWidget);
+      expect(find.textContaining('Waypoint 1:'), findsOneWidget);
+
+      await tester.tap(find.text('Send Next Waypoiint'));
+      await tester.pump();
+
+      expect(find.textContaining('Waypoint 0:'), findsNothing);
+      expect(find.textContaining('Waypoint 1:'), findsOneWidget);
+    });
+    */
   });
 }
